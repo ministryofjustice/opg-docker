@@ -1,0 +1,8 @@
+production:
+  sessions:
+    default:
+      database: devise_authentication_api
+      hosts:
+        - mongodb:27017
+#      username: opg-auth
+#      password: opg-auth
