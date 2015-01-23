@@ -13,6 +13,10 @@ RUN apt-get -y upgrade
 # locale
 RUN locale-gen en_GB en_GB.UTF-8
 
+# let's disable ssh access
+RUN rm /etc/my_init.d/00_regen_ssh_host_keys.sh
+RUN rm -Rf /etc/service/sshd
+
 # our base layout
 RUN  apt-get update
 RUN  apt-get install -y git
