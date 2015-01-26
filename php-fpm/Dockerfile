@@ -1,6 +1,6 @@
 FROM opguk/nginx:latest
 
-RUN  apt-get install -y php5-fpm
+RUN  apt-get install -y php5-fpm php5-cli
 
 RUN  rm -f /etc/php5/fpm/php-fpm.conf
 RUN  rm /etc/php5/fpm/pool.d/www.conf
