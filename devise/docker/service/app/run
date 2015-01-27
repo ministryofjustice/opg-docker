@@ -1,5 +1,8 @@
 #!/bin/sh
 
+echo Delaying service start for ${SLEEP:-0}s
+sleep ${SLEEP:-0}
 
-su app -c "cd /app && bundle exec rake db:mongoid:create_indexes RAILS_ENV=production"
-exec su app -c "cd /app && bundle exec unicorn -E production -o unix:///var/run/app/app.sock"
+cd /app
+/sbin/setuser app bundle exec rake db:mongoid:create_indexes RAILS_ENV=production
+exec /sbin/setuser app bundle exec unicorn -E production -o unix:///var/run/app/app.sock
