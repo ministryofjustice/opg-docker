@@ -1,14 +1,17 @@
 FROM opguk/nginx:latest
 
-#ruby version: 2.2.0
+#ruby version: dsd
 
 WORKDIR root
 RUN  apt-get install -y autoconf bison build-essential libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm3 libgdbm-dev
-RUN  curl http://cache.ruby-lang.org/pub/ruby/2.2/ruby-2.2.0.tar.gz | tar -xz
-RUN  cd ruby-2.2.0 && ./configure --prefix= && make -j 4 && make install
-RUN  rm -Rf ruby-2.2.0
 
-RUN  gem install bundler
+RUN echo "deb [arch=amd64] http://repo.dsd.io trusty main" > /etc/apt/sources.list.d/dsd.list
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 6929455C
+RUN apt-get update
+
+RUN apt-get install -y --no-install-recommends dsd-ruby2.1-bundler libyaml-0-2 libxslt1.1 libpq5
+
+#RUN  gem install bundler
 
 #example ruby web app
 RUN  gem install sinatra

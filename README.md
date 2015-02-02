@@ -1,6 +1,5 @@
 # opg-docker
 
-
 Q&A
 ---
 
