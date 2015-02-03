@@ -8,4 +8,4 @@ export RAILS_ENV=development
 
 cd /app
 /sbin/setuser app bundle exec rake db:mongoid:create_indexes
-exec /sbin/setuser app bundle exec unicorn -o unix:///var/run/app/app.sock &> /var/log/app/app.log
+exec /sbin/setuser app bundle exec unicorn -o unix:///var/run/app/app.sock > /var/log/app/app.log 2>&1
