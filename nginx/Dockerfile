@@ -11,4 +11,7 @@ RUN  chmod a+x /etc/service/nginx/run
 RUN  mkdir -p /app/public
 RUN  echo "Hello World from opguk/nginx" > /app/public/index.html
 
+ADD  docker/beaver.d /etc/beaver.d
+
+
 EXPOSE 80

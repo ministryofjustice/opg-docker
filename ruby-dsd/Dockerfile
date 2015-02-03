@@ -22,3 +22,5 @@ RUN  chmod a+x /etc/service/app/run
 RUN  mkdir -p /app/public
 ADD  src/hello.rb /app/hello.rb
 WORKDIR app
+
+ADD  docker/beaver.d /etc/beaver.d

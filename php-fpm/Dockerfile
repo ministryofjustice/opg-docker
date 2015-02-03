@@ -18,3 +18,6 @@ RUN  chmod a+x /sbin/update-php-fpm-environment.sh
 
 RUN  echo "<?php phpinfo(); ?>" > /app/public/index.php
 RUN  chown app /app/public/index.php
+
+ADD  docker/beaver.d /etc/beaver.d
+

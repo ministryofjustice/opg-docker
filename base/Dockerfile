@@ -27,3 +27,12 @@ RUN  useradd -m -d /app app
 RUN  mkdir -p /var/log/app && chown app /var/log/app
 RUN  mkdir -p /data && chown app /data
 RUN  mkdir -p /var/run/app && chown app /var/run/app
+
+#log aggregation
+RUN  apt-get install -y python python-pip
+RUN  pip install Beaver==33.0.0
+
+ADD  docker/service/beaver /etc/service/beaver
+RUN  chmod a+x /etc/service/beaver/run
+
+ADD  docker/beaver.conf /etc/beaver.conf

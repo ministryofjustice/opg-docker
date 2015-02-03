@@ -1,4 +1,5 @@
 #!/bin/sh
 
 cd /app
-exec su app -c 'ruby hello.rb'
+exec su app -c 'ruby hello.rb' &> /var/log/app/app.log
+
