@@ -1,9 +1,9 @@
 #!/bin/sh
 
-if grep -q "monitoring.*" /etc/hosts
+if grep -q "monitoring.local.*" /etc/hosts
 then
     exec /usr/local/bin/beaver -c /etc/beaver.conf -C /etc/beaver.d -t redis
 else
-    echo "No monitoring server connected. Skipping beaver"
+    echo "No monitoring.local server connected. Skipping beaver"
     sv stop beaver
 fi
