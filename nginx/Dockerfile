@@ -1,7 +1,9 @@
 FROM opguk/base:latest
 
-RUN  apt-get update
-RUN  apt-get install -y nginx
+RUN  apt-get update && apt-get -y upgrade && \
+     apt-get install -y nginx && \
+     apt-get autoclean && apt-get autoremove && rm -rf /var/lib/{apt,dpkg,cache,log}/ && rm -rf /tmp/* /var/tmp/*
+
 
 ADD  docker/nginx /etc/nginx
 

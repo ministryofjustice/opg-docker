@@ -1,6 +1,9 @@
 FROM opguk/ruby-dsd:latest
 
-RUN  apt-get install -y mongodb-clients
+RUN  apt-get update && apt-get -y upgrade && \
+     apt-get install -y mongodb-clients && \
+     apt-get autoclean && apt-get autoremove && rm -rf /var/lib/{apt,dpkg,cache,log}/ && rm -rf /tmp/* /var/tmp/*
+
 
 ADD  vendor/devise_authentication_api/Gemfile /app/Gemfile
 ADD  vendor/devise_authentication_api/Gemfile.lock /app/Gemfile.lock
