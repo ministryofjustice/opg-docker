@@ -1,4 +1,4 @@
 #!/bin/sh
 
 cd /app
-exec su app -c 'ruby hello.rb' > /var/log/app/app.log 2>&1
+exec /sbin/setuser app ruby hello.rb > /var/log/app/app.log 2>&1
