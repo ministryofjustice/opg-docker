@@ -6,7 +6,6 @@ newtag = $(shell semvertag bump patch)
 containers = base nginx php-fpm monitoring
 
 build:
-	export newtag
 	semvertag tag ${newtag}
 	$(MAKE) -C base newtag=${newtag}
  	$(MAKE) -C nginx newtag=${newtag}
