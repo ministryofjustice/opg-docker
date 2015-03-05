@@ -1,4 +1,0 @@
-#!/bin/sh
-
-cd /app
-exec /sbin/setuser app ruby hello.rb > /var/log/app/app.log 2>&1

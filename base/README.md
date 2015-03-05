@@ -26,9 +26,9 @@ All inheriting containers should add their respective beaver config file to /etc
 
 versions
 --------
-Versions are in date format
+Versions are in reduced semver (because docker don't support build segment):
 i.e:
-opg/base:2014.01.13
+opg/base:0.0.2
 
 
 TODO

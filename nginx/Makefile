@@ -1,4 +1,7 @@
 .PHONY: build
+newtag ?= latest
+image = opguk/nginx
 
 build:
-	docker build -t "opguk/nginx:latest" .
+	docker build -t "${image}:latest" .
+	docker tag -f "${image}:latest" "${image}:${newtag}"

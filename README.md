@@ -15,3 +15,10 @@ How to run application as specific user? Shall I use `su foo -c "ls"`?
 
 It's recommended to use setuser.
 i.e. `exec /sbin/setuser memcache /usr/bin/memcached`
+
+
+prerequisites
+-------------
+- docker
+- make
+- semvertag (https://github.com/ministryofjustice/semvertag)
