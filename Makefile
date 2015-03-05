@@ -8,9 +8,9 @@ containers = base nginx php-fpm monitoring
 build:
 	semvertag tag ${newtag}
 	$(MAKE) -C base newtag=${newtag}
- 	$(MAKE) -C nginx newtag=${newtag}
- 	$(MAKE) -C php-fpm newtag=${newtag}
- 	$(MAKE) -C monitoring newtag=${newtag}
+	$(MAKE) -C nginx newtag=${newtag}
+	$(MAKE) -C php-fpm newtag=${newtag}
+	$(MAKE) -C monitoring newtag=${newtag}
 
 push:
 	docker push opguk/base
