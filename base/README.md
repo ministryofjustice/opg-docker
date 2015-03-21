@@ -19,8 +19,8 @@ directory structure:
 
 log shipping
 ------------
-It ships logs using beaver that will only start if monitoring box is linked (monitoring.local hostname is available).
-Logs are shipped to redis on monitoring.local host.
+It ships logs using beaver that will only start if monitoring box is linked (monitoring `hostname` is available in /etc/hosts).
+Logs are shipped to redis on `monitoring` host.
 All inheriting containers should add their respective beaver config file to /etc/beaver.d/(change_me).conf
 
 
