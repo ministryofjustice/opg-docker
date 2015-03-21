@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if grep -q "monitoring.*" /etc/hosts
+if (( grep -q "monitoring.*" /etc/hosts )) || [ -n "${MONITORING_ENABLED}" ]
 then
     exec /usr/local/bin/beaver -c /etc/beaver.conf -C /etc/beaver.d -t redis
 else
