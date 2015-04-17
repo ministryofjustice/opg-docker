@@ -1,4 +1,4 @@
-FROM phusion/baseimage:0.9.15
+FROM phusion/baseimage:0.9.16
 
 # Set correct HOME
 ENV HOME /root
@@ -12,13 +12,14 @@ ENV DEBIAN_FRONTEND noninteractive
 ADD  docker/sources.list /etc/apt/sources.list
 RUN  rm -f /etc/apt/sources.list.d/*
 RUN  apt-get update && apt-get -y upgrade && apt-get install -y git joe && \
+     apt-get install -y awscli && \
      apt-get install -y python python-pip && pip install Beaver==33.1.0 && \
      apt-get autoclean && apt-get autoremove && rm -rf /var/lib/{apt,dpkg,cache,log}/ && rm -rf /tmp/* /var/tmp/*
 
 # Locale
 RUN  locale-gen en_GB en_GB.UTF-8
 
-# Let's disable ssh access
+# Let's disable ssh access (on 0.9.16 you still need to remove server key)
 RUN  rm /etc/my_init.d/00_regen_ssh_host_keys.sh
 RUN  rm -Rf /etc/service/sshd
 
