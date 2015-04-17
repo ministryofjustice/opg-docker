@@ -13,10 +13,10 @@ build:
 	$(MAKE) -C monitoring newtag=${newtag}
 
 push:
-	docker push opguk/base
-	docker push opguk/nginx
-	docker push opguk/php-fpm
-	docker push opguk/monitoring
+	docker push opguk/base:${currenttag}
+	docker push opguk/nginx:${currenttag}
+	docker push opguk/php-fpm:${currenttag}
+	docker push opguk/monitoring:${currenttag}
 
 pull:
 	docker pull opguk/base
