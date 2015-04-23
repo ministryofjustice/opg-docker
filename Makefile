@@ -14,9 +14,13 @@ build:
 
 push:
 	docker push registry.service.dsd.io/opguk/base:${currenttag}
+	docker push registry.service.dsd.io/opguk/base:latest
 	docker push registry.service.dsd.io/opguk/nginx:${currenttag}
+	docker push registry.service.dsd.io/opguk/nginx:latest
 	docker push registry.service.dsd.io/opguk/php-fpm:${currenttag}
+	docker push registry.service.dsd.io/opguk/php-fpm:latest
 	docker push registry.service.dsd.io/opguk/monitoring:${currenttag}
+	docker push registry.service.dsd.io/opguk/monitoring:latest
 
 pull:
 	docker pull registry.service.dsd.io/opguk/base

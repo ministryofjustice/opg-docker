@@ -28,3 +28,8 @@ ADD  docker/php/* /etc/php5/
 
 ADD  docker/my_init.d /etc/my_init.d
 RUN  chmod a+x /etc/my_init.d/*
+
+# disable php5-xdebug by default
+RUN  rm -f /etc/php5/fpm/conf.d/*xdebug*
+RUN  rm -f /etc/php5/cli/conf.d/*xdebug*
+RUN  rm /etc/php5/mods-available/xdebug.ini
