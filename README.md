@@ -22,3 +22,8 @@ prerequisites
 - docker
 - make
 - semvertag (https://github.com/ministryofjustice/semvertag)
+
+
+TODO
+----
+pick something to generate config files

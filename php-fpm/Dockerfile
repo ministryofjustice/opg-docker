@@ -2,6 +2,7 @@ FROM opguk/nginx:latest
 
 RUN  apt-get update && apt-get -y upgrade && \
      apt-get install -y php5-fpm php5-cli && \
+     apt-get install -y php5-xdebug && \
      apt-get autoclean && apt-get autoremove && rm -rf /var/lib/{apt,dpkg,cache,log}/ && rm -rf /tmp/* /var/tmp/*
 
 RUN  rm -f /etc/php5/fpm/php-fpm.conf
@@ -23,3 +24,7 @@ RUN  chown app /app/public/index.php
 
 ADD  docker/beaver.d /etc/beaver.d
 
+ADD  docker/php/* /etc/php5/
+
+ADD  docker/my_init.d /etc/my_init.d
+RUN  chmod a+x /etc/my_init.d/*
