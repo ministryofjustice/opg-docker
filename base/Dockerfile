@@ -34,3 +34,5 @@ RUN  chmod a+x /etc/service/beaver/run
 
 ADD  docker/beaver.conf /etc/beaver.conf
 
+ADD  docker/my_init.d /etc/my_init.d
+RUN  chmod a+x /etc/my_init.d/*

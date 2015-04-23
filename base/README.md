@@ -32,6 +32,13 @@ Versions are in reduced semver (because docker don't support build segment):
 i.e:
 opg/base:0.0.2
 
+If OPG_DOCKER_TAG env variable will be passed to the container then it will generate /app/META file with {'rev': '$OPG_DOCKER_TAG'}
+
+
+supported variables
+-------------------
+OPG_DOCKER_TAG - see versions
+
 
 TODO
 ----
