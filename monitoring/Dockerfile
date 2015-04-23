@@ -1,4 +1,4 @@
-FROM opguk/base:latest
+FROM registry.service.dsd.io/opguk/base:latest
 
 RUN  echo "deb http://packages.elasticsearch.org/logstash/1.4/debian stable main" > /etc/apt/sources.list.d/logstash.list
 RUN  curl -s http://packages.elasticsearch.org/GPG-KEY-elasticsearch | apt-key add -

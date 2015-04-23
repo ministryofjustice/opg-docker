@@ -1,6 +1,6 @@
 .PHONY: build
 newtag ?= latest
-image = opguk/php-fpm
+image = registry.service.dsd.io/opguk/php-fpm
 
 build:
 	docker build -t "${image}:latest" .

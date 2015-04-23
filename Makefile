@@ -13,13 +13,13 @@ build:
 	$(MAKE) -C monitoring newtag=${newtag}
 
 push:
-	docker push opguk/base:${currenttag}
-	docker push opguk/nginx:${currenttag}
-	docker push opguk/php-fpm:${currenttag}
-	docker push opguk/monitoring:${currenttag}
+	docker push registry.service.dsd.io/opguk/base:${currenttag}
+	docker push registry.service.dsd.io/opguk/nginx:${currenttag}
+	docker push registry.service.dsd.io/opguk/php-fpm:${currenttag}
+	docker push registry.service.dsd.io/opguk/monitoring:${currenttag}
 
 pull:
-	docker pull opguk/base
-	docker pull opguk/nginx
-	docker pull opguk/php-fpm
-	docker pull opguk/monitoring
+	docker pull registry.service.dsd.io/opguk/base
+	docker pull registry.service.dsd.io/opguk/nginx
+	docker pull registry.service.dsd.io/opguk/php-fpm
+	docker pull registry.service.dsd.io/opguk/monitoring

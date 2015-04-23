@@ -1,6 +1,6 @@
 .PHONY: build
 newtag ?= latest
-image = opguk/monitoring
+image = registry.service.dsd.io/opguk/monitoring
 
 build:
 	docker build -t "${image}:latest" .
