@@ -2,7 +2,7 @@
 
 # when linked to monitoring container
 # or when MONITORING_ENABLED is set
-if (( host "\smonitoring\s" /etc/hosts )) || (( grep -q "\smonitoring$" /etc/hosts )) || [ -n "${MONITORING_ENABLED}" ]
+if (( grep -q "\smonitoring\s" /etc/hosts )) || (( grep -q "\smonitoring$" /etc/hosts )) || [ -n "${MONITORING_ENABLED}" ]
 then
     exec /usr/local/bin/beaver -c /etc/beaver.conf -C /etc/beaver.d -t redis
 else
