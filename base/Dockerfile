@@ -16,7 +16,7 @@ RUN  apt-get update && apt-get -y upgrade && apt-get install -y git joe && \
      apt-get install -y python python-pip && pip install Beaver==33.1.0 && \
      apt-get install -y wget && \
      apt-get clean && apt-get autoremove && \
-     rm -rf /var/lib/apt/* /var/lib/dpkg/*-old /var/lib/dpkg/info/* /var/lib/cache/* /var/lib/log/* /tmp/* /var/tmp/*
+     rm -rf /var/lib/cache/* /var/lib/log/* /tmp/* /var/tmp/*
 
 # ConfD install
 RUN  wget -O /usr/bin/confd https://github.com/kelseyhightower/confd/releases/download/v0.9.0/confd-0.9.0-linux-amd64 && \

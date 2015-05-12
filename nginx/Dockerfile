@@ -3,7 +3,7 @@ FROM registry.service.dsd.io/opguk/base:latest
 RUN  apt-get update && apt-get -y upgrade && \
      apt-get install -y nginx && \
      apt-get clean && apt-get autoremove && \
-     rm -rf /var/lib/apt/* /var/lib/dpkg/*-old /var/lib/dpkg/info/* /var/lib/cache/* /var/lib/log/* /tmp/* /var/tmp/*
+     rm -rf /var/lib/cache/* /var/lib/log/* /tmp/* /var/tmp/*
 
 
 ADD  docker/nginx /etc/nginx
