@@ -3,7 +3,9 @@ FROM registry.service.dsd.io/opguk/nginx:latest
 RUN  apt-get update && apt-get -y upgrade && \
      apt-get install -y php5-fpm php5-cli && \
      apt-get install -y php5-xdebug && \
-     apt-get autoclean && apt-get autoremove && rm -rf /var/lib/{apt,dpkg,cache,log}/ && rm -rf /tmp/* /var/tmp/*
+     apt-get clean && apt-get autoremove && \
+     rm -rf /var/lib/apt/* /var/lib/dpkg/*-old /var/lib/dpkg/info/* /var/lib/cache/* /var/lib/log/* /tmp/* /var/tmp/*
+
 
 RUN  rm -f /etc/php5/fpm/php-fpm.conf
 RUN  rm /etc/php5/fpm/pool.d/www.conf
