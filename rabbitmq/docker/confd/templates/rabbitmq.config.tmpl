@@ -1,0 +1,12 @@
+[
+ {rabbit,
+  [
+   {loopback_users, []},
+   {tcp_listeners, [{{ getv "/rabbitmq/tcp/listeners" }}]},
+   {default_vhost,       <<"{{ getv "/rabbitmq/default/vhost" }}">>},
+   {default_user,        <<"{{ getv "/rabbitmq/default/user" }}">>},
+   {default_pass,        <<"{{ getv "/rabbitmq/default/pass" }}">>},
+   {default_permissions, [<<".*">>, <<".*">>, <<".*">>]},
+   {default_user_tags, [administrator]}
+  ]}
+].
