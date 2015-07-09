@@ -1,0 +1,7 @@
+[template]
+prefix = "/wordpress"
+src = "wp-config.php.tmpl"
+dest = "/app/public/wp-config.php"
+keys = [
+    "/database",
+]
