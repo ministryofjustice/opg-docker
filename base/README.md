@@ -4,6 +4,7 @@ Base docker image that:
 - ensures latest ubuntu
 - creates application skeleton
 - creates log shipping skeleton
+- ensures we have a unique self signed certificate available
 
 
 structure
@@ -38,6 +39,7 @@ If OPG_DOCKER_TAG env variable will be passed to the container then it will gene
 supported variables
 -------------------
 OPG_DOCKER_TAG - see versions
+SKIP_SSL_GENERATE - when set container will not create self signed certificate on start
 
 
 TODO

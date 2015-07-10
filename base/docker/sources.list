@@ -1,4 +1,4 @@
-deb http://eu-west-1.ec2.archive.ubuntu.com/ubuntu/ trusty main restricted universe multiverse
-deb http://eu-west-1.ec2.archive.ubuntu.com/ubuntu/ trusty-updates main restricted universe multiverse
-deb http://eu-west-1.ec2.archive.ubuntu.com/ubuntu/ trusty-security main restricted universe multiverse
-deb http://eu-west-1.ec2.archive.ubuntu.com/ubuntu/ trusty-proposed main restricted universe multiverse
+deb mirror://mirrors.ubuntu.com/mirrors.txt trusty main restricted universe multiverse
+deb mirror://mirrors.ubuntu.com/mirrors.txt trusty-updates main restricted universe multiverse
+deb mirror://mirrors.ubuntu.com/mirrors.txt trusty-security main restricted universe multiverse
+deb mirror://mirrors.ubuntu.com/mirrors.txt trusty-proposed main restricted universe multiverse
