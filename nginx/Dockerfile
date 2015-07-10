@@ -18,3 +18,4 @@ ADD  docker/beaver.d /etc/beaver.d
 
 
 EXPOSE 80
+EXPOSE 443
