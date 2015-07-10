@@ -11,11 +11,19 @@ structure
 ---------
 directory structure:
 ```
+/etc/my_init.d - all scripts within will be executed at boot
 /app - directory to install app (owned by app user)
 /data - directory to store data (might be available as a mounted volume)
 /var/run/app - for pid/sock files
 /var/log/app - for all application logs
 ```
+
+
+/etc/my_init.d
+--------------
+Init process ensures that all scripts within `/etc/my_init.d` will be executed at container start
+If you enter container through docker run your_script, you will skip the init script. 
+In such case it's the best to run all cscripts with `run-parts --test /etc/my_init.d`
 
 
 log shipping
