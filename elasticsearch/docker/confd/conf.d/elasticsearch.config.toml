@@ -1,0 +1,6 @@
+[template]
+src = "elasticsearch.config.tmpl"
+dest = "/usr/share/elasticsearch/config/logging.yml"
+keys = [
+    "/elasticsearch",
+]
