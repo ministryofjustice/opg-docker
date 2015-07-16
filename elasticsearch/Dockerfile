@@ -41,6 +41,7 @@ EXPOSE 9200 9300
 
 # Provide default values for confd
 ENV HOME /usr/share/elasticsearch
+ENV ELASTICSEARCH_NUMBER_OF_REPLICAS 0
 
 ADD docker/confd /etc/confd
 
