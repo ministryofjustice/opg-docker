@@ -72,4 +72,4 @@ To delete all indices on the master node only:
 Marvel
 ------
 
-The URL for Marvel is `http://<elasticsearchhost>:9200/_plugins/marvel`
+The URL for Marvel is `http://<elasticsearchhost>:9200/_plugin/marvel`
