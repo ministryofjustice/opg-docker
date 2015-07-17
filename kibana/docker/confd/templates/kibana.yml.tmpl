@@ -1,0 +1,21 @@
+port: {{ getv "/port" }}
+host: "{{ getv "/host" }}"
+elasticsearch_url: 'http://{{ getv "/elasticsearch" }}:{{ getv "/elasticsearch/port/9200/tcp" }}'
+elasticsearch_preserve_host: {{ getv "/elasticsearch/preserve/host" }}
+kibana_index: "{{ getv "/kibana/index" }}"
+default_app_id: "{{ getv "/default/app/id" }}"
+request_timeout: {{ getv "/request/timeout" }}
+shard_timeout: {{ getv "/shard/timeout" }} 
+verify_ssl: {{ getv "/verify/ssl" }}
+bundled_plugin_ids:
+ - plugins/dashboard/index
+ - plugins/discover/index
+ - plugins/doc/index
+ - plugins/kibana/index
+ - plugins/markdown_vis/index
+ - plugins/metric_vis/index
+ - plugins/settings/index
+ - plugins/table_vis/index
+ - plugins/vis_types/index
+ - plugins/visualize/index
+
