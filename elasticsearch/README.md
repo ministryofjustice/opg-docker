@@ -6,20 +6,62 @@ Dockerfile Environment Variables
 
 ### Software versions (used during build only)
 
+```
 * ELASTICSEARCH_VERSION             (version of Elasticsearch to install)
 * ELASTICSEARCH_CURATOR_VERSION     (version of Curator to install)
 * MARVEL_VERSION                    (version of Marvel plugin to install)
 * LICENSE_VERSION                   (version of License plugin to install)
 * WATCHER_VERSION                   (version of Watcher plugin to install)
+```
 
 ### Elasticsearch Settings (used by confd during startup)
 
-* ELASTICSEARCH_NUMBER_OF_REPLICAS  (number of replicas to use on indices)
+The following variables are used in the configuration of elasticsearch.yml during container startup and their
+equivalent elasticsearch configuration variable is show alongside:
+
+```
+* ELASTICSEARCH_NUMBER_OF_REPLICAS                    (index.number_of_replicas)
+* ELASTICSEARCH_NETWORK_BIND_HOST                     (network.bind_host)
+* ELASTICSEARCH_SCRIPT_DISABLE_DYNAMIC                (script.disable_dynamic)
+* ELASTICSEARCH_PATH_DATA                             (path.data)
+* ELASTICSEARCH_DISCOVERY_ZEN_PING_MULTICASE_ENABLED  (discovery.zen.ping.multicast.enabled)
+* ELASTICSEARCH_DISCOVERY_ZEN_MINIMUM_MASTER_NODES    (discovery.zen.minimum_master_nodes)
+* ELASTICSEARCH_CLUSTER_NAME                          (cluster.name)
+* ELASTICSEARCH_CLUSTER_NODES_ONE                     (discovery.zen.ping.unicast.hosts)
+* ELASTICSEARCH_NODE_NAME                             (node.name)
+* ELASTICSEARCH_INDICES_FIELDDATA_CACHE_SIZE          (indices.fielddata.cache.size)
+* ELASTICSEARCH_GATEWAY_EXPECTED_NODES                (gateway.expected_nodes)
+* ELASTICSEARCH_GATEWAY_RECOVER_AFTER_TIME            (gateway.recover_after_time)
+* ELASTICSEARCH_GATEWAY_RECOVER_AFTER_NODES           (gateway.recover_after_nodes)
+```
+
+When using the ELASTICSEARCH_CLUSTER_NODES_ variable(s) the suffix after this name is arbitrary. Each variable starting with this
+name will be used as a key in the template used to create the elasticsearch.yml configuration file to populate the list of nodes
+in the cluster. For example:
+
+```
+ELASTICSEARCH_CLUSTER_NODES_ONE elastic-01
+ELASTICSEARCH_CLUSTER_NODES_TWO elastic-02
+ELASTICSEARCH_CLUSTER_NODES_THREE elastic-03
+```
+
+will result in the elasticsearch.yml file containing:
+
+```
+discovery.zen.ping.unicast.hosts:
+- elastic-01
+- elastic-02
+- elastic-03
+````
+
+If this is a single node cluster comment out the `ELASTICSEARCH_CLUSTER_NODES_` variables as they are not required and will
+automatically be left out of the configuration file (otherwise during startup it will generate transport.netty transport
+layer exception messages from java).
 
 Sample docker-compose entries
 -----------------------------
 
-### Elasticsearch
+### Elasticsearch (single node, no replicas)
 
 ```
 elasticsearch:
@@ -32,6 +74,57 @@ Start container with:
 
 ```
  # docker-compose -p opgcore -f <docker-compose-file> up -d elasticsearch
+```
+
+### Elasticsearch (three nodes, two replicas)
+
+```
+elasticsearch01:
+  image: registry.service.dsd.io/opguk/elasticsearch:latest
+  links:
+    - elasticsearch02:elasticsearch-02
+  ports:
+    - 9201:9200
+  env_file: ./env/es1.env
+
+elasticsearch02:
+  image: registry.service.dsd.io/opguk/elasticsearch:latest
+  links:
+    - elasticsearch03:elasticsearch-03
+  ports:
+    - 9202:9200
+  env_file: ./env/es2.env
+
+elasticsearch03:
+  image: registry.service.dsd.io/opguk/elasticsearch:latest
+  ports:
+    - 9203:9200
+  env_file: ./env/es3.env
+```
+
+Environment files
+
+```
+$ cat ./env/es1.env
+ELASTICSEARCH_NUMBER_OF_REPLICAS=2
+ELASTICSEARCH_NODE_NAME=elasticsearch-01
+ELASTICSEARCH_CLUSTER_NODES_ONE=elasticsearch-01
+ELASTICSEARCH_CLUSTER_NODES_TWO=elasticsearch-02
+ELASTICSEARCH_CLUSTER_NODES_THREE=elasticsearch-03
+
+$ cat ./env/es2.env
+ELASTICSEARCH_NUMBER_OF_REPLICAS=2
+ELASTICSEARCH_NODE_NAME=elasticsearch-02
+ELASTICSEARCH_CLUSTER_NODES_ONE=elasticsearch-01
+ELASTICSEARCH_CLUSTER_NODES_TWO=elasticsearch-02
+ELASTICSEARCH_CLUSTER_NODES_THREE=elasticsearch-03
+
+$ cat ./env/es3.env
+ELASTICSEARCH_NUMBER_OF_REPLICAS=2
+ELASTICSEARCH_NODE_NAME=elasticsearch-03
+ELASTICSEARCH_CLUSTER_NODES_ONE=elasticsearch-01
+ELASTICSEARCH_CLUSTER_NODES_TWO=elasticsearch-02
+ELASTICSEARCH_CLUSTER_NODES_THREE=elasticsearch-03
 ```
 
 ### Curator
