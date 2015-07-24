@@ -21,6 +21,8 @@ RUN  chmod a+x /etc/service/php-fpm/run
 RUN  echo "<?php phpinfo(); ?>" > /app/public/index.php
 RUN  chown app /app/public/index.php
 
+ADD  docker/logrotate.d/app /etc/logrotate.d/app
+
 ADD  docker/beaver.d /etc/beaver.d
 
 ADD  docker/php/* /etc/php5/
