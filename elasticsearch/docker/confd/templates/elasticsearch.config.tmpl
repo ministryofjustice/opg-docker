@@ -1,1 +1,28 @@
 index.number_of_replicas: {{ getv "/elasticsearch/number/of/replicas" }}
+network.bind_host: {{ getv "/elasticsearch/network/bind/host" }}
+script.disable_dynamic: {{ getv "/elasticsearch/script/disable/dynamic" }}
+path.data: {{ getv "/elasticsearch/path/data" }}
+
+discovery.zen.ping.multicast.enabled: {{ getv "/elasticsearch/discovery/zen/ping/multicase/enabled" }}
+{{if ls "/elasticsearch/cluster/nodes"}}
+discovery.zen.ping.unicast.hosts: {{range getvs "/elasticsearch/cluster/nodes/*"}}
+- {{.}} {{end}}
+{{end}}
+
+discovery.zen.minimum_master_nodes: {{ getv "/elasticsearch/discovery/zen/minimum/master/nodes" }}
+
+cluster.name: {{ getv "/elasticsearch/cluster/name" }}
+
+node.name: {{ getv "/elasticsearch/node/name" }}
+
+indices.fielddata.cache.size: {{ getv "/elasticsearch/indices/fielddata/cache/size" }}
+
+gateway.expected_nodes: {{ getv "/elasticsearch/gateway/expected/nodes" }}
+gateway.recover_after_time: {{ getv "/elasticsearch/gateway/recover/after/time" }}
+gateway.recover_after_nodes: {{ getv "/elasticsearch/gateway/recover/after/nodes" }}
+
+# As per CVE-2015-1427 advisory:
+script:
+  groovy:
+    sandbox:
+      enabled: false

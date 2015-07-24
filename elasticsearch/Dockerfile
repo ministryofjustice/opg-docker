@@ -32,16 +32,28 @@ RUN /usr/share/elasticsearch/bin/plugin install elasticsearch/marvel/$MARVEL_VER
 RUN /usr/share/elasticsearch/bin/plugin install elasticsearch/license/$LICENSE_VERSION
 RUN /usr/share/elasticsearch/bin/plugin install elasticsearch/watcher/$WATCHER_VERSION
 
-ENV PATH /usr/share/elasticsearch/bin:$PATH
-
-VOLUME /usr/share/elasticsearch/data
 RUN mkdir -p /usr/share/elasticsearch/config
 
 EXPOSE 9200 9300
 
 # Provide default values for confd
 ENV HOME /usr/share/elasticsearch
+ENV PATH $HOME/bin:$PATH
 ENV ELASTICSEARCH_NUMBER_OF_REPLICAS 0
+ENV ELASTICSEARCH_NETWORK_BIND_HOST 0.0.0.0
+ENV ELASTICSEARCH_SCRIPT_DISABLE_DYNAMIC true
+ENV ELASTICSEARCH_PATH_DATA /usr/share/elasticsearch/data
+ENV ELASTICSEARCH_DISCOVERY_ZEN_PING_MULTICASE_ENABLED false
+ENV ELASTICSEARCH_DISCOVERY_ZEN_MINIMUM_MASTER_NODES 1
+ENV ELASTICSEARCH_CLUSTER_NAME opgcore
+#ENV ELASTICSEARCH_CLUSTER_NODES_ONE elasticsearch-01
+ENV ELASTICSEARCH_NODE_NAME elasticsearch-01
+ENV ELASTICSEARCH_INDICES_FIELDDATA_CACHE_SIZE 40%
+ENV ELASTICSEARCH_GATEWAY_EXPECTED_NODES 1
+ENV ELASTICSEARCH_GATEWAY_RECOVER_AFTER_TIME 5m
+ENV ELASTICSEARCH_GATEWAY_RECOVER_AFTER_NODES 1
+
+VOLUME $ELASTICSEARCH_PATH_DATA
 
 ADD docker/confd /etc/confd
 
