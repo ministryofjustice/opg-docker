@@ -2,6 +2,7 @@ index.number_of_replicas: {{ getv "/elasticsearch/number/of/replicas" }}
 network.bind_host: {{ getv "/elasticsearch/network/bind/host" }}
 script.disable_dynamic: {{ getv "/elasticsearch/script/disable/dynamic" }}
 path.data: {{ getv "/elasticsearch/path/data" }}
+path.repo: {{ getv "/elasticsearch/path/repo" }}
 
 discovery.zen.ping.multicast.enabled: {{ getv "/elasticsearch/discovery/zen/ping/multicase/enabled" }}
 {{if ls "/elasticsearch/cluster/nodes"}}

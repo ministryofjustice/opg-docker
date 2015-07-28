@@ -20,6 +20,7 @@ The following variables are used in the configuration of elasticsearch.yml durin
 equivalent elasticsearch configuration variable is show alongside:
 
 ```
+* ELASTICSEARCH_PATH_REPO                             (path.repo)
 * ELASTICSEARCH_NUMBER_OF_REPLICAS                    (index.number_of_replicas)
 * ELASTICSEARCH_NETWORK_BIND_HOST                     (network.bind_host)
 * ELASTICSEARCH_SCRIPT_DISABLE_DYNAMIC                (script.disable_dynamic)
