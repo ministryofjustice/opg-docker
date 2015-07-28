@@ -1,26 +1,36 @@
-index.number_of_replicas: {{ getv "/elasticsearch/number/of/replicas" }}
-network.bind_host: {{ getv "/elasticsearch/network/bind/host" }}
-script.disable_dynamic: {{ getv "/elasticsearch/script/disable/dynamic" }}
-path.data: {{ getv "/elasticsearch/path/data" }}
-path.repo: {{ getv "/elasticsearch/path/repo" }}
+{{if exists "/elasticsearch/number/of/replicas" }}index.number_of_replicas: {{ getv "/elasticsearch/number/of/replicas" }}{{end}}
+{{if exists "/elasticsearch/network/bind/host" }}network.bind_host: {{ getv "/elasticsearch/network/bind/host" }}{{end}}
+{{if exists "/elasticsearch/script/disable/dynamic" }}script.disable_dynamic: {{ getv "/elasticsearch/script/disable/dynamic" }}{{end}}
+{{if exists "/elasticsearch/path/data" }}path.data: {{ getv "/elasticsearch/path/data" }}{{end}}
+{{if exists "/elasticsearch/path/repo" }}path.repo: {{ getv "/elasticsearch/path/repo" }}{{end}}
 
-discovery.zen.ping.multicast.enabled: {{ getv "/elasticsearch/discovery/zen/ping/multicase/enabled" }}
+{{if exists "/elasticsearch/discovery/zen/ping/multicase/enabled" }}discovery.zen.ping.multicast.enabled: {{ getv "/elasticsearch/discovery/zen/ping/multicase/enabled" }}{{end}}
 {{if ls "/elasticsearch/cluster/nodes"}}
 discovery.zen.ping.unicast.hosts: {{range getvs "/elasticsearch/cluster/nodes/*"}}
 - {{.}} {{end}}
 {{end}}
 
-discovery.zen.minimum_master_nodes: {{ getv "/elasticsearch/discovery/zen/minimum/master/nodes" }}
+{{if exists "/elasticsearch/discovery/zen/minimum/master/nodes" }}discovery.zen.minimum_master_nodes: {{ getv "/elasticsearch/discovery/zen/minimum/master/nodes" }}{{end}}
 
-cluster.name: {{ getv "/elasticsearch/cluster/name" }}
+{{if exists "/elasticsearch/cluster/name" }}cluster.name: {{ getv "/elasticsearch/cluster/name" }}{{end}}
 
-node.name: {{ getv "/elasticsearch/node/name" }}
+{{if exists "/elasticsearch/node/name" }}node.name: {{ getv "/elasticsearch/node/name" }}{{end}}
 
-indices.fielddata.cache.size: {{ getv "/elasticsearch/indices/fielddata/cache/size" }}
+{{if exists "/elasticsearch/indices/fielddata/cache/size" }}indices.fielddata.cache.size: {{ getv "/elasticsearch/indices/fielddata/cache/size" }}{{end}}
 
-gateway.expected_nodes: {{ getv "/elasticsearch/gateway/expected/nodes" }}
-gateway.recover_after_time: {{ getv "/elasticsearch/gateway/recover/after/time" }}
-gateway.recover_after_nodes: {{ getv "/elasticsearch/gateway/recover/after/nodes" }}
+{{if exists "/elasticsearch/gateway/expected/nodes" }}gateway.expected_nodes: {{ getv "/elasticsearch/gateway/expected/nodes" }}{{end}}
+{{if exists "/elasticsearch/gateway/recover/after/time" }}gateway.recover_after_time: {{ getv "/elasticsearch/gateway/recover/after/time" }}{{end}}
+{{if exists "/elasticsearch/gateway/recover/after/nodes" }}gateway.recover_after_nodes: {{ getv "/elasticsearch/gateway/recover/after/nodes" }}{{end}}
+
+cloud:
+    aws: 
+{{if exists "/elasticsearch/cloud/aws/region"}}        region: {{ getv "/elasticsearch/cloud/aws/region" }}{{end}}
+{{if exists "/elasticsearch/cloud/aws/accesskey"}}        access_key: {{ getv "/elasticsearch/cloud/aws/accesskey" }}{{end}}
+{{if exists "/elasticsearch/cloud/aws/secretkey"}}        secret_key: {{ getv "/elasticsearch/cloud/aws/secretkey" }}{{end}}
+        protocol: https {{if exists "/elasticsearch/cloud/aws/s3/protocol" }}
+        s3:
+            protocol: {{ getv "/elasticsearch/cloud/aws/s3/protocol" }}
+{{end}}
 
 # As per CVE-2015-1427 advisory:
 script:

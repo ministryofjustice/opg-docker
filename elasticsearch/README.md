@@ -9,6 +9,7 @@ Dockerfile Environment Variables
 ```
 * ELASTICSEARCH_VERSION             (version of Elasticsearch to install)
 * ELASTICSEARCH_CURATOR_VERSION     (version of Curator to install)
+* ELASTICSEARCH_CLOUD_AWS           (version of AWS cloud plugin to install)
 * MARVEL_VERSION                    (version of Marvel plugin to install)
 * LICENSE_VERSION                   (version of License plugin to install)
 * WATCHER_VERSION                   (version of Watcher plugin to install)
@@ -34,6 +35,10 @@ equivalent elasticsearch configuration variable is show alongside:
 * ELASTICSEARCH_GATEWAY_EXPECTED_NODES                (gateway.expected_nodes)
 * ELASTICSEARCH_GATEWAY_RECOVER_AFTER_TIME            (gateway.recover_after_time)
 * ELASTICSEARCH_GATEWAY_RECOVER_AFTER_NODES           (gateway.recover_after_nodes)
+* ELASTICSEARCH_CLOUD_AWS_REGION                      (cloud.aws.region)
+* ELASTICSEARCH_CLOUD_AWS_S3_PROTOCOL                 (cloud.aws.s3.protocol)
+* ELASTICSEARCH_CLOUD_AWS_ACCESS_KEY                  (cloud.aws.access_key)
+* ELASTICSEARCH_CLOUD_AWS_SECRET_KEY                  (cloud.aws.secret_key)
 ```
 
 When using the ELASTICSEARCH_CLUSTER_NODES_ variable(s) the suffix after this name is arbitrary. Each variable starting with this

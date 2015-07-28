@@ -18,6 +18,7 @@ RUN apt-key adv --keyserver ha.pool.sks-keyservers.net --recv-keys 46095ACC85485
 # Define software versions
 ENV ELASTICSEARCH_VERSION 1.6.0
 ENV ELASTICSEARCH_CURATOR_VERSION 3.2.0
+ENV ELASTICSEARCH_CLOUD_AWS 2.6.0
 ENV MARVEL_VERSION latest
 ENV LICENSE_VERSION latest
 ENV WATCHER_VERSION latest
@@ -32,6 +33,7 @@ RUN apt-get update \
   && pip install elasticsearch-curator==$ELASTICSEARCH_CURATOR_VERSION \
   && rm -rf /var/lib/apt/lists/*
 
+RUN /usr/share/elasticsearch/bin/plugin install elasticsearch/elasticsearch-cloud-aws/$ELASTICSEARCH_CLOUD_AWS
 RUN /usr/share/elasticsearch/bin/plugin install elasticsearch/marvel/$MARVEL_VERSION
 RUN /usr/share/elasticsearch/bin/plugin install elasticsearch/license/$LICENSE_VERSION
 RUN /usr/share/elasticsearch/bin/plugin install elasticsearch/watcher/$WATCHER_VERSION
@@ -61,6 +63,10 @@ ENV ELASTICSEARCH_INDICES_FIELDDATA_CACHE_SIZE 40%
 ENV ELASTICSEARCH_GATEWAY_EXPECTED_NODES 1
 ENV ELASTICSEARCH_GATEWAY_RECOVER_AFTER_TIME 5m
 ENV ELASTICSEARCH_GATEWAY_RECOVER_AFTER_NODES 1
+ENV ELASTICSEARCH_CLOUD_AWS_REGION eu-west-1
+ENV ELASTICSEARCH_CLOUD_AWS_S3_PROTOCOL https
+ENV ELASTICSEARCH_CLOUD_AWS_ACCESSKEY placeholder 
+ENV ELASTICSEARCH_CLOUD_AWS_SECRETKEY placeholder
 
 VOLUME $ELASTICSEARCH_PATH_DATA
 VOLUME $ELASTICSEARCH_PATH_REPO
