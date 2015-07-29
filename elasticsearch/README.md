@@ -9,6 +9,7 @@ Dockerfile Environment Variables
 ```
 * ELASTICSEARCH_VERSION             (version of Elasticsearch to install)
 * ELASTICSEARCH_CURATOR_VERSION     (version of Curator to install)
+* ELASTICSEARCH_CLOUD_AWS           (version of AWS cloud plugin to install)
 * MARVEL_VERSION                    (version of Marvel plugin to install)
 * LICENSE_VERSION                   (version of License plugin to install)
 * WATCHER_VERSION                   (version of Watcher plugin to install)
@@ -20,6 +21,7 @@ The following variables are used in the configuration of elasticsearch.yml durin
 equivalent elasticsearch configuration variable is show alongside:
 
 ```
+* ELASTICSEARCH_PATH_REPO                             (path.repo)
 * ELASTICSEARCH_NUMBER_OF_REPLICAS                    (index.number_of_replicas)
 * ELASTICSEARCH_NETWORK_BIND_HOST                     (network.bind_host)
 * ELASTICSEARCH_SCRIPT_DISABLE_DYNAMIC                (script.disable_dynamic)
@@ -33,9 +35,15 @@ equivalent elasticsearch configuration variable is show alongside:
 * ELASTICSEARCH_GATEWAY_EXPECTED_NODES                (gateway.expected_nodes)
 * ELASTICSEARCH_GATEWAY_RECOVER_AFTER_TIME            (gateway.recover_after_time)
 * ELASTICSEARCH_GATEWAY_RECOVER_AFTER_NODES           (gateway.recover_after_nodes)
+* ELASTICSEARCH_CLOUD_AWS_REGION                      (cloud.aws.region)
+* ELASTICSEARCH_CLOUD_AWS_S3_PROTOCOL                 (cloud.aws.s3.protocol)
+* ELASTICSEARCH_CLOUD_AWS_ACCESS_KEY                  (cloud.aws.access_key)
+* ELASTICSEARCH_CLOUD_AWS_SECRET_KEY                  (cloud.aws.secret_key)
 ```
 
-When using the ELASTICSEARCH_CLUSTER_NODES_ variable(s) the suffix after this name is arbitrary. Each variable starting with this
+To allow AWS access/secret keys to be used (instead of IAM roles) for access to S3 storage for snapshots, the variables have been defined but left unset so that IAM is used in preference. Setting values for the key variables will override IAM and force the use of these keys when authenticating.
+
+When using the `ELASTICSEARCH_CLUSTER_NODES_` variable(s) the suffix after this name is arbitrary. Each variable starting with this
 name will be used as a key in the template used to create the elasticsearch.yml configuration file to populate the list of nodes
 in the cluster. For example:
 
@@ -142,6 +150,27 @@ Assuming a running elasticsearch container has been started as above, to run cur
  # docker-compose -f <docker-compose-file> run elasticcurator curator --host elasticsearch.......
 ```
 
+### Snapshots
+
+```
+elasticsnapshot:
+  image: registry.service.dsd.io/opguk/elasticsearch:latest
+  external_links:
+    - opgcoredocker_elasticsearch_1:elasticsearch
+```
+
+Assuming a running elasticsearch container has been started as above, to define a repository for snapshots called `my_snaps`:
+
+```
+ # docker-compose -f <docker-compose-file> run elasticsnapshot \
+ curl -XPUT "http://elasticsearch:9200/_snapshot/my_snaps" -d '{
+    "type": "fs",
+    "settings": {
+       "location": "my_snaps"
+    }
+ }'
+ ```
+
 Curator
 -------
 Using the sample compose entries above and the example to run curator above -
@@ -161,6 +190,16 @@ To do a dry run housekeep of marvel indices older than 30 days:
 To delete all indices on the master node only:
 
 ` curator --master-only --host elasticsearch delete indices --all-indices`
+
+Snapshots
+---------
+For more information on configuring, taking, restoring from and deleting snapshots:
+
+https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-snapshots.html
+
+To snapshot to AWS (S3) using the AWS Cloud Plugin:
+
+https://github.com/elastic/elasticsearch-cloud-aws
 
 Marvel
 ------
