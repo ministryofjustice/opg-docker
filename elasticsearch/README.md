@@ -17,7 +17,7 @@ Dockerfile Environment Variables
 
 ### Elasticsearch Settings (used by confd during startup)
 
-The following variables are used in the configuration of elasticsearch.yml during container startup and their
+The following variables are used in the configuration of `elasticsearch.yml` during container startup and their
 equivalent elasticsearch configuration variable is show alongside:
 
 ```
@@ -65,6 +65,19 @@ discovery.zen.ping.unicast.hosts:
 If this is a single node cluster comment out the `ELASTICSEARCH_CLUSTER_NODES_` variables as they are not required and will
 automatically be left out of the configuration file (otherwise during startup it will generate transport.netty transport
 layer exception messages from java).
+
+### Elasticsearch Script Variables (used by scripts)
+
+The following variables are used by scripts included in the container (stored in `/scripts/elasticsearch/`). See comments within the script for more details.
+
+```
+* ELASTICSEARCH_SNAPSHOTS_REPOSITORY_TYPE             (Snapshot repo type)
+* ELASTICSEARCH_SNAPSHOTS_REPOSITORY_NAME             (Snapshot repo name)
+* ELASTICSEARCH_SNAPSHOTS_REPOSITORY_S3_BUCKET        (S3 bucket for repo)
+* ELASTICSEARCH_SNAPSHOTS_REPOSITORY_S3_PATH          (Used to build path to repo in S3)
+* ELASTICSEARCH_SNAPSHOTS_REPOSITORY_FS_PATH          (Local directory for repo)
+* ELASTICSEARCH_SNAPSHOTS_RETAIN_DAYS                 (How many days to keep snapshots)
+```
 
 Sample docker-compose entries
 -----------------------------
@@ -193,6 +206,19 @@ To delete all indices on the master node only:
 
 Snapshots
 ---------
+There is a script included within the container called `/scripts/elasticsearch/snapshot_elastic.sh`, which will use variables defined in the Dockerfile to create a snapshot repository, take a snapshot of all indices and remove previous snapshots older than a certain number of days. The script also uses sensible defaults if those variables are not set.
+
+Using the sample compose entries above, to take a snapshot to a repository called `mysnapshots` on an S3 bucket called `s3_snapshots` and remove copies older than 3 days:
+
+```
+ # docker-compose -f <docker-compose-file> run \
+ -e ELASTICSEARCH_SNAPSHOTS_REPOSITORY_TYPE=s3 \
+ -e ELASTICSEARCH_SNAPSHOTS_REPOSITORY_S3_BUCKET=s3_snapshots \
+ -e ELASTICSEARCH_SNAPSHOTS_REPOSITORY_NAME=mysnapshots \
+ -e ELASTICSEARCH_SNAPSHOTS_RETAIN_DAYS=3 \
+ elasticsnapshot /scripts/elasticsearch/snapshot_elastic.sh
+```
+
 For more information on configuring, taking, restoring from and deleting snapshots:
 
 https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-snapshots.html
