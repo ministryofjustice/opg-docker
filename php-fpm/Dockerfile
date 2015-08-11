@@ -2,10 +2,9 @@ FROM registry.service.dsd.io/opguk/nginx:latest
 
 RUN  apt-get update && apt-get -y upgrade && \
      apt-get install -y php5-fpm php5-cli && \
-     apt-get install -y php5-xdebug && \
+     apt-get install -y php5-xdebug php5-xhprof php5-mcrypt && \
      apt-get clean && apt-get autoremove && \
      rm -rf /var/lib/cache/* /var/lib/log/* /tmp/* /var/tmp/*
-
 
 RUN  rm -f /etc/php5/fpm/php-fpm.conf
 RUN  rm /etc/php5/fpm/pool.d/www.conf
@@ -29,6 +28,10 @@ ADD  docker/php/* /etc/php5/
 
 ADD  docker/my_init.d /etc/my_init.d
 RUN  chmod a+x /etc/my_init.d/*
+
+RUN mkdir -p /scripts/php-fpm/xhprof
+ADD docker/scripts/xhprof/profiler /scripts/php-fpm/xhprof/profiler
+RUN chmod -R a+x /scripts/php-fpm
 
 # disable php5-xdebug by default
 RUN  rm -f /etc/php5/fpm/conf.d/*xdebug*
