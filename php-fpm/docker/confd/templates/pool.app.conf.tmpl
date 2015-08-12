@@ -130,7 +130,7 @@ pm = static
 ; CGI.
 ; Note: Used when pm is set to either 'static' or 'dynamic'
 ; Note: This value is mandatory.
-pm.max_children = 4
+pm.max_children = {{if exists "/opg/php/pool/children/max"}}{{getv "/opg/php/pool/children/max"}}{{else}}4{{end}}
 ; for ec2 small
 
 ; The number of child processes created on startup.
@@ -152,7 +152,7 @@ pm.max_spare_servers = 2
 ; This can be useful to work around memory leaks in 3rd party libraries. For
 ; endless request processing specify '0'. Equivalent to PHP_FCGI_MAX_REQUESTS.
 ; Default Value: 0
-pm.max_requests = 0
+pm.max_requests = {{if exists "/opg/php/pool/requests/max"}}{{getv "/opg/php/pool/requests/max"}}{{else}}0{{end}}
 
 ; The URI to view the FPM status page. If this value is not set, no URI will be
 ; recognized as a status page. By default, the status page shows the following

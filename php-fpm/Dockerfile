@@ -12,7 +12,7 @@ RUN  rm /etc/php5/fpm/pool.d/www.conf
 
 RUN  mkdir -p /data/session
 
-ADD  docker/fpm /etc/php5/fpm
+ADD  docker/confd /etc/confd
 ADD  docker/nginx /etc/nginx
 
 ADD  docker/service/php-fpm /etc/service/php-fpm
@@ -34,3 +34,4 @@ RUN  chmod a+x /etc/my_init.d/*
 RUN  rm -f /etc/php5/fpm/conf.d/*xdebug*
 RUN  rm -f /etc/php5/cli/conf.d/*xdebug*
 RUN  rm /etc/php5/mods-available/xdebug.ini
+
