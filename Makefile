@@ -3,7 +3,7 @@
 currenttag = $(shell semvertag latest)
 newtag = $(shell semvertag bump patch)
 
-containers = base nginx php-fpm golang rabbitmq wordpress jre-8 elasticsearch
+containers = base nginx php-fpm golang rabbitmq wordpress jre-8 elasticsearch kibana
 
 build:
 	semvertag tag ${newtag}
@@ -15,6 +15,7 @@ build:
 	$(MAKE) -C wordpress newtag=${newtag}
 	$(MAKE) -C jre-8 newtag=${newtag}
 	$(MAKE) -C elasticsearch newtag=${newtag}
+	$(MAKE) -C kibana newtag=${newtag}
 
 push:
 	docker push registry.service.dsd.io/opguk/base:${currenttag}
@@ -33,6 +34,8 @@ push:
 	docker push registry.service.dsd.io/opguk/jre-8:latest
 	docker push registry.service.dsd.io/opguk/elasticsearch:${currenttag}
 	docker push registry.service.dsd.io/opguk/elasticsearch:latest
+	docker push registry.service.dsd.io/opguk/kibana:${currenttag}
+	docker push registry.service.dsd.io/opguk/kibana:latest
 
 pull:
 	docker pull registry.service.dsd.io/opguk/base
@@ -43,3 +46,4 @@ pull:
 	docker pull registry.service.dsd.io/opguk/wordpress
 	docker pull registry.service.dsd.io/opguk/jre-8
 	docker pull registry.service.dsd.io/opguk/elasticsearch
+	docker pull registry.service.dsd.io/opguk/kibana
