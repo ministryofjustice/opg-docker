@@ -1,0 +1,27 @@
+#a demo docker compose file
+
+router:
+  build: .
+  links:
+  - php
+  - nginx
+  ports:
+  - 80:80
+  - 443:443
+  environment:
+  - OPG_NGINX_ROUTER_00_VHOST=php.*
+  - OPG_NGINX_ROUTER_00_TARGET=http://php
+  - OPG_NGINX_ROUTER_00_CLIENT_MAX_BODY_SIZE=20M
+  - OPG_NGINX_ROUTER_01_VHOST=nginx.*
+  - OPG_NGINX_ROUTER_01_TARGET=https://nginx
+#  volumes:
+#  - ./docker/confd:/etc/confd
+
+
+php:
+  image: registry.service.dsd.io/opguk/php-fpm
+
+
+nginx:
+  image: registry.service.dsd.io/opguk/nginx
+

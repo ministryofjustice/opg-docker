@@ -1,0 +1,22 @@
+access_log  /var/log/app/nginx.access.json logstash_json;
+error_log   /var/log/app/nginx.error.log error;
+
+{{ range lsdir "/opg/nginx/router" }}
+server {
+    listen     80;
+    listen     443 ssl;
+    server_name {{ getv (printf "/opg/nginx/router/%s/vhost" .) }};
+
+    {{ with $client_max_body_size_key := (printf "/opg/nginx/router/%s/client/max/body/size" .) }}
+    {{ if exists $client_max_body_size_key }}
+    client_max_body_size {{ getv $client_max_body_size_key }};
+    {{ end }}
+    {{ end }}
+
+    proxy_buffering off;
+
+    location / {
+        proxy_pass {{ getv (printf "/opg/nginx/router/%s/target" .) }};
+    }
+}
+{{ end }}
