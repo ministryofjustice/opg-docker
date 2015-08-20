@@ -4,7 +4,7 @@ error_log   /var/log/app/nginx.error.log error;
 {{ if exists "/opg/nginx/ssl/force/redirect" }}
 server {
    listen      80;
-   return      307 https://$server_name$request_uri;
+   return      307 https://$host$request_uri;
 }
 {{ end }}
 
