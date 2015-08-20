@@ -12,7 +12,6 @@ RUN  rm /etc/php5/fpm/pool.d/www.conf
 RUN  mkdir -p /data/session
 
 ADD  docker/confd /etc/confd
-ADD  docker/nginx /etc/nginx
 
 ADD  docker/service/php-fpm /etc/service/php-fpm
 RUN  chmod a+x /etc/service/php-fpm/run
