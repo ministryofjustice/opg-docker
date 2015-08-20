@@ -1,9 +1,19 @@
 access_log  /var/log/app/nginx.access.json logstash_json;
 error_log   /var/log/app/nginx.error.log error;
 
+{{ if exists "/opg/nginx/ssl/force/redirect" }}
+server {
+   listen      80;
+   return      307 https://$server_name$request_uri;
+}
+{{ end }}
+
+
 {{ range lsdir "/opg/nginx/router" }}
 server {
+{{ if not (exists "/opg/nginx/ssl/force/redirect") }}
     listen     80;
+{{ end }}
     listen     443 ssl;
     server_name {{ getv (printf "/opg/nginx/router/%s/vhost" .) }};
 
