@@ -161,6 +161,7 @@ Quite simply:
 ```
 
 The final command in the ```/etc/my_init.d``` directory can the be set to the jenkins startup script, ```99-run``` in this case, which then starts the container following the bootstrap processes.
+
 ---
 <sup>1</sup>You could upgrade to the [Docker Toolbox](https://www.docker.com/toolbox), but it isn't necessary[↩](#a1)</br>
 <sup>2</sup>Thank God[↩](#a2)
