@@ -12,10 +12,10 @@ build:
 	docker build -f docker/Dockerfile-$(TAG) -t $(NAME):$(VERSION)-$(TAG) .
 
 clean:
-	eval $(docker-machine env default)
-	docker kill $(docker ps -a -q)
-	docker rm -f $(docker ps -a -q)
-	docker rmi -f $(docker images -q)
+	@eval `docker-machine env default` ||:
+	@docker kill `docker ps -a -q` ||:
+	@docker rm -f `docker ps -a -q` ||:
+	@docker rmi -f `docker images -q` ||:
 
 test:
 	env NAME=$(NAME) VERSION=$(VERSION)-$(TAG) ./test/runner.sh

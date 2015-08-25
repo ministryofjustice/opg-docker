@@ -73,9 +73,17 @@ and the Amazon container
   make TAG=ecs
 ```
 
-### Testing, Tagging, releasing, pushing...
-Check out the ```Makefile``` for further details.
-
+### Testing, Tagging, releasing, pushing, cleaning...
+Check out the ```Makefile``` for further details. For instance if you want to nuke your docker builds and cleanup your computer of all docker containers and images, run the ```make clean``` which is just
+```
+  #!/bin/bash
+  # Kill all processes
+  docker kill $(docker ps -a -q)
+  # Delete all containers
+  docker rm $(docker ps -a -q)
+  # Delete all images
+  docker rmi $(docker images -q)
+``` 
 ## Amazon ECS
 ### CloudFormation for Everyone, Everywhere and Always
 It is possbile to run the OPG jenkins container on Amazon Web Services without Salt or any other configuration apart from CloudFormation and the environment variables<sup id="a1">[1](#f1)</sup>.
@@ -118,21 +126,9 @@ file, so to install the *greenballs* plugin you would simply add-edit the file, 
 ```
 and then run your make command. 
 
-## Clean Up You Slob!
-If you want to nuke your docker builds and cleanup your computer of all docker containers and images, run the ```./docker-clean``` script.
-```
-  #!/bin/bash
-  # Kill all processes
-  docker kill $(docker ps -a -q)
-  # Delete all containers
-  docker rm $(docker ps -a -q)
-  # Delete all images
-  docker rmi $(docker images -q)
-``` 
+# The Documentation Is In The Code
 
-# The Documentation Is In The Code, Man...
-
-For more details on how the containers are built see their respective Dockerfiles, and AWS take a gander at the ```aws``` and ```template.json```.
+For more details on how the containers are built see their respective Dockerfiles, and AWS take a gander at the ```aws``` script and ```template.json```.
 
 ---
 # Appendix

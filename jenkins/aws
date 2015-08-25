@@ -20,7 +20,7 @@ else
     else
       COMMAND=create
     fi
-    aws cloudformation $COMMAND-stack \
+    aws cloudformation $COMAND-stack \
       --stack-name $AWS_DEFAULT_PROFILE \
       --template-body file://template.json \
       --capabilities CAPABILITY_IAM \
