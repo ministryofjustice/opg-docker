@@ -134,6 +134,7 @@ If you want to nuke your docker builds and cleanup your computer of all docker c
 ``` 
 
 # The Documentation Is In The Code, Man...
+
 For more details on how the containers are built see their respective Dockerfiles, and AWS take a gander at the ```aws``` and ```template.json```.
 ---
 # Appendix
@@ -143,7 +144,8 @@ The template for the ```JENKINS_GITHUB_PRIVKEY``` is overwritten by its ```check
   /bin/echo -e $JENKINS_GITHUB_PRIVKEY > {{.src}}
 ```
 is used to correctly set the private key value. Note that the full path is required to echo i.e. ```/bin/echo```, otherwise -e is intepreted as part of the string - haha Gotcha!
-##Re-Entrypoint
+
+## Re-Entrypoint
 Because [Amazon ECS](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html) runs it's own service, the bootstrap sequence our base image employs has been modified, and now consists of a simple bash script that runs all the scripts in ```/etc/my_init.d```.
 
 Quite simply:
@@ -156,8 +158,9 @@ Quite simply:
     fi
   done
 ```
+
 The final command in the ```/etc/my_init.d``` directory can the be set to the jenkins startup script, ```99-run``` in this case, which then starts the container following the bootstrap processes.
 ---
-<sup>1</sup>You could upgrade to the [Docker Toolbox](https://www.docker.com/toolbox), but it isn't necessary[↩](#a1)
+<sup>1</sup>You could upgrade to the [Docker Toolbox](https://www.docker.com/toolbox), but it isn't necessary[↩](#a1)</br>
 <sup>2</sup>Thank God[↩](#a2)
 
