@@ -30,16 +30,16 @@ RUN apt-get update && \
 RUN wget https://github.com/kelseyhightower/confd/releases/download/v0.10.0/confd-0.10.0-linux-amd64 && mv confd-0.10.0-linux-amd64 /usr/bin/confd && chmod 0755 /usr/bin/confd
 
 # Our jubbly customisations.
-COPY /usr/share/jenkins/ref /usr/share/jenkins/ref
+COPY docker/usr/share/jenkins/ref /usr/share/jenkins/ref
 
 # Plugins, plugins everywhere.
 RUN /usr/local/bin/plugins.sh /usr/share/jenkins/ref/plugins.txt
 
 # Bootstrap commands, and our Jenkins service.
-COPY /etc/confd /etc/confd
-COPY /etc/service /etc/service
-COPY /etc/my_init.d /etc/my_init.d
-COPY /sbin/my_init /sbin/my_init
+COPY docker/etc/confd /etc/confd
+COPY docker/etc/service /etc/service
+COPY docker/etc/my_init.d /etc/my_init.d
+COPY docker/sbin/my_init /sbin/my_init
 RUN ln -s /etc/service/run /etc/my_init.d/99-run
 
 # Jenkins is the owner of his own home sir!

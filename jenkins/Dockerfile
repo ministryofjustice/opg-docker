@@ -58,15 +58,15 @@ RUN curl -fL http://mirrors.jenkins-ci.org/war-stable/$JENKINS_VERSION/jenkins.w
   && echo "$JENKINS_SHA /usr/share/jenkins/jenkins.war" | sha1sum -c -
 
 # Installation, startup and config files.
-COPY /usr/local/bin/plugins.sh /usr/local/bin/plugins.sh
-COPY /usr/local/bin/jenkins.sh /usr/local/bin/jenkins.sh
+COPY docker/usr/local/bin/plugins.sh /usr/local/bin/plugins.sh
+COPY docker/usr/local/bin/jenkins.sh /usr/local/bin/jenkins.sh
 
 # Our jubbly customisations.
-COPY /usr/share/jenkins/ref /usr/share/jenkins/ref
+COPY docker/usr/share/jenkins/ref /usr/share/jenkins/ref
 
 # Bootstrap commands, and our Jenkins service.
-COPY /etc/confd /etc/confd
-COPY /etc/service /etc/service
+COPY docker/etc/confd /etc/confd
+COPY docker/etc/service /etc/service
 
 # Plugins, plugins everywhere.
 RUN /usr/local/bin/plugins.sh /usr/share/jenkins/ref/plugins.txt

@@ -3,11 +3,11 @@ The Jenkins Continuous Integration and Delivery server Dockeri(s|z)ed for the OP
 ![jenkins_moj_logo](https://cloud.githubusercontent.com/assets/13198078/9408279/47665d26-4809-11e5-9c3f-4113dd3aa07e.png)
 # Prerequistes
 * An environment.sh file
-* [boot2docker](http://boot2docker.io/) && docker-compose - for local builds
-* [aws-cli:](http://aws.amazon.com/cli/) for deploying to Amazon Web Services
+* [Docker Toolbox](https://www.docker.com/toolbox) - for local MOJ builds
+* [aws-cli](http://aws.amazon.com/cli/) - for deploying to Amazon Web Services
 
 ## Environment Variables
-Both ECS and MOJ implementations use ENV's and [confd](https://github.com/kelseyhightower/confd) during the boostrap process to configure the instance. Look at the environment.example file for specifics,
+Both AWS and MOJ implementations use ENV's and [confd](https://github.com/kelseyhightower/confd) during the boostrap process to configure the instance. Look at the environment.example file for specifics,
 ```
   #!/bin/bash
   # Set the user and private Docker registry env's.
@@ -39,7 +39,7 @@ Both ECS and MOJ implementations use ENV's and [confd](https://github.com/kelsey
 as you will need to set these before you run either of the two deployments.
 
 ## boot2docker
-To run locally use [boot2docker](http://boot2docker.io/)<sup id="a1">[1](#f1)</sup>
+To run locally use [Docker Toolbox](https://www.docker.com/toolbox)
 
 If you're feeling lucky run, 
 ```
@@ -81,7 +81,7 @@ Push the image to our registry if required, you will have to do this if using Am
 
 ## Amazon ECS
 ### CloudFormation for Everyone, Everywhere and Always
-It is possbile to run the OPG jenkins container on Amazon Web Services without Salt or any other configuration apart from CloudFormation and the environment variables<sup id="a2">[2](#f2)</sup>.
+It is possbile to run the OPG jenkins container on Amazon Web Services without Salt or any other configuration apart from CloudFormation and the environment variables<sup id="a1">[1](#f1)</sup>.
 
 To run a test environment in AWS which creates an ECS cluster of one, with an [Elastic LoadBalancer](https://aws.amazon.com/documentation/elastic-load-balancing/) and [Route53](http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html) DNS record, run the ```aws``` script. 
 ```
@@ -89,7 +89,7 @@ To run a test environment in AWS which creates an ECS cluster of one, with an [E
 ```
 The script requires a command - either ```create|update``` (to create or update the CloudFormation template), an SSH keyname and DNS domain.
 
-In order to pass the environment variables to the template you will ***also*** need to create an environment.sh file containing the ENV's listed above, At a minimum you must configure the following thusly,
+In order to pass the environment variables to the template you will ***also*** need to create an environment.sh file containing the ENV's listed above. At a minimum you must configure the following,
 ```
   #!/bin/bash
   JENKINS_USER_TRAINING_APIKEY=JP22DVUEvG...
@@ -117,7 +117,7 @@ file, so to install the *greenballs* plugin you would simply add-edit the file, 
   xunit
   plain-credentials
   workflow-step-api
-  ***greenballs***
+  <b>greenballs</b>
 ```
 and then run your make command. 
 
@@ -163,6 +163,5 @@ Quite simply:
 The final command in the ```/etc/my_init.d``` directory can the be set to the jenkins startup script, ```99-run``` in this case, which then starts the container following the bootstrap processes.
 
 ---
-<sup>1</sup>You could upgrade to the [Docker Toolbox](https://www.docker.com/toolbox), but it isn't necessary[↩](#a1)</br>
-<sup>2</sup>Thank God[↩](#a2)
+<sup>1</sup>Thank God[↩](#a1)</br>
 
