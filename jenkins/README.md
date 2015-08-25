@@ -136,6 +136,7 @@ If you want to nuke your docker builds and cleanup your computer of all docker c
 # The Documentation Is In The Code, Man...
 
 For more details on how the containers are built see their respective Dockerfiles, and AWS take a gander at the ```aws``` and ```template.json```.
+
 ---
 # Appendix
 ## Gotcha
