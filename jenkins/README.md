@@ -7,7 +7,7 @@ The Jenkins Continuous Integration and Delivery server Dockeri(s|z)ed for the OP
 * [aws-cli:](http://aws.amazon.com/cli/) for deploying to Amazon Web Services
 
 ## Environment Variables
-Both ECS and MOJ implementations use ENV's and [confd](https://github.com/kelseyhightower/confd) during the boostrap process to configure the instance. Look at the environment.example file for specifics, as you will need to set these before you run either of the two deployments.
+Both ECS and MOJ implementations use ENV's and [confd](https://github.com/kelseyhightower/confd) during the boostrap process to configure the instance. Look at the environment.example file for specifics,
 ```
   #!/bin/bash
   # Set the user and private Docker registry env's.
@@ -36,6 +36,7 @@ Both ECS and MOJ implementations use ENV's and [confd](https://github.com/kelsey
   # APP_DOCKER_SUFFIX=dev
   # APP_GIT_BRANCH=develop
 ```
+as you will need to set these before you run either of the two deployments.
 
 ## boot2docker
 To run locally use [boot2docker](http://boot2docker.io/)<sup id="a1">[1](#f1)</sup>
