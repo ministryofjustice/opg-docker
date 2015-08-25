@@ -1,0 +1,38 @@
+#!/bin/bash
+# Set the user and private Docker registry env's.
+# JENKINS_GITHUB_PUBKEY=
+# JENKINS_GITHUB_PRIVKEY=
+# JENKINS_GITHUB_AUTHKEYS=
+
+# These are users for logging into the user interface
+# JENKINS_USER_OPGCORE_APITOKEN=
+# JENKINS_USER_OPGCORE_PASSWORD=
+# JENKINS_USER_OPGCORE_PUBKEYS=
+#
+# JENKINS_USER_TRAINING_APITOKEN=
+# JENKINS_USER_TRAINING_PASSWORD=
+# JENKINS_USER_TRAINING_PUBKEYS=
+
+# Configures the Dockercfg if pushing to a remote registry
+# Leave blank if only using local docker registry
+# JENKINS_DOCKERCFG_URL=
+# JENKINS_DOCKERCFG_EMAIL=
+# JENKINS_DOCKERCFG_USERNAME=
+# JENKINS_DOCKERCFG_PASSWORD=
+
+# Git needs to be configured with a user.name and user.email
+# GIT_USERNAME=whoami
+# GIT_EMAIL_ADDRESS=your.name@address.who
+
+# Tweakables for setting the branches from the first build job
+# OPG_MEMBRANE_BRANCH=develop
+# OPG_FRONTEND_BRANCH=develop
+# OPG_BACKEND_BRANCH=develop
+
+# Legacy variables that were used to deploy 
+# on the salt version of Jenkins
+# DEPLOY_GIT_BRANCH=master
+# APP_GIT_DOWNSTREAM_BRANCH=
+# APP_DOCKER_SUFFIX=dev
+# APP_GIT_BRANCH=develop
+
