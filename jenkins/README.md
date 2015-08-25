@@ -5,6 +5,7 @@ The Jenkins Continuous Integration and Delivery server Dockeri(s|z)ed for the OP
 * An environment.sh file
 * [boot2docker](http://boot2docker.io/) && docker-compose - for local builds
 * [aws-cli:](http://aws.amazon.com/cli/) for deploying to Amazon Web Services
+
 ## Environment Variables
 Both ECS and MOJ implementations use ENV's and [confd](https://github.com/kelseyhightower/confd) during the boostrap process to configure the instance. Look at the environment.example file for specifics, as you will need to set these before you run either of the two deployments.
 ```
@@ -35,6 +36,7 @@ Both ECS and MOJ implementations use ENV's and [confd](https://github.com/kelsey
   # APP_DOCKER_SUFFIX=dev
   # APP_GIT_BRANCH=develop
 ```
+
 ## boot2docker
 To run locally use [boot2docker](http://boot2docker.io/)<sup id="a1">[1](#f1)</sup>
 
@@ -52,6 +54,7 @@ Connect to Jenkins on:
 ```
   curl http://$(boot2docker ip):8080
 ```
+
 ### Baking
 This [docker](https://www.docker.com/) build environment contains two possible containers.
 
@@ -68,11 +71,13 @@ and the Amazon container
 ```
   make -f Makefile-moj
 ```
+
 ### Pushing
 Push the image to our registry if required, you will have to do this if using Amazon:
 ```
   docker push registry.service.dsd.io/opguk/jenkins-ecs
 ```
+
 ## Amazon ECS
 ### CloudFormation for Everyone, Everywhere and Always
 It is possbile to run the OPG jenkins container on Amazon Web Services without Salt or any other configuration apart from CloudFormation and the environment variables<sup id="a2">[2](#f2)</sup>.
@@ -98,6 +103,7 @@ In order to pass the environment variables to the template you will ***also*** n
   OPG_FRONTEND_BRANCH=training
   OPG_BACKEND_BRANCH=training
 ```
+
 # Customising Your Container
 ## Plugins
 Jenkins plugins are installed via a script, you can configure the plugins that you want to be installed by editing the 
@@ -113,6 +119,7 @@ file, so to install the *greenballs* plugin you would simply add-edit the file, 
   ***greenballs***
 ```
 and then run your make command. 
+
 ## Clean Up You Slob!
 If you want to nuke your docker builds and cleanup your computer of all docker containers and images, run the ```./docker-clean``` script.
 ```
@@ -124,6 +131,7 @@ If you want to nuke your docker builds and cleanup your computer of all docker c
   # Delete all images
   docker rmi $(docker images -q)
 ``` 
+
 # The Documentation Is In The Code, Man...
 For more details on how the containers are built see their respective Dockerfiles, and AWS take a gander at the ```aws``` and ```template.json```.
 ---
