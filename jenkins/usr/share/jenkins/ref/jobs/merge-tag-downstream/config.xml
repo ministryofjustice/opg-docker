@@ -1,0 +1,151 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description>This job merges the latest tag on this branch into the downstream branch. &#xd;
+I.E. on master it merges the latest tag into all repos on support and on on Support it merges the latest patch tag into all repos on develop.&#xd;
+&#xd;
+Notes:&#xd;
+* If it encounters any conflicts it will abort at the job fails.&#xd;
+* It only pushes changes back to origin, if merge is successful on all repos&#xd;
+</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.15">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
+    <de.pellepelster.jenkins.walldisplay.WallDisplayJobProperty plugin="jenkinswalldisplay@0.6.30"/>
+  </properties>
+  <scm class="org.jenkinsci.plugins.multiplescms.MultiSCM" plugin="multiple-scms@0.4">
+    <scms>
+      <hudson.plugins.git.GitSCM plugin="git@2.3.5">
+        <configVersion>2</configVersion>
+        <userRemoteConfigs>
+          <hudson.plugins.git.UserRemoteConfig>
+            <url>git@github.com:ministryofjustice/opg-core-back-end.git</url>
+            <credentialsId>dfbf4577-f890-4f9a-abd4-7388b96fcee5</credentialsId>
+          </hudson.plugins.git.UserRemoteConfig>
+        </userRemoteConfigs>
+        <branches>
+          <hudson.plugins.git.BranchSpec>
+            <name>*/${APP_GIT_BRANCH}</name>
+          </hudson.plugins.git.BranchSpec>
+        </branches>
+        <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+        <submoduleCfg class="list"/>
+        <extensions>
+          <hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
+            <relativeTargetDir>opg-core-back-end</relativeTargetDir>
+          </hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
+          <hudson.plugins.git.extensions.impl.ScmName>
+            <name>opg-core-back-end</name>
+          </hudson.plugins.git.extensions.impl.ScmName>
+          <hudson.plugins.git.extensions.impl.PruneStaleBranch/>
+        </extensions>
+      </hudson.plugins.git.GitSCM>
+      <hudson.plugins.git.GitSCM plugin="git@2.3.5">
+        <configVersion>2</configVersion>
+        <userRemoteConfigs>
+          <hudson.plugins.git.UserRemoteConfig>
+            <url>git@github.com:ministryofjustice/opg-core-front-end.git</url>
+            <credentialsId>dfbf4577-f890-4f9a-abd4-7388b96fcee5</credentialsId>
+          </hudson.plugins.git.UserRemoteConfig>
+        </userRemoteConfigs>
+        <branches>
+          <hudson.plugins.git.BranchSpec>
+            <name>*/${APP_GIT_BRANCH}</name>
+          </hudson.plugins.git.BranchSpec>
+        </branches>
+        <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+        <submoduleCfg class="list"/>
+        <extensions>
+          <hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
+            <relativeTargetDir>opg-core-front-end</relativeTargetDir>
+          </hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
+          <hudson.plugins.git.extensions.impl.ScmName>
+            <name>opg-core-front-end</name>
+          </hudson.plugins.git.extensions.impl.ScmName>
+          <hudson.plugins.git.extensions.impl.PruneStaleBranch/>
+        </extensions>
+      </hudson.plugins.git.GitSCM>
+      <hudson.plugins.git.GitSCM plugin="git@2.3.5">
+        <configVersion>2</configVersion>
+        <userRemoteConfigs>
+          <hudson.plugins.git.UserRemoteConfig>
+            <url>git@github.com:ministryofjustice/opg-core-auth-membrane.git</url>
+            <credentialsId>dfbf4577-f890-4f9a-abd4-7388b96fcee5</credentialsId>
+          </hudson.plugins.git.UserRemoteConfig>
+        </userRemoteConfigs>
+        <branches>
+          <hudson.plugins.git.BranchSpec>
+            <name>*/${APP_GIT_BRANCH}</name>
+          </hudson.plugins.git.BranchSpec>
+        </branches>
+        <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+        <submoduleCfg class="list"/>
+        <extensions>
+          <hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
+            <relativeTargetDir>opg-core-auth-membrane</relativeTargetDir>
+          </hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
+          <hudson.plugins.git.extensions.impl.ScmName>
+            <name>opg-core-auth-membrane</name>
+          </hudson.plugins.git.extensions.impl.ScmName>
+          <hudson.plugins.git.extensions.impl.PruneStaleBranch/>
+        </extensions>
+      </hudson.plugins.git.GitSCM>
+      <hudson.plugins.git.GitSCM plugin="git@2.3.5">
+        <configVersion>2</configVersion>
+        <userRemoteConfigs>
+          <hudson.plugins.git.UserRemoteConfig>
+            <url>git@github.com:ministryofjustice/opg-core-docker.git</url>
+          </hudson.plugins.git.UserRemoteConfig>
+        </userRemoteConfigs>
+        <branches>
+          <hudson.plugins.git.BranchSpec>
+            <name>*/master</name>
+          </hudson.plugins.git.BranchSpec>
+        </branches>
+        <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+        <submoduleCfg class="list"/>
+        <extensions>
+          <hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
+            <relativeTargetDir>opg-core-docker</relativeTargetDir>
+          </hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
+          <hudson.plugins.git.extensions.impl.ScmName>
+            <name>opg-core-docker</name>
+          </hudson.plugins.git.extensions.impl.ScmName>
+        </extensions>
+      </hudson.plugins.git.GitSCM>
+    </scms>
+  </scm>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>true</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>if [ -z &quot;${APP_GIT_DOWNSTREAM_BRANCH}&quot; ]; then
+  printf &quot;No downstream branch specified, nothing to do. (environmental variable: APP_GIT_DOWNSTREAM_BRANCH)\n&quot;;
+  exit 0;
+fi
+
+cd opg-core-docker;
+
+if [ -n &quot;${APP_DOCKER_SUFFIX}&quot; ]; then 
+	LATEST_TAG=$(semvertag --cwd &quot;/srv/jenkins/jobs/merge-tag-downstream/workspace/opg-core-back-end&quot; latest --stage &quot;${APP_DOCKER_SUFFIX}&quot;);
+else 
+	LATEST_TAG=$(semvertag --cwd &quot;/srv/jenkins/jobs/merge-tag-downstream/workspace/opg-core-back-end&quot; latest);
+fi
+
+./merge-tag-into-branch.sh -r &quot;${LATEST_TAG}&quot; &quot;${APP_GIT_DOWNSTREAM_BRANCH}&quot;;</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers>
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.6"/>
+    <hudson.plugins.ansicolor.AnsiColorBuildWrapper plugin="ansicolor@0.4.1">
+      <colorMapName>xterm</colorMapName>
+    </hudson.plugins.ansicolor.AnsiColorBuildWrapper>
+  </buildWrappers>
+</project>

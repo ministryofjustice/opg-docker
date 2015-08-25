@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?><project>
+  <actions/>
+  <description/>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>Target_Environment</name>
+          <description>Target Environment</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>ci</string>
+              <string>qa</string>
+              <string>uat</string>
+              <string>integration</string>
+              <string>training</string>
+              <string>scratch</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <com.cwctravel.hudson.plugins.extended__choice__parameter.ExtendedChoiceParameterDefinition plugin="extended-choice-parameter@0.36">
+          <name>Data_Set</name>
+          <description>Directory from which to ingest XML test-data files</description>
+          <quoteValue>false</quoteValue>
+          <visibleItemCount>100</visibleItemCount>
+          <type>PT_SINGLE_SELECT</type>
+          <groovyScript>/* List all available test data sets */
+def lookup_path = '/srv/jenkins/jobs/010-build/workspace/opg-core-back-end/fixtures/opg-core-ddc-essentials/DataSets';
+
+def tags = [];
+new File(lookup_path).eachDir() { dir -&gt; tags.add(dir.getName()) }
+
+def csv = tags.toString();
+return csv.replaceAll(/[\[|\]]/, "");</groovyScript>
+          <bindings/>
+          <groovyClasspath/>
+          <multiSelectDelimiter>,</multiSelectDelimiter>
+        </com.cwctravel.hudson.plugins.extended__choice__parameter.ExtendedChoiceParameterDefinition>
+        <com.cwctravel.hudson.plugins.extended__choice__parameter.ExtendedChoiceParameterDefinition plugin="extended-choice-parameter@0.36">
+          <name>Build_Version</name>
+          <description/>
+          <quoteValue>false</quoteValue>
+          <visibleItemCount>100</visibleItemCount>
+          <type>PT_SINGLE_SELECT</type>
+          <groovyScript>/* List all available tags (descending order) */
+def command = [
+  'semvertag', '--cwd', '/srv/jenkins/jobs/010-build/workspace/opg-core-back-end', 'list', '--csv'
+];
+
+def suffix = null;
+new File(sprintf("%s/env", System.getenv('HOME'))).eachLine { line -&gt;
+  if (line.trim() &amp;&amp; line =~ /APP_DOCKER_SUFFIX/) {
+    suffix = line.split('=').collect { it.trim() }.pop();
+    return true;
+  }
+}
+
+if (suffix?.trim() &amp;&amp; suffix != "APP_DOCKER_SUFFIX") {
+  command.push('--stage');
+  command.push(suffix);
+}
+
+def proc = command.execute();
+proc.waitFor();
+
+return proc.text.trim();</groovyScript>
+          <bindings/>
+          <groovyClasspath/>
+          <defaultGroovyScript>/* Get latest tag */
+def command = [
+  'semvertag', '--cwd', '/srv/jenkins/jobs/010-build/workspace/opg-core-back-end', 'latest'
+];
+
+def suffix = null;
+new File(sprintf("%s/env", System.getenv('HOME'))).eachLine { line -&gt;
+  if (line.trim() &amp;&amp; line =~ /APP_DOCKER_SUFFIX/) {
+    suffix = line.split('=').collect { it.trim() }.pop();
+    return true;
+  }
+}
+
+
+if (suffix?.trim() &amp;&amp; suffix != "APP_DOCKER_SUFFIX") {
+  command.push('--stage');
+  command.push(suffix);
+}
+
+def proc = command.execute();
+proc.waitFor();
+
+return proc.text.trim();</defaultGroovyScript>
+          <defaultBindings/>
+          <defaultGroovyClasspath/>
+          <multiSelectDelimiter>,</multiSelectDelimiter>
+        </com.cwctravel.hudson.plugins.extended__choice__parameter.ExtendedChoiceParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <jenkins.plugins.slack.SlackNotifier_-SlackJobProperty plugin="slack@1.8">
+      <teamDomain>opgcore</teamDomain>
+      <token>cDpyuTZep9IIiitIq8eV8oBW</token>
+      <room>#opg-jenkins</room>
+      <startNotification>false</startNotification>
+      <notifySuccess>false</notifySuccess>
+      <notifyAborted>false</notifyAborted>
+      <notifyNotBuilt>false</notifyNotBuilt>
+      <notifyUnstable>false</notifyUnstable>
+      <notifyFailure>true</notifyFailure>
+      <notifyBackToNormal>false</notifyBackToNormal>
+      <notifyRepeatedFailure>false</notifyRepeatedFailure>
+      <includeTestSummary>false</includeTestSummary>
+      <showCommitList>false</showCommitList>
+      <includeCustomMessage>false</includeCustomMessage>
+      <customMessage></customMessage>
+    </jenkins.plugins.slack.SlackNotifier_-SlackJobProperty>
+    <de.pellepelster.jenkins.walldisplay.WallDisplayJobProperty plugin="jenkinswalldisplay@0.6.30"/>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>true</concurrentBuild>
+  <customWorkspace>workspaces/900-deploy</customWorkspace>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>echo "set version"
+sudo -E salt "${Target_Environment}-*" grains.setval opg_app_version ${Build_Version}
+
+echo "deploy"
+parsed-salt "${Target_Environment}-*" state.sls containers.compose-standalone
+
+echo "setupdbs &amp; ingest"
+DOCKER_COMPOSE="docker-compose -p opgcore -f /etc/docker-compose/standalone.yml"
+
+sudo -E salt "${Target_Environment}-*" cmd.run use_vt=True "${DOCKER_COMPOSE} run membrane sh /app/scripts/database/setupdbs.sh"
+
+sudo -E salt "${Target_Environment}-*" cmd.run use_vt=True "${DOCKER_COMPOSE} run ingestion sh /app/scripts/database/setupdbs.sh"
+sudo -E salt "${Target_Environment}-*" cmd.run use_vt=True "${DOCKER_COMPOSE} run ingestion sh /app/scripts/database/useringest.sh"
+sudo -E salt "${Target_Environment}-*" cmd.run use_vt=True "${DOCKER_COMPOSE} run ingestion sh /app/scripts/database/caseingest_xmls.sh ${Data_Set}"
+</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <jenkins.plugins.slack.SlackNotifier plugin="slack@1.8">
+      <teamDomain>opgcore</teamDomain>
+      <authToken>cDpyuTZep9IIiitIq8eV8oBW</authToken>
+    </jenkins.plugins.slack.SlackNotifier>
+  </publishers>
+  <buildWrappers>
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.6"/>
+    <hudson.plugins.ansicolor.AnsiColorBuildWrapper plugin="ansicolor@0.4.1">
+      <colorMapName>xterm</colorMapName>
+    </hudson.plugins.ansicolor.AnsiColorBuildWrapper>
+  </buildWrappers>
+</project>

@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.15">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
+    <jenkins.plugins.slack.SlackNotifier_-SlackJobProperty plugin="slack@1.8">
+      <teamDomain>opgcore</teamDomain>
+      <token>cDpyuTZep9IIiitIq8eV8oBW</token>
+      <room>#opg-jenkins</room>
+      <startNotification>false</startNotification>
+      <notifySuccess>false</notifySuccess>
+      <notifyAborted>false</notifyAborted>
+      <notifyNotBuilt>false</notifyNotBuilt>
+      <notifyUnstable>false</notifyUnstable>
+      <notifyFailure>false</notifyFailure>
+      <notifyBackToNormal>false</notifyBackToNormal>
+      <notifyRepeatedFailure>false</notifyRepeatedFailure>
+      <includeTestSummary>false</includeTestSummary>
+      <showCommitList>false</showCommitList>
+      <includeCustomMessage>false</includeCustomMessage>
+      <customMessage></customMessage>
+    </jenkins.plugins.slack.SlackNotifier_-SlackJobProperty>
+    <de.pellepelster.jenkins.walldisplay.WallDisplayJobProperty plugin="jenkinswalldisplay@0.6.30"/>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>true</concurrentBuild>
+  <customWorkspace>workspaces/900-deploy</customWorkspace>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>echo "setupdbs &amp; ingest"
+DOCKER_COMPOSE="docker-compose -p opgcore -f /etc/docker-compose/standalone.yml"
+INGEST_COMPOSE="docker-compose -p opgcore -f /etc/docker-compose/ingestcase.yml"
+Target_Environment="training"
+
+parsed-salt "${Target_Environment}-*" state.sls containers.compose-ingest
+
+sudo -E salt "${Target_Environment}-*" cmd.run use_vt=True "${INGEST_COMPOSE} pull ingestcase"
+
+sudo -E salt "${Target_Environment}-*" cmd.run use_vt=True "${DOCKER_COMPOSE} run membrane sh /app/scripts/database/setupdbs.sh"
+
+sudo -E salt "${Target_Environment}-*" cmd.run use_vt=True "${DOCKER_COMPOSE} run ingestion sh /app/scripts/database/setupdbs.sh"
+sudo -E salt "${Target_Environment}-*" cmd.run use_vt=True "${INGEST_COMPOSE} run ingestion php /app/public/index.php ingest users /tmp/ingestcase/training_master_users.csv http://frontend"
+sudo -E salt "${Target_Environment}-*" cmd.run use_vt=True "${INGEST_COMPOSE} run ingestion sh /app/scripts/database/ingestcase.sh"
+</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers>
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.6.2"/>
+    <hudson.plugins.ansicolor.AnsiColorBuildWrapper plugin="ansicolor@0.4.1">
+      <colorMapName>xterm</colorMapName>
+    </hudson.plugins.ansicolor.AnsiColorBuildWrapper>
+  </buildWrappers>
+</project>

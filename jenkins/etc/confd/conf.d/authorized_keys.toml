@@ -1,0 +1,7 @@
+[template]
+src = "authorized_keys.tmpl"
+dest = "/root/.ssh/authorized_keys"
+mode = "0600"
+keys = [
+  "/jenkins"
+]

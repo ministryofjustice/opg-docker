@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><project>
+  <actions/>
+  <description>Initialises Postgresql and Elasticsearch in chosen release-stage (no case/user ingestion)</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>Target_Environment</name>
+          <description>Target Environment</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>ci</string>
+              <string>qa</string>
+              <string>uat</string>
+              <string>integration</string>
+              <string>training</string>
+              <string>scratch</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <de.pellepelster.jenkins.walldisplay.WallDisplayJobProperty plugin="jenkinswalldisplay@0.6.30"/>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command># Load default settings (for particular environment).
+DOCKER_COMPOSE='salt '${Target_Environment}-*' cmd.run docker-compose -p opgcore -f /etc/docker-compose/standalone.yml'
+
+# We connect back to *this* node via SSH to ensure that we have allocated terminal.
+SSH="ssh -o CheckHostIP=no -o StrictHostKeyChecking=no -tt -q ${USER}@127.0.0.1"
+
+$SSH $DOCKER_COMPOSE run membrane sh -c '/app/scripts/database/setupdbs.sh'
+$SSH $DOCKER_COMPOSE run ingestion sh -c '/app/scripts/database/setupdbs.sh'</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers>
+    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.6"/>
+    <hudson.plugins.ansicolor.AnsiColorBuildWrapper plugin="ansicolor@0.4.1">
+      <colorMapName>xterm</colorMapName>
+    </hudson.plugins.ansicolor.AnsiColorBuildWrapper>
+  </buildWrappers>
+</project>

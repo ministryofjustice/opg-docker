@@ -1,0 +1,766 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Creates the hellojenkins application.",
+    "Parameters": {
+        "JenkinsUserOpgcoreApikey": {
+            "Description": "",
+            "Type": "String"
+        },
+        "JenkinsUserOpgcorePassword": {
+            "Description": "",
+            "Type": "String"
+        },
+        "JenkinsUserOpgcorePubkeys": {
+            "Description": "",
+            "Type": "String"
+        },
+        "JenkinsUserTrainingApikey": {
+            "Description": "",
+            "Type": "String"
+        },
+        "JenkinsUserTrainingPassword": {
+            "Description": "",
+            "Type": "String"
+        },
+        "DockercfgUsername": {
+            "Description": "The username for the docker hub account",
+            "Type": "String"
+        },
+        "DockercfgEmail": {
+            "Description": "The email address for the docker hub account",
+            "Type": "String"
+        },
+        "DockercfgUrl": {
+            "Description": "The email address for the docker hub account",
+            "Type": "String"
+        },
+        "DockercfgPassword": {
+            "Description": "The password for the docker hub account",
+            "NoEcho": "true",
+            "Type": "String"
+        },
+        "GitPrivateKey": {
+            "Description": "The private SSH key for a github account",
+            "Type": "String"
+        },
+        "GitPublicKey": {
+            "Description": "The public SSH key for a github account",
+            "Type": "String"
+        },
+        "GitAuthorizedKeys": {
+            "Description": "The authorized SSH keys for github",
+            "Type": "String"
+        },
+        "KeyName": {
+            "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instances",
+            "Default": "default",
+            "Type": "String",
+            "MinLength": "1",
+            "MaxLength": "64",
+            "AllowedPattern": "[-_ a-zA-Z0-9]*",
+            "ConstraintDescription": "can contain only alphanumeric characters, spaces, dashes and underscores."
+        },
+        "ContainerPort": {
+            "Description": "The application port",
+            "Default": "8080",
+            "Type": "String"
+        },
+        "DNSDomain": {
+            "Description": "DNS Name for the Application",
+            "Type": "String"
+        },
+        "SSHLocation": {
+            "Description": " The IP address range that can be used to SSH to the EC2 instances",
+            "Type": "String",
+            "MinLength": "9",
+            "MaxLength": "18",
+            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+            "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x."
+        }
+    },
+    "Conditions": {
+        "Is-EC2-VPC": {
+            "Fn::Or": [
+                {
+                    "Fn::Equals": [
+                        {
+                            "Ref": "AWS::Region"
+                        },
+                        "eu-central-1"
+                    ]
+                },
+                {
+                    "Fn::Equals": [
+                        {
+                            "Ref": "AWS::Region"
+                        },
+                        "cn-north-1"
+                    ]
+                }
+            ]
+        },
+        "Is-EC2-Classic": {
+            "Fn::Not": [
+                {
+                    "Condition": "Is-EC2-VPC"
+                }
+            ]
+        }
+    },
+    "Mappings": {
+        "AWSRegion2AMI": {
+            "us-east-1": {
+                "ecs": "ami-8da458e6"
+            },
+            "us-west-2": {
+                "ecs": "ami-db0306eb"
+            },
+            "eu-west-1": {
+                "ecs": "ami-7948320e"
+            },
+            "ap-northeast-1": {
+                "ecs": "ami-fa12b7fa"
+            },
+            "ap-southeast-2": {
+                "ecs": "ami-014f353b"
+            }
+        }
+    },
+    "Resources": {
+        "ECSServiceRole": {
+          "Type": "AWS::IAM::Role",
+          "Properties": {
+            "AssumeRolePolicyDocument": {
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Principal": {
+                    "Service": [
+                      "ecs.amazonaws.com"
+                    ]
+                  },
+                  "Action": [
+                    "sts:AssumeRole"
+                  ]
+                }
+              ]
+            },
+            "Path": "/",
+            "Policies": [
+              {
+                "PolicyName": "ecs-service",
+                "PolicyDocument": {
+                  "Statement": [
+                    {
+                      "Effect": "Allow",
+                      "Action": [
+                        "elasticloadbalancing:Describe*",
+                        "elasticloadbalancing:DeregisterInstancesFromLoadBalancer",
+                        "elasticloadbalancing:RegisterInstancesWithLoadBalancer",
+                        "ec2:Describe*",
+                        "ec2:AuthorizeSecurityGroupIngress"
+                      ],
+                      "Resource": "*"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        "EC2InstanceRole": {
+          "Type": "AWS::IAM::Role",
+          "Properties": {
+            "AssumeRolePolicyDocument": {
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Principal": {
+                    "Service": [
+                      "ec2.amazonaws.com"
+                    ]
+                  },
+                  "Action": [
+                    "sts:AssumeRole"
+                  ]
+                }
+              ]
+            },
+            "Path": "/",
+            "Policies": [
+              {
+                "PolicyName": "ecs-service",
+                "PolicyDocument": {
+                  "Statement": [
+                    {
+                      "Effect": "Allow",
+                      "Action": [
+                        "ecs:CreateCluster",
+                        "ecs:RegisterContainerInstance",
+                        "ecs:DeregisterContainerInstance",
+                        "ecs:DiscoverPollEndpoint",
+                        "ecs:Submit*",
+                        "ecs:Poll"
+                      ],
+                      "Resource": "*"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },  
+        "IamPolicy": {
+            "Type": "AWS::IAM::Policy",
+            "DependsOn": "EC2InstanceRole",
+            "Properties": {
+                "PolicyName": "jenkins-iam-policy",
+                "PolicyDocument": {
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "ecs:CreateCluster",
+                                "ecs:DeregisterContainerInstance",
+                                "ecs:DiscoverPollEndpoint",
+                                "ecs:Poll",
+                                "ecs:RegisterContainerInstance",
+                                "ecs:Submit*"
+                            ],
+                            "Resource": "*"
+                        }
+                    ]
+                },
+                "Roles": [
+                    {
+                        "Ref": "EC2InstanceRole"
+                    }
+                ]
+            }
+        },
+        "IamInstanceProfile": {
+            "Type": "AWS::IAM::InstanceProfile",
+            "DependsOn": "EC2InstanceRole",
+            "Properties": {
+                "Path": "/",
+                "Roles": [
+                    {
+                        "Ref": "EC2InstanceRole"
+                    }
+                ]
+            }
+        },
+        "LoadBalancerSecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupDescription": "Enable HTTP access on port 80.",
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "80",
+                        "ToPort": "80",
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ]
+            }
+        },
+        "AutoScalingSecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "UpdatePolicy": {
+                "AutoScalingRollingUpdate": {
+                    "MaxBatchSize": "3",
+                    "MinInstancesInService": "1",
+                    "PauseTime": "PT2M30S"
+                }
+            },
+            "Properties": {
+                "GroupDescription": "Enable SSH access",
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": {
+                            "Ref": "ContainerPort"
+                        },
+                        "ToPort": {
+                            "Ref": "ContainerPort"
+                        },
+                        "SourceSecurityGroupOwnerId": {
+                            "Fn::GetAtt": [
+                                "ElasticLoadBalancer",
+                                "SourceSecurityGroup.OwnerAlias"
+                            ]
+                        },
+                        "SourceSecurityGroupName": {
+                            "Fn::GetAtt": [
+                                "ElasticLoadBalancer",
+                                "SourceSecurityGroup.GroupName"
+                            ]
+                        }
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "22",
+                        "ToPort": "22",
+                        "CidrIp": {
+                            "Ref": "SSHLocation"
+                        }
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": {
+                            "Ref": "ContainerPort"
+                        },
+                        "ToPort": {
+                            "Ref": "ContainerPort"
+                        },
+                        "CidrIp": {
+                            "Ref": "SSHLocation"
+                        }
+                    }
+                ]
+            }
+        },
+        "AutoScalingGroup": {
+            "Type": "AWS::AutoScaling::AutoScalingGroup",
+            "Properties": {
+                "AvailabilityZones": {
+                    "Fn::GetAZs": ""
+                },
+                "LaunchConfigurationName": {
+                    "Ref": "AutoScalingLaunchConfig"
+                },
+                "LoadBalancerNames": [
+                    {
+                        "Ref": "ElasticLoadBalancer"
+                    }
+                ],
+                "MinSize": "1",
+                "MaxSize": "3",
+                "DesiredCapacity": "1",
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Join": [
+                                "",
+                                [
+                                    "jenkins.",
+                                    {
+                                        "Ref": "DNSDomain"
+                                    }
+                                ]
+                            ]
+                        },
+                        "PropagateAtLaunch": "true"
+                    }
+                ]
+            }
+        },
+        "AutoScalingLaunchConfig": {
+            "DependsOn": "ECSCluster",
+            "CreationPolicy": {
+                "ResourceSignal": {
+                    "Count": "1",
+                    "Timeout": "PT5M"
+                }
+            },
+            "Type": "AWS::AutoScaling::LaunchConfiguration",
+            "Metadata": {
+                "AWS::CloudFormation::Init": {
+                    "configSets": {
+                        "full_install": [
+                            "install_cfn",
+                            "configure_ecs"
+                        ]
+                    },
+                    "install_cfn": {
+                        "files": {
+                            "/etc/cfn/cfn-hup.conf": {
+                                "content": {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            "[main]\n",
+                                            "stack=",
+                                            {
+                                                "Ref": "AWS::StackId"
+                                            },
+                                            "\n",
+                                            "region=",
+                                            {
+                                                "Ref": "AWS::Region"
+                                            },
+                                            "\n"
+                                        ]
+                                    ]
+                                },
+                                "mode": "000400",
+                                "owner": "root",
+                                "group": "root"
+                            },
+                            "/etc/cfn/hooks.d/cfn-auto-reloader.conf": {
+                                "content": {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            "[cfn-auto-reloader-hook]\n",
+                                            "triggers=post.update\n",
+                                            "path=Resources.LaunchConfig.Metadata.AWS::CloudFormation::Init\n",
+                                            "action=/opt/aws/bin/cfn-init -v ",
+                                            "         --stack ",
+                                            {
+                                                "Ref": "AWS::StackName"
+                                            },
+                                            "         --resource LaunchConfig ",
+                                            "         --configsets configure_ecs ",
+                                            "         --region ",
+                                            {
+                                                "Ref": "AWS::Region"
+                                            },
+                                            "\n",
+                                            "runas=root\n"
+                                        ]
+                                    ]
+                                }
+                            }
+                        },
+                        "services": {
+                            "sysvinit": {
+                                "cfn-hup": {
+                                    "enabled": "true",
+                                    "ensureRunning": "true",
+                                    "files": [
+                                        "/etc/cfn/cfn-hup.conf",
+                                        "/etc/cfn/hooks.d/cfn-auto-reloader.conf"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "configure_ecs": {
+                        "files": {
+                            "/etc/ecs/ecs.config": {
+                                "content": {
+                                    "Fn::Join": [
+                                        "",
+                                        [
+                                            "ECS_CLUSTER=",
+                                            {
+                                                "Ref": "ECSCluster"
+                                            },
+                                            "\n",
+                                            "ECS_ENGINE_AUTH_TYPE=docker\n",
+                                            "ECS_ENGINE_AUTH_DATA={\"",
+                                            {
+                                                "Ref": "DockercfgUrl"
+                                            },
+                                            "\":{\"username\":\"",
+                                            {
+                                                "Ref": "DockercfgUsername"
+                                            },
+                                            "\",\"password\":\"",
+                                            {
+                                                "Ref": "DockercfgPassword"
+                                            },
+                                            "\",\"email\":\"",
+                                            {
+                                                "Ref": "DockercfgEmail"
+                                            },
+                                            "\"}}\n",
+                                            "\n"
+                                        ]
+                                    ]
+                                },
+                                "mode": "000644",
+                                "owner": "root",
+                                "group": "root"
+                            }
+                        }
+                    }
+                }
+            },
+            "Properties": {
+                "ImageId": {
+                    "Fn::FindInMap": [
+                        "AWSRegion2AMI",
+                        {
+                            "Ref": "AWS::Region"
+                        },
+                        "ecs"
+                    ]
+                },
+                "InstanceType": "t2.medium",
+                "IamInstanceProfile": {
+                    "Ref": "IamInstanceProfile"
+                },
+                "SecurityGroups": [
+                    {
+                        "Ref": "AutoScalingSecurityGroup"
+                    }
+                ],
+                "KeyName": {
+                    "Ref": "KeyName"
+                },
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
+                            "",
+                            [
+                                "#!/bin/bash -xe\n",
+                                "yum install -y aws-cfn-bootstrap\n",
+                                "/opt/aws/bin/cfn-init -v",
+                                " --stack ",
+                                {
+                                    "Ref": "AWS::StackId"
+                                },
+                                " --resource AutoScalingLaunchConfig",
+                                " --configsets full_install",
+                                " --region ",
+                                {
+                                    "Ref": "AWS::Region"
+                                },
+                                "\n",
+                                "/opt/aws/bin/cfn-signal -e $? ",
+                                " --stack ",
+                                {
+                                    "Ref": "AWS::StackId"
+                                },
+                                " --resource AutoScalingGroup",
+                                " --region ",
+                                {
+                                    "Ref": "AWS::Region"
+                                },
+                                "\n"
+                            ]
+                        ]
+                    }
+                }
+            }
+        },
+        "ElasticLoadBalancer": {
+            "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+            "Properties": {
+                "LoadBalancerName": "jenkins",
+                "AvailabilityZones": {
+                    "Fn::GetAZs": ""
+                },
+                "HealthCheck": {
+                    "HealthyThreshold": "2",
+                    "Interval": "6",
+                    "Target": "HTTP:8080/login",
+                    "Timeout": "3",
+                    "UnhealthyThreshold": "3"
+                },
+                "CrossZone": "true",
+                "Listeners": [
+                    {
+                        "InstancePort": {
+                            "Ref": "ContainerPort"
+                        },
+                        "InstanceProtocol": "HTTP",
+                        "LoadBalancerPort": "80",
+                        "Protocol": "HTTP"
+                    }
+                ]
+            }
+        },
+        "ECSCluster": {
+            "Type": "AWS::ECS::Cluster"
+        },
+        "ECSTaskDefinition": {
+            "Type": "AWS::ECS::TaskDefinition",
+            "Properties": {
+                "ContainerDefinitions": [
+                    {
+                        "Name": "jenkins",
+                        "Image": "registry.service.dsd.io/opguk/jenkins-ecs",
+                        "Essential": "true",
+                        "Cpu": "2048",
+                        "Memory": "2048",
+                        "EntryPoint": [ "/sbin/my_init" ],
+                        "Environment": [
+                            {
+                                "Name": "JENKINS_USER_OPGCORE_APIKEY",
+                                "Value": {
+                                    "Ref": "JenkinsUserOpgcoreApikey"
+                                }
+                            },
+                            {
+                                "Name": "JENKINS_USER_OPGCORE_PASSWORD",
+                                "Value": {
+                                    "Ref": "JenkinsUserOpgcorePassword"
+                                }
+                            },
+                            {
+                                "Name": "JENKINS_USER_OPGCORE_PUBKEYS",
+                                "Value": {
+                                    "Ref": "JenkinsUserOpgcorePubkeys"
+                                }
+                            },
+                            {
+                                "Name": "JENKINS_USER_TRAINING_APIKEY",
+                                "Value": {
+                                    "Ref": "JenkinsUserTrainingApikey"
+                                }
+                            },
+                            {
+                                "Name": "JENKINS_USER_TRAINING_PASSWORD",
+                                "Value": {
+                                    "Ref": "JenkinsUserTrainingPassword"
+                                }
+                            },
+                            {
+                                "Name": "DOCKERCFG_URL",
+                                "Value": {
+                                    "Ref": "DockercfgUrl"
+                                }
+                            },
+                            {
+                                "Name": "DOCKERCFG_USERNAME",
+                                "Value": {
+                                    "Ref": "DockercfgUsername"
+                                }
+                            },
+                            {
+                                "Name": "DOCKERCFG_PASSWORD",
+                                "Value": {
+                                    "Ref": "DockercfgPassword"
+                                }
+                            },
+                            {
+                                "Name": "DOCKERCFG_EMAIL",
+                                "Value": {
+                                    "Ref": "DockercfgEmail"
+                                }
+                            },
+                            {
+                                "Name": "GIT_PUBLIC_KEY",
+                                "Value": {
+                                    "Ref": "GitPublicKey"
+                                }
+                            },
+                            {
+                                "Name": "GIT_PRIVATE_KEY",
+                                "Value": {
+                                    "Ref": "GitPrivateKey"
+                                }
+                            },
+                            {
+                                "Name": "GIT_AUTHORIZED_KEYS",
+                                "Value": {
+                                    "Ref": "GitAuthorizedKeys"
+                                }
+                            }
+                        ],
+                        "PortMappings": [
+                            {
+                                "ContainerPort": {
+                                    "Ref": "ContainerPort"
+                                },
+                                "HostPort": {
+                                    "Ref": "ContainerPort"
+                                }
+                            }
+                        ],
+                        "MountPoints": [{
+                          "ContainerPath": "/var/jenkins_home",
+                          "SourceVolume": "jenkins-home"
+                        }]
+                    }
+                ],
+                "Volumes": [
+                  {
+                    "Name": "jenkins-home"
+                  }
+                ]
+            }
+        },
+        "ECSServiceDefinition": {
+            "DependsOn": "AutoScalingGroup",
+            "Type": "AWS::ECS::Service",
+            "Properties": {
+                "Cluster": {
+                    "Ref": "ECSCluster"
+                },
+                "DesiredCount": "1",
+                "LoadBalancers": [
+                    {
+                        "ContainerName": "jenkins",
+                        "ContainerPort": {
+                            "Ref": "ContainerPort"
+                        },
+                        "LoadBalancerName": {
+                            "Ref": "ElasticLoadBalancer"
+                        }
+                    }
+                ],
+                "Role": {
+                    "Ref": "ECSServiceRole"
+                },
+                "TaskDefinition": {
+                    "Ref": "ECSTaskDefinition"
+                }
+            }
+        },
+        "RecordSetGroup": {
+            "Type": "AWS::Route53::RecordSetGroup",
+            "Properties": {
+                "HostedZoneName": {
+                    "Fn::Join": [
+                        "",
+                        [
+                            {
+                                "Ref": "DNSDomain"
+                            },
+                            "."
+                        ]
+                    ]
+                },
+                "Comment": "The Ruby On Rails HTTP application",
+                "RecordSets": [
+                    {
+                        "Name": {
+                            "Fn::Join": [
+                                "",
+                                [
+                                    "jenkins.",
+                                    {
+                                        "Ref": "DNSDomain"
+                                    },
+                                    "."
+                                ]
+                            ]
+                        },
+                        "Type": "A",
+                        "AliasTarget": {
+                            "DNSName": {
+                                "Fn::GetAtt": [
+                                    "ElasticLoadBalancer",
+                                    "DNSName"
+                                ]
+                            },
+                            "EvaluateTargetHealth": "true",
+                            "HostedZoneId": {
+                                "Fn::GetAtt": [
+                                    "ElasticLoadBalancer",
+                                    "CanonicalHostedZoneNameID"
+                                ]
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "Outputs": {
+        "LoadbalancerEndpoint": {
+            "Description": "The DNSName of the load balancer",
+            "Value": {
+                "Fn::GetAtt": [
+                    "ElasticLoadBalancer",
+                    "DNSName"
+                ]
+            }
+        }
+    }
+}

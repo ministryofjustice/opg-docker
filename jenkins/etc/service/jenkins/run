@@ -1,0 +1,4 @@
+#!/bin/bash
+export HOME=/var/jenkins_home
+chmod 0600 /usr/share/jenkins/ref/.ssh/*
+/bin/tini -- /usr/local/bin/jenkins.sh

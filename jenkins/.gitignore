@@ -1,0 +1,5 @@
+environment.sh
+.DS_Store
+commit.txt
+id_rsa
+*.pem
