@@ -58,8 +58,8 @@ RUN curl -fL http://mirrors.jenkins-ci.org/war-stable/$JENKINS_VERSION/jenkins.w
   && echo "$JENKINS_SHA /usr/share/jenkins/jenkins.war" | sha1sum -c -
 
 # Installation, startup and config files.
-COPY plugins.sh /usr/local/bin/plugins.sh
-COPY jenkins.sh /usr/local/bin/jenkins.sh
+COPY /usr/local/bin/plugins.sh /usr/local/bin/plugins.sh
+COPY /usr/local/bin/jenkins.sh /usr/local/bin/jenkins.sh
 
 # Our jubbly customisations.
 COPY /usr/share/jenkins/ref /usr/share/jenkins/ref
