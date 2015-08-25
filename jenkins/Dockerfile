@@ -1,25 +1,14 @@
-FROM registry.service.dsd.io/opguk/jre-8:latest
+FROM jenkins
 
-# 8080  - Webapp
-# 50000 - Agents
-EXPOSE 8080
-EXPOSE 50000
-
-# Jenkins home directory is a volume. Therefore 
-# configuration and build history can
-# be persisted and survive image upgrades
-VOLUME /var/jenkins_home
-
-# Jenkins environment variables.
-ENV JENKINS_VERSION 1.609.2
-ENV JENKINS_HOME /var/jenkins_home
-ENV JENKINS_SLAVE_AGENT_PORT 50000
-ENV JENKINS_UC https://updates.jenkins-ci.org
-ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
+#Switch to the root user to configure and run the container
+USER root
 
 # Update and install dependencies etc etc
 RUN apt-get update && \
     apt-get install -y \
+    salt-master \
+    salt-minion \
+    salt-syndic \
     wget \
     python-pip \
     libcurl4-gnutls-dev \
@@ -33,46 +22,31 @@ RUN apt-get update && \
     libxml2-dev \
     git \
     curl \
-    zip \
-    ttf-dejavu \
-    fontconfig && \
+    zip && \
     pip install git+https://github.com/ministryofjustice/semvertag.git && \
-    pip install git+https://github.com/ministryofjustice/opg-cotton.git && \
-    rm -rf /var/lib/apt/lists/*
+    pip install git+https://github.com/ministryofjustice/opg-cotton.git
 
-# `/usr/share/jenkins/ref/` contains all reference configuration we want 
-# to set on our fresh new installation.
-RUN mkdir -p /usr/share/jenkins/ref
-
-# Use tini as a subreaper in the Docker container 
-# to adopt zombie processes.
-ENV TINI_SHA 066ad710107dc7ee05d3aa6e4974f01dc98f3888
-RUN curl -fL https://github.com/krallin/tini/releases/download/v0.5.0/tini-static -o /bin/tini && chmod +x /bin/tini \
-  && echo "$TINI_SHA /bin/tini" | sha1sum -c -
-
-# We could use ADD here, but this does not 
-# check the Last-Modified header.
-# see https://github.com/docker/docker/issues/8331
-ENV JENKINS_SHA 59215da16f9f8a781d185dde683c05fcf11450ef
-RUN curl -fL http://mirrors.jenkins-ci.org/war-stable/$JENKINS_VERSION/jenkins.war -o /usr/share/jenkins/jenkins.war \
-  && echo "$JENKINS_SHA /usr/share/jenkins/jenkins.war" | sha1sum -c -
-
-# Installation, startup and config files.
-COPY plugins.sh /usr/local/bin/plugins.sh
-COPY jenkins.sh /usr/local/bin/jenkins.sh
+RUN wget https://github.com/kelseyhightower/confd/releases/download/v0.10.0/confd-0.10.0-linux-amd64 && mv confd-0.10.0-linux-amd64 /usr/bin/confd && chmod 0755 /usr/bin/confd
 
 # Our jubbly customisations.
 COPY /usr/share/jenkins/ref /usr/share/jenkins/ref
 
-# Bootstrap commands, and our Jenkins service.
-COPY /etc/confd /etc/confd
-COPY /etc/service /etc/service
-
 # Plugins, plugins everywhere.
 RUN /usr/local/bin/plugins.sh /usr/share/jenkins/ref/plugins.txt
 
+# Bootstrap commands, and our Jenkins service.
+COPY /etc/confd /etc/confd
+COPY /etc/service /etc/service
+COPY /etc/my_init.d /etc/my_init.d
+COPY /sbin/my_init /sbin/my_init
+RUN ln -s /etc/service/run /etc/my_init.d/99-run
+
 # Jenkins is the owner of his own home sir!
 RUN chown -R root "$JENKINS_HOME" /usr/share/jenkins/ref
+
+# This env is not carried over from the jenkins 
+# image (for some strange reason)
+ENV JENKINS_SLAVE_AGENT_PORT=50000
 
 # Set the user and private Docker registry env's.
 ENV JENKINS_GITHUB_PUBKEY=
