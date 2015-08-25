@@ -13,7 +13,7 @@
       <timestamp>1434536253556</timestamp>
     </jenkins.security.LastGrantedAuthoritiesProperty>
     <jenkins.security.ApiTokenProperty>
-      <apiToken>{{ getv "/jenkins/user/opgcore/apitoken" }}</apiToken>
+      <apiToken>{{if exists "/jenkins/user/opgcore/apitoken" }}{{ getv "/jenkins/user/opgcore/apitoken" }}{{end}}</apiToken>
     </jenkins.security.ApiTokenProperty>
     <hudson.plugins.greenballs.ColorBlindProperty plugin="greenballs@1.14">
       <enabledColorBlindSupport>false</enabledColorBlindSupport>
@@ -44,10 +44,10 @@
       </views>
     </hudson.model.MyViewsProperty>
     <hudson.security.HudsonPrivateSecurityRealm_-Details>
-      <passwordHash>{{ getv "/jenkins/user/opgcore/password" }}</passwordHash>
+      <passwordHash>{{if exists "/jenkins/user/opgcore/password" }}{{ getv "/jenkins/user/opgcore/password" }}{{end}}</passwordHash>
     </hudson.security.HudsonPrivateSecurityRealm_-Details>
     <org.jenkinsci.main.modules.cli.auth.ssh.UserPropertyImpl>
-      <authorizedKeys>{{ getv "/jenkins/user/opgcore/pubkeys" }}</authorizedKeys>
+      <authorizedKeys>{{if exists "/jenkins/user/opgcore/pubkeys" }}{{ getv "/jenkins/user/opgcore/pubkeys" }}{{end}}</authorizedKeys>
     </org.jenkinsci.main.modules.cli.auth.ssh.UserPropertyImpl>
     <hudson.search.UserSearchProperty>
       <insensitiveSearch>false</insensitiveSearch>

@@ -38,22 +38,22 @@ Both AWS and MOJ implementations use ENV's and [confd](https://github.com/kelsey
 ```
 as you will need to set these before you run either of the two deployments.
 
-## boot2docker
+## Docker Toolbox
 To run locally use [Docker Toolbox](https://www.docker.com/toolbox)
 
 If you're feeling lucky run, 
 ```
-  ./boot2docker
+  ./bake
 ```
 (you will need to configure an environment file though). The main command to note is:
 ```
   docker-compose up -d
 ```  
-which creates the containers and daemonizes them. 
+which creates the Jenkins container and daemonizes it. 
 
 Connect to Jenkins on:
 ```
-  curl http://$(boot2docker ip):8080
+  curl http://$(docker-machine ip default):8080
 ```
 
 ### Baking
@@ -66,18 +66,15 @@ The reason being two, is that Amazon ECS runs it's own service (like [my_init an
 
 To make the MOJ container image run
 ```
-  make
+  make TAG=moj
 ```
 and the Amazon container
 ```
-  make -f Makefile-moj
+  make TAG=ecs
 ```
 
-### Pushing
-Push the image to our registry if required, you will have to do this if using Amazon:
-```
-  docker push registry.service.dsd.io/opguk/jenkins-ecs
-```
+### Testing, Tagging, releasing, pushing...
+Check out the ```Makefile``` for further details.
 
 ## Amazon ECS
 ### CloudFormation for Everyone, Everywhere and Always

@@ -5,7 +5,7 @@ USER root
 
 # Update and install dependencies etc etc
 RUN apt-get update && \
-    apt-get install -y \
+    apt-get install -y --no-install-recommends \
     salt-master \
     salt-minion \
     salt-syndic \
@@ -24,7 +24,10 @@ RUN apt-get update && \
     curl \
     zip && \
     pip install git+https://github.com/ministryofjustice/semvertag.git && \
-    pip install git+https://github.com/ministryofjustice/opg-cotton.git
+    pip install git+https://github.com/ministryofjustice/opg-cotton.git && \
+    apt-get clean && \
+    rm -rf /tmp/* /var/tmp/* && \
+    rm -rf /var/lib/apt/lists/*
 
 # Download and install the confd binary
 RUN wget https://github.com/kelseyhightower/confd/releases/download/v0.10.0/confd-0.10.0-linux-amd64 && mv confd-0.10.0-linux-amd64 /usr/bin/confd && chmod 0755 /usr/bin/confd

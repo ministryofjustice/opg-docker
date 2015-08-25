@@ -19,7 +19,7 @@ ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
 
 # Update and install dependencies etc etc
 RUN apt-get update && \
-    apt-get install -y \
+    apt-get install -y --no-install-recommends \
     wget \
     python-pip \
     libcurl4-gnutls-dev \
@@ -38,6 +38,8 @@ RUN apt-get update && \
     fontconfig && \
     pip install git+https://github.com/ministryofjustice/semvertag.git && \
     pip install git+https://github.com/ministryofjustice/opg-cotton.git && \
+    apt-get clean && \
+    rm -rf /tmp/* /var/tmp/* && \
     rm -rf /var/lib/apt/lists/*
 
 # `/usr/share/jenkins/ref/` contains all reference configuration we want 

@@ -1,8 +1,0 @@
-.PHONY: build
-newtag ?= latest
-image = registry.service.dsd.io/opguk/jenkins-ecs
-
-build:
-	docker build -f Dockerfile-ecs -t "${image}:ecs-${newtag}" .
-	docker tag -f "${image}:ecs-latest" "${image}:ecs-${newtag}"
-  

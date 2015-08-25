@@ -7,25 +7,24 @@ else
   ENV_FILE=./environment.sh
   if [ -e $ENV_FILE ]; then
     source $ENV_FILE
-  fi
-  # We use the DNS domain in the CloudFormation
-  # stack name  (no dashes in stack names).
-  export AWS_DEFAULT_PROFILE=jenkins-$(`echo $2 | sed -e 's/\./\-/g'`)
-  # Sets your external IP for the load-balancer security group
-  IPADDRESS=`wget -qO- http://ipecho.net/plain ; echo -n`
-  # Configures the aws-cli, requires an access key is and secret
-  aws configure --profile $AWS_DEFAULT_PROFILE
-  # Creates a CloudFormation stack for the ECS cluster
-  if [ $1 == "update" ]; then
-    COMMAND=update
-  else
-    COMMAND=create
-  fi
-  aws cloudformation $COMMAND-stack \
-    --stack-name $AWS_DEFAULT_PROFILE \
-    --template-body file://template.json \
-    --capabilities CAPABILITY_IAM \
-    --parameters ParameterKey=SSHLocation,ParameterValue="$IPADDRESS/32" \
+    # We use the DNS domain in the CloudFormation
+    # stack name  (no dashes in stack names).
+    export AWS_DEFAULT_PROFILE=jenkins-$(`echo $2 | sed -e 's/\./\-/g'`)
+    # Sets your external IP for the load-balancer security group
+    IPADDRESS=`wget -qO- http://ipecho.net/plain ; echo -n`
+    # Configures the aws-cli, requires an access key is and secret
+    aws configure --profile $AWS_DEFAULT_PROFILE
+    # Creates a CloudFormation stack for the ECS cluster
+    if [ $1 == "update" ]; then
+      COMMAND=update
+    else
+      COMMAND=create
+    fi
+    aws cloudformation $COMMAND-stack \
+      --stack-name $AWS_DEFAULT_PROFILE \
+      --template-body file://template.json \
+      --capabilities CAPABILITY_IAM \
+      --parameters ParameterKey=SSHLocation,ParameterValue="$IPADDRESS/32" \
 ParameterKey=DNSDomain,ParameterValue="$2" \
 ParameterKey=DockercfgPassword,ParameterValue="$JENKINS_DOCKERCFG_PASSWORD" \
 ParameterKey=DockercfgEmail,ParameterValue="$JENKINS_DOCKERCFG_EMAIL" \
@@ -36,4 +35,8 @@ ParameterKey=JenkinsUserOpgcorePassword,ParameterValue="$JENKINS_USER_OPGCORE_PA
 ParameterKey=JenkinsUserOpgcorePubkeys,ParameterValue="$JENKINS_USER_OPGCORE_PUBKEYS" \
 ParameterKey=JenkinsUserTrainingApikey,ParameterValue="$JENKINS_USER_TRAINING_APIKEY" \
 ParameterKey=JenkinsUserTrainingPassword,ParameterValue="$JENKINS_USER_TRAINING_PASSWORD"
+  else
+    echo "You need to create an environment.sh file"
+    exit 1
+  fi
 fi
