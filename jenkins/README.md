@@ -4,6 +4,9 @@ The Jenkins Continuous Integration and Delivery server.
 
 ![jenkins_moj_logo](https://cloud.githubusercontent.com/assets/13198078/9408279/47665d26-4809-11e5-9c3f-4113dd3aa07e.png)
 
+# Docker
+To use this container locally on your development box you will need to install either [boot2docker](http://boot2docker.io/) or the newer version [docker toolbox](https://www.docker.com/toolbox).
+
 # To Make And Build
 This [docker](https://www.docker.com/) build environment contains two possible containers.
 
