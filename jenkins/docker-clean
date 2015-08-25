@@ -1,8 +1,0 @@
-#!/bin/bash
-eval $(docker-machine env default)
-# Kill all processes
-docker kill $(docker ps -a -q)
-# Delete all containers
-docker rm -f $(docker ps -a -q)
-# Delete all images
-docker rmi -f $(docker images -q)

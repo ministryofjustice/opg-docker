@@ -1,12 +1,21 @@
 NAME = registry.service.dsd.io/opguk/jenkins
 VERSION = 0.0.1
 TAG ?= ecs
-.PHONY: all build test tag_latest release ssh
+.PHONY: all bake build clean test tag_latest release ssh
 
 all: build
 
+bake:
+	./bake
+
 build:
-	docker build -f Dockerfile-$(TAG) -t $(NAME):$(VERSION)-$(TAG) .
+	docker build -f docker/Dockerfile-$(TAG) -t $(NAME):$(VERSION)-$(TAG) .
+
+clean:
+	eval $(docker-machine env default)
+	docker kill $(docker ps -a -q)
+	docker rm -f $(docker ps -a -q)
+	docker rmi -f $(docker images -q)
 
 test:
 	env NAME=$(NAME) VERSION=$(VERSION)-$(TAG) ./test/runner.sh
