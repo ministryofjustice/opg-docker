@@ -74,6 +74,6 @@ COPY docker/root/.ssh /root/.ssh
 # Plugins, plugins everywhere.
 RUN /usr/local/bin/plugins.sh /usr/share/jenkins/ref/plugins.txt
 
-# Jenkins is the owner of his own home sir!
+# set root as the owner of the jenkins directory
 RUN chown -R root "$JENKINS_HOME" /usr/share/jenkins/ref
 
