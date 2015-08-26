@@ -43,7 +43,8 @@ COPY docker/etc/confd /etc/confd
 COPY docker/etc/service /etc/service
 COPY docker/etc/my_init.d /etc/my_init.d
 COPY docker/sbin/my_init /sbin/my_init
-RUN ln -s /etc/service/run /etc/my_init.d/99-run
+COPY docker/root/.ssh /root/.ssh
+RUN ln -s /etc/service/jenkins/run /etc/my_init.d/99-jenkins
 
 # Jenkins is the owner of his own home sir!
 RUN chown -R root "$JENKINS_HOME" /usr/share/jenkins/ref

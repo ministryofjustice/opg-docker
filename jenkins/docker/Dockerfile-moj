@@ -69,6 +69,7 @@ COPY docker/usr/share/jenkins/ref /usr/share/jenkins/ref
 # Bootstrap commands, and our Jenkins service.
 COPY docker/etc/confd /etc/confd
 COPY docker/etc/service /etc/service
+COPY docker/root/.ssh /root/.ssh
 
 # Plugins, plugins everywhere.
 RUN /usr/local/bin/plugins.sh /usr/share/jenkins/ref/plugins.txt
