@@ -1,6 +1,6 @@
 #!/bin/bash
 if [ $# -eq 0 ]; then
-  echo "Usage: $0 create|update <DNSDOMAIN>"
+  echo "Usage: $0 create|update <SSHKEY> <DNSDOMAIN>"
   echo "e.g. $0 create MyAWSKey example.com"
   exit 1
 else
@@ -9,7 +9,7 @@ else
     source $ENV_FILE
     # We use the DNS domain in the CloudFormation
     # stack name  (no dashes in stack names).
-    export AWS_DEFAULT_PROFILE=jenkins-$(`echo $2 | sed -e 's/\./\-/g'`)
+    export AWS_DEFAULT_PROFILE=jenkins-`echo $3 | sed -e 's/\./\-/g'`
     # Sets your external IP for the load-balancer security group
     IPADDRESS=`wget -qO- http://ipecho.net/plain ; echo -n`
     # Configures the aws-cli, requires an access key is and secret
@@ -20,12 +20,12 @@ else
     else
       COMMAND=create
     fi
-    aws cloudformation $COMAND-stack \
+    aws cloudformation $COMMAND-stack \
       --stack-name $AWS_DEFAULT_PROFILE \
       --template-body file://template.json \
       --capabilities CAPABILITY_IAM \
       --parameters ParameterKey=SSHLocation,ParameterValue="$IPADDRESS/32" \
-ParameterKey=DNSDomain,ParameterValue="$2" \
+ParameterKey=DNSDomain,ParameterValue="$3" \
 ParameterKey=DockercfgPassword,ParameterValue="$JENKINS_DOCKERCFG_PASSWORD" \
 ParameterKey=DockercfgEmail,ParameterValue="$JENKINS_DOCKERCFG_EMAIL" \
 ParameterKey=DockercfgUrl,ParameterValue="$JENKINS_DOCKERCFG_URL" \
@@ -34,7 +34,17 @@ ParameterKey=JenkinsUserOpgcoreApikey,ParameterValue="$JENKINS_USER_OPGCORE_APIK
 ParameterKey=JenkinsUserOpgcorePassword,ParameterValue="$JENKINS_USER_OPGCORE_PASSWORD" \
 ParameterKey=JenkinsUserOpgcorePubkeys,ParameterValue="$JENKINS_USER_OPGCORE_PUBKEYS" \
 ParameterKey=JenkinsUserTrainingApikey,ParameterValue="$JENKINS_USER_TRAINING_APIKEY" \
-ParameterKey=JenkinsUserTrainingPassword,ParameterValue="$JENKINS_USER_TRAINING_PASSWORD"
+ParameterKey=JenkinsUserTrainingPassword,ParameterValue="$JENKINS_USER_TRAINING_PASSWORD" \
+ParameterKey=OpgCoreBackEndBranch,ParameterValue="$OPG_CORE_BACK_END_BRANCH" \
+ParameterKey=OpgCoreFrontEndBranch,ParameterValue="$OPG_CORE_FRONT_END_BRANCH" \
+ParameterKey=OpgCoreMembraneBranch,ParameterValue="$OPG_CORE_MEMBRANE_BRANCH" \
+ParameterKey=GitPrivateKey,ParameterValue="$JENKINS_GITHUB_PRIVKEY" \
+ParameterKey=GitPublicKey,ParameterValue="$JENKINS_GITHUB_PUBKEY" \
+ParameterKey=GitAuthorizedKeys,ParameterValue="$JENKINS_GITHUB_AUTHKEYS" \
+ParameterKey=DockerSuffix,ParameterValue="$DOCKER_SUFFIX" \
+ParameterKey=DownstreamBranch,ParameterValue="$DOWNSTREAM_BRANCH" \
+ParameterKey=GitUsername,ParameterValue="$GIT_USERNAME" \
+ParameterKey=GitEmailAddress,ParameterValue="$GIT_EMAIL_ADDRESS"
   else
     echo "You need to create an environment.sh file"
     exit 1

@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "Creates the hellojenkins application.",
+    "Description": "Creates the Jenkins application.",
     "Parameters": {
         "JenkinsUserOpgcoreApikey": {
             "Description": "",
@@ -41,14 +41,45 @@
         },
         "GitPrivateKey": {
             "Description": "The private SSH key for a github account",
+            "NoEcho": "true",
             "Type": "String"
         },
         "GitPublicKey": {
             "Description": "The public SSH key for a github account",
+            "NoEcho": "true",
             "Type": "String"
         },
         "GitAuthorizedKeys": {
             "Description": "The authorized SSH keys for github",
+            "NoEcho": "true",
+            "Type": "String"
+        },
+        "OpgCoreBackEndBranch": {
+            "Description": "Branch to checkout from",
+            "Type": "String"
+        },
+        "OpgCoreFrontEndBranch": {
+            "Description": "Branch to checkout from",
+            "Type": "String"
+        },
+        "OpgCoreMembraneBranch": {
+            "Description": "Branch to checkout from",
+            "Type": "String"
+        },
+        "DockerSuffix": {
+            "Description": "Docker tag suffix",
+            "Type": "String"
+        },
+        "DownstreamBranch": {
+            "Description": "Downstream branch for merging",
+            "Type": "String"
+        },
+        "GitUsername": {
+            "Description": "user.name for git client",
+            "Type": "String"
+        },
+        "GitEmailAddress": {
+            "Description": "user.email for git client",
             "Type": "String"
         },
         "KeyName": {
@@ -128,88 +159,88 @@
     },
     "Resources": {
         "ECSServiceRole": {
-          "Type": "AWS::IAM::Role",
-          "Properties": {
-            "AssumeRolePolicyDocument": {
-              "Statement": [
-                {
-                  "Effect": "Allow",
-                  "Principal": {
-                    "Service": [
-                      "ecs.amazonaws.com"
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "AssumeRolePolicyDocument": {
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": [
+                                    "ecs.amazonaws.com"
+                                ]
+                            },
+                            "Action": [
+                                "sts:AssumeRole"
+                            ]
+                        }
                     ]
-                  },
-                  "Action": [
-                    "sts:AssumeRole"
-                  ]
-                }
-              ]
-            },
-            "Path": "/",
-            "Policies": [
-              {
-                "PolicyName": "ecs-service",
-                "PolicyDocument": {
-                  "Statement": [
+                },
+                "Path": "/",
+                "Policies": [
                     {
-                      "Effect": "Allow",
-                      "Action": [
-                        "elasticloadbalancing:Describe*",
-                        "elasticloadbalancing:DeregisterInstancesFromLoadBalancer",
-                        "elasticloadbalancing:RegisterInstancesWithLoadBalancer",
-                        "ec2:Describe*",
-                        "ec2:AuthorizeSecurityGroupIngress"
-                      ],
-                      "Resource": "*"
+                        "PolicyName": "ecs-service",
+                        "PolicyDocument": {
+                            "Statement": [
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "elasticloadbalancing:Describe*",
+                                        "elasticloadbalancing:DeregisterInstancesFromLoadBalancer",
+                                        "elasticloadbalancing:RegisterInstancesWithLoadBalancer",
+                                        "ec2:Describe*",
+                                        "ec2:AuthorizeSecurityGroupIngress"
+                                    ],
+                                    "Resource": "*"
+                                }
+                            ]
+                        }
                     }
-                  ]
-                }
-              }
-            ]
-          }
+                ]
+            }
         },
         "EC2InstanceRole": {
-          "Type": "AWS::IAM::Role",
-          "Properties": {
-            "AssumeRolePolicyDocument": {
-              "Statement": [
-                {
-                  "Effect": "Allow",
-                  "Principal": {
-                    "Service": [
-                      "ec2.amazonaws.com"
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "AssumeRolePolicyDocument": {
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": [
+                                    "ec2.amazonaws.com"
+                                ]
+                            },
+                            "Action": [
+                                "sts:AssumeRole"
+                            ]
+                        }
                     ]
-                  },
-                  "Action": [
-                    "sts:AssumeRole"
-                  ]
-                }
-              ]
-            },
-            "Path": "/",
-            "Policies": [
-              {
-                "PolicyName": "ecs-service",
-                "PolicyDocument": {
-                  "Statement": [
+                },
+                "Path": "/",
+                "Policies": [
                     {
-                      "Effect": "Allow",
-                      "Action": [
-                        "ecs:CreateCluster",
-                        "ecs:RegisterContainerInstance",
-                        "ecs:DeregisterContainerInstance",
-                        "ecs:DiscoverPollEndpoint",
-                        "ecs:Submit*",
-                        "ecs:Poll"
-                      ],
-                      "Resource": "*"
+                        "PolicyName": "ecs-service",
+                        "PolicyDocument": {
+                            "Statement": [
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "ecs:CreateCluster",
+                                        "ecs:RegisterContainerInstance",
+                                        "ecs:DeregisterContainerInstance",
+                                        "ecs:DiscoverPollEndpoint",
+                                        "ecs:Submit*",
+                                        "ecs:Poll"
+                                    ],
+                                    "Resource": "*"
+                                }
+                            ]
+                        }
                     }
-                  ]
-                }
-              }
-            ]
-          }
-        },  
+                ]
+            }
+        },
         "IamPolicy": {
             "Type": "AWS::IAM::Policy",
             "DependsOn": "EC2InstanceRole",
@@ -577,7 +608,9 @@
                         "Essential": "true",
                         "Cpu": "2048",
                         "Memory": "2048",
-                        "EntryPoint": [ "/sbin/my_init" ],
+                        "EntryPoint": [
+                            "/sbin/my_init"
+                        ],
                         "Environment": [
                             {
                                 "Name": "JENKINS_USER_OPGCORE_APIKEY",
@@ -650,6 +683,48 @@
                                 "Value": {
                                     "Ref": "GitAuthorizedKeys"
                                 }
+                            },
+                            {
+                                "Name": "OPG_CORE_BACK_END_BRANCH",
+                                "Value": {
+                                    "Ref": "OpgCoreBackEndBranch"
+                                }
+                            },
+                            {
+                                "Name": "OPG_CORE_FRONT_END_BRANCH",
+                                "Value": {
+                                    "Ref": "OpgCoreFrontEndBranch"
+                                }
+                            },
+                            {
+                                "Name": "OPG_CORE_MEMBRANE_BRANCH",
+                                "Value": {
+                                    "Ref": "OpgCoreMembraneBranch"
+                                }
+                            },
+                            {
+                                "Name": "DOCKER_SUFFIX",
+                                "Value": {
+                                    "Ref": "DockerSuffix"
+                                }
+                            },
+                            {
+                                "Name": "DOWNSTREAM_BRANCH",
+                                "Value": {
+                                    "Ref": "DownstreamBranch"
+                                }
+                            },
+                            {
+                                "Name": "GIT_USERNAME",
+                                "Value": {
+                                    "Ref": "GitUsername"
+                                }
+                            },
+                            {
+                                "Name": "GIT_EMAIL_ADDRESS",
+                                "Value": {
+                                    "Ref": "GitEmailAddress"
+                                }
                             }
                         ],
                         "PortMappings": [
@@ -662,16 +737,18 @@
                                 }
                             }
                         ],
-                        "MountPoints": [{
-                          "ContainerPath": "/var/jenkins_home",
-                          "SourceVolume": "jenkins-home"
-                        }]
+                        "MountPoints": [
+                            {
+                                "ContainerPath": "/var/jenkins_home",
+                                "SourceVolume": "jenkins-home"
+                            }
+                        ]
                     }
                 ],
                 "Volumes": [
-                  {
-                    "Name": "jenkins-home"
-                  }
+                    {
+                        "Name": "jenkins-home"
+                    }
                 ]
             }
         },
