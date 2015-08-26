@@ -1,8 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?><project>
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
   <actions/>
-  <description/>
+  <description></description>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.15">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
         <hudson.model.ChoiceParameterDefinition>
@@ -19,45 +23,47 @@
             </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
-        <com.cwctravel.hudson.plugins.extended__choice__parameter.ExtendedChoiceParameterDefinition plugin="extended-choice-parameter@0.36">
+        <com.cwctravel.hudson.plugins.extended__choice__parameter.ExtendedChoiceParameterDefinition plugin="extended-choice-parameter@0.52">
           <name>Data_Set</name>
           <description>Directory from which to ingest XML test-data files</description>
           <quoteValue>false</quoteValue>
+          <saveJSONParameterToFile>false</saveJSONParameterToFile>
           <visibleItemCount>100</visibleItemCount>
           <type>PT_SINGLE_SELECT</type>
           <groovyScript>/* List all available test data sets */
-def lookup_path = '/srv/jenkins/jobs/010-build/workspace/opg-core-back-end/fixtures/opg-core-ddc-essentials/DataSets';
+def lookup_path = &apos;/srv/jenkins/jobs/010-build/workspace/opg-core-back-end/fixtures/opg-core-ddc-essentials/DataSets&apos;;
 
 def tags = [];
 new File(lookup_path).eachDir() { dir -&gt; tags.add(dir.getName()) }
 
 def csv = tags.toString();
-return csv.replaceAll(/[\[|\]]/, "");</groovyScript>
-          <bindings/>
-          <groovyClasspath/>
+return csv.replaceAll(/[\[|\]]/, &quot;&quot;);</groovyScript>
+          <bindings></bindings>
+          <groovyClasspath></groovyClasspath>
           <multiSelectDelimiter>,</multiSelectDelimiter>
         </com.cwctravel.hudson.plugins.extended__choice__parameter.ExtendedChoiceParameterDefinition>
-        <com.cwctravel.hudson.plugins.extended__choice__parameter.ExtendedChoiceParameterDefinition plugin="extended-choice-parameter@0.36">
+        <com.cwctravel.hudson.plugins.extended__choice__parameter.ExtendedChoiceParameterDefinition plugin="extended-choice-parameter@0.52">
           <name>Build_Version</name>
-          <description/>
+          <description></description>
           <quoteValue>false</quoteValue>
+          <saveJSONParameterToFile>false</saveJSONParameterToFile>
           <visibleItemCount>100</visibleItemCount>
           <type>PT_SINGLE_SELECT</type>
           <groovyScript>/* List all available tags (descending order) */
 def command = [
-  'semvertag', '--cwd', '/srv/jenkins/jobs/010-build/workspace/opg-core-back-end', 'list', '--csv'
+  &apos;semvertag&apos;, &apos;--cwd&apos;, &apos;${JENKINS_HOME}/jobs/010-build/workspace/opg-core-back-end&apos;, &apos;list&apos;, &apos;--csv&apos;
 ];
 
 def suffix = null;
-new File(sprintf("%s/env", System.getenv('HOME'))).eachLine { line -&gt;
-  if (line.trim() &amp;&amp; line =~ /APP_DOCKER_SUFFIX/) {
-    suffix = line.split('=').collect { it.trim() }.pop();
+new File(sprintf(&quot;%s/env&quot;, System.getenv(&apos;HOME&apos;))).eachLine { line -&gt;
+  if (line.trim() &amp;&amp; line =~ /DOCKER_SUFFIX/) {
+    suffix = line.split(&apos;=&apos;).collect { it.trim() }.pop();
     return true;
   }
 }
 
-if (suffix?.trim() &amp;&amp; suffix != "APP_DOCKER_SUFFIX") {
-  command.push('--stage');
+if (suffix?.trim() &amp;&amp; suffix != &quot;DOCKER_SUFFIX&quot;) {
+  command.push(&apos;--stage&apos;);
   command.push(suffix);
 }
 
@@ -65,24 +71,24 @@ def proc = command.execute();
 proc.waitFor();
 
 return proc.text.trim();</groovyScript>
-          <bindings/>
-          <groovyClasspath/>
+          <bindings></bindings>
+          <groovyClasspath></groovyClasspath>
           <defaultGroovyScript>/* Get latest tag */
 def command = [
-  'semvertag', '--cwd', '/srv/jenkins/jobs/010-build/workspace/opg-core-back-end', 'latest'
+  &apos;semvertag&apos;, &apos;--cwd&apos;, &apos;${JENKINS_HOME}/jobs/010-build/workspace/opg-core-back-end&apos;, &apos;latest&apos;
 ];
 
 def suffix = null;
-new File(sprintf("%s/env", System.getenv('HOME'))).eachLine { line -&gt;
-  if (line.trim() &amp;&amp; line =~ /APP_DOCKER_SUFFIX/) {
-    suffix = line.split('=').collect { it.trim() }.pop();
+new File(sprintf(&quot;%s/env&quot;, System.getenv(&apos;HOME&apos;))).eachLine { line -&gt;
+  if (line.trim() &amp;&amp; line =~ /DOCKER_SUFFIX/) {
+    suffix = line.split(&apos;=&apos;).collect { it.trim() }.pop();
     return true;
   }
 }
 
 
-if (suffix?.trim() &amp;&amp; suffix != "APP_DOCKER_SUFFIX") {
-  command.push('--stage');
+if (suffix?.trim() &amp;&amp; suffix != &quot;DOCKER_SUFFIX&quot;) {
+  command.push(&apos;--stage&apos;);
   command.push(suffix);
 }
 
@@ -90,8 +96,8 @@ def proc = command.execute();
 proc.waitFor();
 
 return proc.text.trim();</defaultGroovyScript>
-          <defaultBindings/>
-          <defaultGroovyClasspath/>
+          <defaultBindings></defaultBindings>
+          <defaultGroovyClasspath></defaultGroovyClasspath>
           <multiSelectDelimiter>,</multiSelectDelimiter>
         </com.cwctravel.hudson.plugins.extended__choice__parameter.ExtendedChoiceParameterDefinition>
       </parameterDefinitions>
@@ -125,20 +131,20 @@ return proc.text.trim();</defaultGroovyScript>
   <customWorkspace>workspaces/900-deploy</customWorkspace>
   <builders>
     <hudson.tasks.Shell>
-      <command>echo "set version"
-sudo -E salt "${Target_Environment}-*" grains.setval opg_app_version ${Build_Version}
+      <command>echo &quot;set version&quot;
+sudo -E salt &quot;${Target_Environment}-*&quot; grains.setval opg_app_version ${Build_Version}
 
-echo "deploy"
-parsed-salt "${Target_Environment}-*" state.sls containers.compose-standalone
+echo &quot;deploy&quot;
+parsed-salt &quot;${Target_Environment}-*&quot; state.sls containers.compose-standalone
 
-echo "setupdbs &amp; ingest"
-DOCKER_COMPOSE="docker-compose -p opgcore -f /etc/docker-compose/standalone.yml"
+echo &quot;setupdbs &amp; ingest&quot;
+DOCKER_COMPOSE=&quot;docker-compose -p opgcore -f /etc/docker-compose/standalone.yml&quot;
 
-sudo -E salt "${Target_Environment}-*" cmd.run use_vt=True "${DOCKER_COMPOSE} run membrane sh /app/scripts/database/setupdbs.sh"
+sudo -E salt &quot;${Target_Environment}-*&quot; cmd.run use_vt=True &quot;${DOCKER_COMPOSE} run membrane sh /app/scripts/database/setupdbs.sh&quot;
 
-sudo -E salt "${Target_Environment}-*" cmd.run use_vt=True "${DOCKER_COMPOSE} run ingestion sh /app/scripts/database/setupdbs.sh"
-sudo -E salt "${Target_Environment}-*" cmd.run use_vt=True "${DOCKER_COMPOSE} run ingestion sh /app/scripts/database/useringest.sh"
-sudo -E salt "${Target_Environment}-*" cmd.run use_vt=True "${DOCKER_COMPOSE} run ingestion sh /app/scripts/database/caseingest_xmls.sh ${Data_Set}"
+sudo -E salt &quot;${Target_Environment}-*&quot; cmd.run use_vt=True &quot;${DOCKER_COMPOSE} run ingestion sh /app/scripts/database/setupdbs.sh&quot;
+sudo -E salt &quot;${Target_Environment}-*&quot; cmd.run use_vt=True &quot;${DOCKER_COMPOSE} run ingestion sh /app/scripts/database/useringest.sh&quot;
+sudo -E salt &quot;${Target_Environment}-*&quot; cmd.run use_vt=True &quot;${DOCKER_COMPOSE} run ingestion sh /app/scripts/database/caseingest_xmls.sh ${Data_Set}&quot;
 </command>
     </hudson.tasks.Shell>
   </builders>
@@ -149,7 +155,6 @@ sudo -E salt "${Target_Environment}-*" cmd.run use_vt=True "${DOCKER_COMPOSE} ru
     </jenkins.plugins.slack.SlackNotifier>
   </publishers>
   <buildWrappers>
-    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.6"/>
     <hudson.plugins.ansicolor.AnsiColorBuildWrapper plugin="ansicolor@0.4.1">
       <colorMapName>xterm</colorMapName>
     </hudson.plugins.ansicolor.AnsiColorBuildWrapper>

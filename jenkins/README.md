@@ -45,10 +45,6 @@ To run locally use [Docker Toolbox](https://www.docker.com/toolbox)
 
 If you're feeling lucky run, 
 ```
-  ./bake
-```
-(you will need to configure an environment file though). The main command to note is:
-```
   docker-compose up -d
 ```  
 which creates the Jenkins container and daemonizes it. 
