@@ -42,7 +42,8 @@
           <permission>hudson.model.Run.Update</permission>
         </permissions>
         <assignedSIDs>
-          <sid>{{if exists "/jenkins/user/name" }}{{ getv "/jenkins/user/name" }}{{end}}</sid>
+          <sid>opgcore</sid>
+          {{if exists "/jenkins/user/name" }}<sid>{{ getv "/jenkins/user/name" }}</sid>{{end}}
         </assignedSIDs>
       </role>
       <role name="training" pattern=".*">

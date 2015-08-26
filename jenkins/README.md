@@ -10,16 +10,16 @@ The Jenkins Continuous Integration and Delivery server Dockeri(s|z)ed for the OP
 Both AWS and MOJ implementations use ENV's and [confd](https://github.com/kelseyhightower/confd) during the boostrap process to configure the container. Look at the environment.example file for specifics:
 ```
   #!/bin/bash
+  # A users for logging into the user interface
+  JENKINS_USER_NAME=shirley
+  JENKINS_USER_PASSWORD=#jbcrypt:$a.hashed.password.
+  JENKINS_USER_APITOKEN=
+  JENKINS_USER_PUBKEYS=
+  
   # Set the user and private Docker registry env's.
   JENKINS_GITHUB_PUBKEY=
   JENKINS_GITHUB_PRIVKEY=
   JENKINS_GITHUB_AUTHKEYS=
-
-  # These are users for logging into the user interface
-  JENKINS_USER_NAME=
-  JENKINS_USER_APITOKEN=
-  JENKINS_USER_PASSWORD=
-  JENKINS_USER_PUBKEYS=
 
   # Git needs to be configured with a user.name and user.email
   GIT_USERNAME=whoami
