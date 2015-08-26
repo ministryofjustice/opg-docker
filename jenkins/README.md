@@ -7,7 +7,7 @@ The Jenkins Continuous Integration and Delivery server Dockeri(s|z)ed for the OP
 * [aws-cli](http://aws.amazon.com/cli/) - for deploying to Amazon Web Services
 
 ## Environment Variables
-Both AWS and MOJ implementations use ENV's and [confd](https://github.com/kelseyhightower/confd) during the boostrap process to configure the instance. Look at the environment.example file for specifics,
+Both AWS and MOJ implementations use ENV's and [confd](https://github.com/kelseyhightower/confd) during the boostrap process to configure the container. Look at the environment.example file for specifics:
 ```
   #!/bin/bash
   # Set the user and private Docker registry env's.
@@ -16,25 +16,24 @@ Both AWS and MOJ implementations use ENV's and [confd](https://github.com/kelsey
   JENKINS_GITHUB_AUTHKEYS=
 
   # These are users for logging into the user interface
-  JENKINS_USER_OPGCORE_APITOKEN=
-  JENKINS_USER_OPGCORE_PASSWORD=
-  JENKINS_USER_OPGCORE_PUBKEYS=
+  JENKINS_USER_NAME=
+  JENKINS_USER_APITOKEN=
+  JENKINS_USER_PASSWORD=
+  JENKINS_USER_PUBKEYS=
 
   # Git needs to be configured with a user.name and user.email
   GIT_USERNAME=whoami
   GIT_EMAIL_ADDRESS=your.name@address.who
 
-  # Tweakables for setting the branches from the first build job
-  OPG_MEMBRANE_BRANCH=develop
-  OPG_FRONTEND_BRANCH=develop
-  OPG_BACKEND_BRANCH=develop
+  # Tweakables for setting the branches for building from job
+  OPG_CORE_MEMBRANE_BRANCH=develop
+  OPG_CORE_FRONT_END_BRANCH=develop
+  OPG_CORE_BACK_END_BRANCH=develop
 
-  # Legacy variables that were used to deploy 
-  # on the salt version of Jenkins
-  # DEPLOY_GIT_BRANCH=master
-  # APP_GIT_DOWNSTREAM_BRANCH=
-  # APP_DOCKER_SUFFIX=dev
-  # APP_GIT_BRANCH=develop
+  # Set the downstream branch to merge to
+  # and the docker tag suffix
+  DOWNSTREAM_BRANCH=
+  DOCKER_SUFFIX=dev
 ```
 as you will need to set these before you run either of the two deployments.
 

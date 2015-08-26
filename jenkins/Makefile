@@ -5,9 +5,6 @@ TAG ?= ecs
 
 all: build
 
-bake:
-	./bake
-
 build:
 	docker build -f docker/Dockerfile-$(TAG) -t $(NAME):$(VERSION)-$(TAG) .
 

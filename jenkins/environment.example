@@ -5,8 +5,12 @@
 # JENKINS_GITHUB_AUTHKEYS=
 
 # A web user for logging into the user interface
+# You only need to set the user, and a password, however
+# the password must be hashed. see https://github.com/jeremyh/jBCrypt
+# for more details.
+# JENKINS_USER_NAME=opgcore
+# JENKINS_USER_PASSWORD=#jbcrypt:$aisnd$aosdm.asodjas.sdasd
 # JENKINS_USER_APITOKEN=
-# JENKINS_USER_PASSWORD=
 # JENKINS_USER_PUBKEYS=
 
 # Configures the Dockercfg if pushing to a remote registry
@@ -15,20 +19,19 @@
 # JENKINS_DOCKERCFG_EMAIL=
 # JENKINS_DOCKERCFG_USERNAME=
 # JENKINS_DOCKERCFG_PASSWORD=
+# JENKINS_DOCKERCFG_AUTH=
 
 # Git needs to be configured with a user.name and user.email
 # GIT_USERNAME=whoami
 # GIT_EMAIL_ADDRESS=your.name@address.who
 
-# Tweakables for setting the branches from the first build job
-# OPG_MEMBRANE_BRANCH=develop
-# OPG_FRONTEND_BRANCH=develop
-# OPG_BACKEND_BRANCH=develop
+# Tweakables for setting the branches to build from
+# OPG_CORE_AUTH_MEMBRANE_BRANCH=develop
+# OPG_CORE_FRONT_END_BRANCH=develop
+# OPG_CORE_BACK_END_BRANCH=develop
 
-# Legacy variables that were used to deploy 
-# on the salt version of Jenkins
-# DEPLOY_GIT_BRANCH=master
-# APP_GIT_DOWNSTREAM_BRANCH=
-# APP_DOCKER_SUFFIX=dev
-# APP_GIT_BRANCH=develop
+# Set the downstream branch to merge to
+# and the docker tag suffix
+# DOWNSTREAM_BRANCH=master 
+# DOCKER_SUFFIX=dev
 

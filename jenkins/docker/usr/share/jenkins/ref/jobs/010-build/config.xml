@@ -1,17 +1,34 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description>clone application repos and build images of app</description>
+  <description></description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.15">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
+    <jenkins.plugins.slack.SlackNotifier_-SlackJobProperty plugin="slack@1.8">
+      <teamDomain></teamDomain>
+      <token></token>
+      <room></room>
+      <startNotification>false</startNotification>
+      <notifySuccess>false</notifySuccess>
+      <notifyAborted>false</notifyAborted>
+      <notifyNotBuilt>false</notifyNotBuilt>
+      <notifyUnstable>false</notifyUnstable>
+      <notifyFailure>false</notifyFailure>
+      <notifyBackToNormal>false</notifyBackToNormal>
+      <notifyRepeatedFailure>false</notifyRepeatedFailure>
+      <includeTestSummary>false</includeTestSummary>
+      <showCommitList>false</showCommitList>
+      <includeCustomMessage>false</includeCustomMessage>
+      <customMessage></customMessage>
+    </jenkins.plugins.slack.SlackNotifier_-SlackJobProperty>
     <de.pellepelster.jenkins.walldisplay.WallDisplayJobProperty plugin="jenkinswalldisplay@0.6.30"/>
   </properties>
-  <scm class="org.jenkinsci.plugins.multiplescms.MultiSCM" plugin="multiple-scms@0.4">
+  <scm class="org.jenkinsci.plugins.multiplescms.MultiSCM" plugin="multiple-scms@0.5">
     <scms>
-      <hudson.plugins.git.GitSCM plugin="git@2.3.5">
+      <hudson.plugins.git.GitSCM plugin="git@2.4.0">
         <configVersion>2</configVersion>
         <userRemoteConfigs>
           <hudson.plugins.git.UserRemoteConfig>
@@ -21,7 +38,7 @@
         </userRemoteConfigs>
         <branches>
           <hudson.plugins.git.BranchSpec>
-            <name>*/${APP_GIT_BRANCH}</name>
+            <name>*/${OPG_CORE_BACK_END_BRANCH}</name>
           </hudson.plugins.git.BranchSpec>
         </branches>
         <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -36,7 +53,7 @@
           <hudson.plugins.git.extensions.impl.PruneStaleBranch/>
         </extensions>
       </hudson.plugins.git.GitSCM>
-      <hudson.plugins.git.GitSCM plugin="git@2.3.5">
+      <hudson.plugins.git.GitSCM plugin="git@2.4.0">
         <configVersion>2</configVersion>
         <userRemoteConfigs>
           <hudson.plugins.git.UserRemoteConfig>
@@ -46,7 +63,7 @@
         </userRemoteConfigs>
         <branches>
           <hudson.plugins.git.BranchSpec>
-            <name>*/${APP_GIT_BRANCH}</name>
+            <name>*/${OPG_CORE_FRONT_END_BRANCH}</name>
           </hudson.plugins.git.BranchSpec>
         </branches>
         <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -61,7 +78,7 @@
           <hudson.plugins.git.extensions.impl.PruneStaleBranch/>
         </extensions>
       </hudson.plugins.git.GitSCM>
-      <hudson.plugins.git.GitSCM plugin="git@2.3.5">
+      <hudson.plugins.git.GitSCM plugin="git@2.4.0">
         <configVersion>2</configVersion>
         <userRemoteConfigs>
           <hudson.plugins.git.UserRemoteConfig>
@@ -71,7 +88,7 @@
         </userRemoteConfigs>
         <branches>
           <hudson.plugins.git.BranchSpec>
-            <name>*/${APP_GIT_BRANCH}</name>
+            <name>*/${OPG_CORE_AUTH_MEMBRANE_BRANCH}</name>
           </hudson.plugins.git.BranchSpec>
         </branches>
         <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -86,7 +103,7 @@
           <hudson.plugins.git.extensions.impl.PruneStaleBranch/>
         </extensions>
       </hudson.plugins.git.GitSCM>
-      <hudson.plugins.git.GitSCM plugin="git@2.3.5">
+      <hudson.plugins.git.GitSCM plugin="git@2.4.0">
         <configVersion>2</configVersion>
         <userRemoteConfigs>
           <hudson.plugins.git.UserRemoteConfig>
@@ -109,7 +126,7 @@
           </hudson.plugins.git.extensions.impl.ScmName>
         </extensions>
       </hudson.plugins.git.GitSCM>
-      <hudson.plugins.git.GitSCM plugin="git@2.3.5">
+      <hudson.plugins.git.GitSCM plugin="git@2.4.0">
         <configVersion>2</configVersion>
         <userRemoteConfigs>
           <hudson.plugins.git.UserRemoteConfig>
@@ -146,7 +163,7 @@
   </triggers>
   <concurrentBuild>false</concurrentBuild>
   <builders>
-    <hudson.plugins.parameterizedtrigger.TriggerBuilder plugin="parameterized-trigger@2.26">
+    <hudson.plugins.parameterizedtrigger.TriggerBuilder plugin="parameterized-trigger@2.28">
       <configs>
         <hudson.plugins.parameterizedtrigger.BlockableBuildTriggerConfig>
           <configs class="empty-list"/>
@@ -159,7 +176,7 @@
     </hudson.plugins.parameterizedtrigger.TriggerBuilder>
     <hudson.tasks.Shell>
       <command>cd opg-core-docker
-export stage=${APP_DOCKER_SUFFIX} 
+export stage=${DOCKER_SUFFIX} 
 make debug
 make
 </command>
@@ -177,7 +194,6 @@ make
     </hudson.tasks.BuildTrigger>
   </publishers>
   <buildWrappers>
-    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.6"/>
     <hudson.plugins.ansicolor.AnsiColorBuildWrapper plugin="ansicolor@0.4.1">
       <colorMapName>xterm</colorMapName>
     </hudson.plugins.ansicolor.AnsiColorBuildWrapper>

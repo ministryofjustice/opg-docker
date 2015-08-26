@@ -1,0 +1,6 @@
+[template]
+src = "user.tmpl"
+dest = "/usr/share/jenkins/ref/users/user/config.xml"
+keys = [
+  "/jenkins/user"
+]

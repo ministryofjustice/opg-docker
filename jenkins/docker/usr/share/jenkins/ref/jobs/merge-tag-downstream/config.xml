@@ -5,7 +5,7 @@
 I.E. on master it merges the latest tag into all repos on support and on on Support it merges the latest patch tag into all repos on develop.&#xd;
 &#xd;
 Notes:&#xd;
-* If it encounters any conflicts it will abort at the job fails.&#xd;
+* If it encounters any conflicts it will abort and the job fails.&#xd;
 * It only pushes changes back to origin, if merge is successful on all repos&#xd;
 </description>
   <keepDependencies>false</keepDependencies>
@@ -13,11 +13,28 @@ Notes:&#xd;
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.15">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
+    <jenkins.plugins.slack.SlackNotifier_-SlackJobProperty plugin="slack@1.8">
+      <teamDomain></teamDomain>
+      <token></token>
+      <room></room>
+      <startNotification>false</startNotification>
+      <notifySuccess>false</notifySuccess>
+      <notifyAborted>false</notifyAborted>
+      <notifyNotBuilt>false</notifyNotBuilt>
+      <notifyUnstable>false</notifyUnstable>
+      <notifyFailure>false</notifyFailure>
+      <notifyBackToNormal>false</notifyBackToNormal>
+      <notifyRepeatedFailure>false</notifyRepeatedFailure>
+      <includeTestSummary>false</includeTestSummary>
+      <showCommitList>false</showCommitList>
+      <includeCustomMessage>false</includeCustomMessage>
+      <customMessage></customMessage>
+    </jenkins.plugins.slack.SlackNotifier_-SlackJobProperty>
     <de.pellepelster.jenkins.walldisplay.WallDisplayJobProperty plugin="jenkinswalldisplay@0.6.30"/>
   </properties>
-  <scm class="org.jenkinsci.plugins.multiplescms.MultiSCM" plugin="multiple-scms@0.4">
+  <scm class="org.jenkinsci.plugins.multiplescms.MultiSCM" plugin="multiple-scms@0.5">
     <scms>
-      <hudson.plugins.git.GitSCM plugin="git@2.3.5">
+      <hudson.plugins.git.GitSCM plugin="git@2.4.0">
         <configVersion>2</configVersion>
         <userRemoteConfigs>
           <hudson.plugins.git.UserRemoteConfig>
@@ -27,7 +44,7 @@ Notes:&#xd;
         </userRemoteConfigs>
         <branches>
           <hudson.plugins.git.BranchSpec>
-            <name>*/${APP_GIT_BRANCH}</name>
+            <name>*/${OPG_CORE_BACK_END_BRANCH}</name>
           </hudson.plugins.git.BranchSpec>
         </branches>
         <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -42,7 +59,7 @@ Notes:&#xd;
           <hudson.plugins.git.extensions.impl.PruneStaleBranch/>
         </extensions>
       </hudson.plugins.git.GitSCM>
-      <hudson.plugins.git.GitSCM plugin="git@2.3.5">
+      <hudson.plugins.git.GitSCM plugin="git@2.4.0">
         <configVersion>2</configVersion>
         <userRemoteConfigs>
           <hudson.plugins.git.UserRemoteConfig>
@@ -52,7 +69,7 @@ Notes:&#xd;
         </userRemoteConfigs>
         <branches>
           <hudson.plugins.git.BranchSpec>
-            <name>*/${APP_GIT_BRANCH}</name>
+            <name>*/${OPG_CORE_FRONT_END_BRANCH}</name>
           </hudson.plugins.git.BranchSpec>
         </branches>
         <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -67,7 +84,7 @@ Notes:&#xd;
           <hudson.plugins.git.extensions.impl.PruneStaleBranch/>
         </extensions>
       </hudson.plugins.git.GitSCM>
-      <hudson.plugins.git.GitSCM plugin="git@2.3.5">
+      <hudson.plugins.git.GitSCM plugin="git@2.4.0">
         <configVersion>2</configVersion>
         <userRemoteConfigs>
           <hudson.plugins.git.UserRemoteConfig>
@@ -77,7 +94,7 @@ Notes:&#xd;
         </userRemoteConfigs>
         <branches>
           <hudson.plugins.git.BranchSpec>
-            <name>*/${APP_GIT_BRANCH}</name>
+            <name>*/${OPG_CORE_AUTH_MEMBRANE_BRANCH}</name>
           </hudson.plugins.git.BranchSpec>
         </branches>
         <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -92,7 +109,7 @@ Notes:&#xd;
           <hudson.plugins.git.extensions.impl.PruneStaleBranch/>
         </extensions>
       </hudson.plugins.git.GitSCM>
-      <hudson.plugins.git.GitSCM plugin="git@2.3.5">
+      <hudson.plugins.git.GitSCM plugin="git@2.4.0">
         <configVersion>2</configVersion>
         <userRemoteConfigs>
           <hudson.plugins.git.UserRemoteConfig>
@@ -125,25 +142,24 @@ Notes:&#xd;
   <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>if [ -z &quot;${APP_GIT_DOWNSTREAM_BRANCH}&quot; ]; then
-  printf &quot;No downstream branch specified, nothing to do. (environmental variable: APP_GIT_DOWNSTREAM_BRANCH)\n&quot;;
+      <command>if [ -z &quot;${DOWNSTREAM_BRANCH}&quot; ]; then
+  printf &quot;No downstream branch specified, nothing to do. (environmental variable: DOWNSTREAM_BRANCH)\n&quot;;
   exit 0;
 fi
 
 cd opg-core-docker;
 
-if [ -n &quot;${APP_DOCKER_SUFFIX}&quot; ]; then 
-	LATEST_TAG=$(semvertag --cwd &quot;/srv/jenkins/jobs/merge-tag-downstream/workspace/opg-core-back-end&quot; latest --stage &quot;${APP_DOCKER_SUFFIX}&quot;);
+if [ -n &quot;${DOCKER_SUFFIX}&quot; ]; then 
+	LATEST_TAG=$(semvertag --cwd &quot;${JENKINS_HOME}/jobs/merge-tag-downstream/workspace/opg-core-back-end&quot; latest --stage &quot;${DOCKER_SUFFIX}&quot;);
 else 
-	LATEST_TAG=$(semvertag --cwd &quot;/srv/jenkins/jobs/merge-tag-downstream/workspace/opg-core-back-end&quot; latest);
+	LATEST_TAG=$(semvertag --cwd &quot;${JENKINS_HOME}/jobs/merge-tag-downstream/workspace/opg-core-back-end&quot; latest);
 fi
 
-./merge-tag-into-branch.sh -r &quot;${LATEST_TAG}&quot; &quot;${APP_GIT_DOWNSTREAM_BRANCH}&quot;;</command>
+./merge-tag-into-branch.sh -r &quot;${LATEST_TAG}&quot; &quot;${DOWNSTREAM_BRANCH}&quot;;</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
   <buildWrappers>
-    <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.6"/>
     <hudson.plugins.ansicolor.AnsiColorBuildWrapper plugin="ansicolor@0.4.1">
       <colorMapName>xterm</colorMapName>
     </hudson.plugins.ansicolor.AnsiColorBuildWrapper>
