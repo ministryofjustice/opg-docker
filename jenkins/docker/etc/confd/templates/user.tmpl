@@ -13,7 +13,7 @@
       <timestamp>1434536253556</timestamp>
     </jenkins.security.LastGrantedAuthoritiesProperty>
     <jenkins.security.ApiTokenProperty>
-      <apiToken>{{if exists "/jenkins/user/apikey" }}{{ getv "/jenkins/user/apikey" }}{{end}}</apiToken>
+      <apiToken>{{if exists "/jenkins/user/apitoken" }}{{ getv "/jenkins/user/apitoken" }}{{end}}</apiToken>
     </jenkins.security.ApiTokenProperty>
     <hudson.plugins.greenballs.ColorBlindProperty plugin="greenballs@1.14">
       <enabledColorBlindSupport>false</enabledColorBlindSupport>

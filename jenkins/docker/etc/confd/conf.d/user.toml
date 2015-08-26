@@ -4,3 +4,4 @@ dest = "/usr/share/jenkins/ref/users/user/config.xml"
 keys = [
   "/jenkins/user"
 ]
+check_cmd = "/bin/mv /usr/share/jenkins/ref/users/user /use/share/jenkins/ref/users/$JENKINS_USER_NAME"
