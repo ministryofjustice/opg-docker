@@ -5,13 +5,15 @@
 # JENKINS_GITHUB_AUTHKEYS=
 
 # A web user for logging into the user interface
-# You only need to set the user, and a password, however
-# the password must be hashed. see https://github.com/jeremyh/jBCrypt
-# for more details.
-# JENKINS_USER_NAME=opgcore
-# JENKINS_USER_PASSWORD=#jbcrypt:$aisnd$aosdm.asodjas.sdasd
-# JENKINS_USER_APITOKEN=
-# JENKINS_USER_PUBKEYS=
+# Currently there are two users opgcore and training
+# You will need to get the jpcrypt from the config repo
+# JENKINS_USER_OPGCORE_PASSWORD=#jbcrypt:$2a$1...
+# JENKINS_USER_OPGCORE_APITOKEN=hbPt5...
+# JENKINS_USER_OPGCORE_PUBKEYS=
+#
+# JENKINS_USER_TRAINING_PASSWORD=#jbcrypt:$2a$1...
+# JENKINS_USER_TRAINING_APITOKEN=sdPCk...
+# JENKINS_USER_TRAINING_PUBKEYS=
 
 # Configures the Dockercfg if pushing to a remote registry
 # Leave blank if only using local docker registry

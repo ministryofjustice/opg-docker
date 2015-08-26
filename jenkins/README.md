@@ -11,10 +11,13 @@ Both AWS and MOJ implementations use ENV's and [confd](https://github.com/kelsey
 ```
   #!/bin/bash
   # A users for logging into the user interface
-  JENKINS_USER_NAME=shirley
-  JENKINS_USER_PASSWORD=#jbcrypt:$a.hashed.password.
-  JENKINS_USER_APITOKEN=
-  JENKINS_USER_PUBKEYS=
+  JENKINS_USER_OPGCORE_PASSWORD=#jbcrypt:$2a$1...
+  JENKINS_USER_OPGCORE_APITOKEN=hbPt5...
+  JENKINS_USER_OPGCORE_PUBKEYS=
+
+  JENKINS_USER_TRAINING_PASSWORD=#jbcrypt:$2a$1...
+  JENKINS_USER_TRAINING_APITOKEN=sdPCk...
+  JENKINS_USER_TRAINING_PUBKEYS=
   
   # Set the user and private Docker registry env's.
   JENKINS_GITHUB_PUBKEY=
