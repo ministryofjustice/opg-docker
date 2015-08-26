@@ -1,7 +1,0 @@
-[template]
-src = "user.tmpl"
-dest = "/usr/share/jenkins/ref/users/user/config.xml"
-keys = [
-  "/jenkins/user"
-]
-check_cmd = "/bin/mv /usr/share/jenkins/ref/users/user /usr/share/jenkins/ref/users/$JENKINS_USER_NAME"

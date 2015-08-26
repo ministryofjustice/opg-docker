@@ -1,6 +1,0 @@
-[template]
-src = "config.xml.tmpl"
-dest = "/usr/share/jenkins/ref/config.xml"
-keys = [
-  "/jenkins/user"
-]
