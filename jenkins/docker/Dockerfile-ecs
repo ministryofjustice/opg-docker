@@ -4,7 +4,11 @@ FROM jenkins
 USER root
 
 # Set the Jenkins home dir to our preference
-ENV JENKINS_HOME=/srv/jenkins
+ENV JENKINS_HOME /srv/jenkins
+VOLUME $JENKINS_HOME
+
+# The source directory for our customisations
+ENV JENKINS_REF=/usr/share/jenkins/ref
 
 # Update and install dependencies etc etc
 RUN apt-get update && \
@@ -36,10 +40,10 @@ RUN apt-get update && \
 RUN wget https://github.com/kelseyhightower/confd/releases/download/v0.10.0/confd-0.10.0-linux-amd64 && mv confd-0.10.0-linux-amd64 /usr/bin/confd && chmod 0755 /usr/bin/confd
 
 # Our jubbly customisations.
-COPY docker/jenkins $JENKINS_HOME
+COPY docker/jenkins $JENKINS_REF
 
 # Plugins, plugins everywhere.
-RUN /usr/local/bin/plugins.sh $JENKINS_HOME/plugins.txt
+RUN /usr/local/bin/plugins.sh $JENKINS_REF/plugins.txt
 
 # Bootstrap commands, and our Jenkins service.
 COPY docker/etc/confd /etc/confd
@@ -50,9 +54,11 @@ COPY docker/root/.ssh /root/.ssh
 RUN ln -s /etc/service/jenkins/run /etc/my_init.d/99-jenkins
 
 # Set root as the owner of the jenkins directory
-RUN chown -R root $JENKINS_HOME
+RUN chown -R root $JENKINS_HOME $JENKINS_REF
 
 # This env is not carried over from the jenkins 
 # image (for some strange reason)
 ENV JENKINS_SLAVE_AGENT_PORT=50000
+
+COPY docker/usr/local/bin/jenkins.sh /usr/local/bin/jenkins.sh
 

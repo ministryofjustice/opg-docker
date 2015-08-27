@@ -1,4 +1,4 @@
-#! /bin/bash -e
+#! /bin/bash
 
 set -e
 
@@ -6,24 +6,21 @@ set -e
 # So the initial JENKINS-HOME is set with expected content. 
 # Don't override, as this is just a reference setup, and use from UI 
 # can then change this, upgrade plugins, etc.
-JENKINS_REF=/srv/jenkins
-N=${#JENKINS_REF}+1
-echo $N
 copy_reference_file() {
-  f=${1%/} 
-  echo "$f" #>> $COPY_REFERENCE_FILE_LOG
-  rel=${f:N}
+	f=${1%/} 
+	echo "$f" >> $COPY_REFERENCE_FILE_LOG
+  rel=${f:23}
   dir=$(dirname ${f})
-  echo " $f -> $rel" #>> $COPY_REFERENCE_FILE_LOG
-  echo "copy $rel to JENKINS_HOME" #>> $COPY_REFERENCE_FILE_LOG
-  mkdir -p ${JENKINS_HOME}/${dir:N}
-  cp -r ${JENKINS_REF}/${rel} ${JENKINS_HOME}/${rel};
+  echo " $f -> $rel" >> $COPY_REFERENCE_FILE_LOG
+  echo "copy $rel to JENKINS_HOME" >> $COPY_REFERENCE_FILE_LOG
+  mkdir -p $JENKINS_HOME/${dir:23}
+  cp -rf /usr/share/jenkins/ref/${rel} $JENKINS_HOME/${rel};
   # pin plugins on initial copy
-  [[ ${rel} == plugins/*.jpi ]] && touch ${JENKINS_HOME}/${rel}.pinned
+  [[ ${rel} == plugins/*.jpi ]] && touch $JENKINS_HOME/${rel}.pinned
 }
 export -f copy_reference_file
-echo "--- Copying files at $(date)" #>> $COPY_REFERENCE_FILE_LOG
-find $JENKINS_REF -type f -exec bash -c "copy_reference_file '{}'" \;
+echo "--- Copying files at $(date)" >> $COPY_REFERENCE_FILE_LOG
+find /usr/share/jenkins/ref/ -type f -exec bash -c "copy_reference_file '{}'" \;
 
 # if `docker run` first argument start with `--` the user is passing jenkins launcher arguments
 if [[ $# -lt 1 ]] || [[ "$1" == "--"* ]]; then

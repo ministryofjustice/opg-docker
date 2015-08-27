@@ -5,17 +5,18 @@ FROM registry.service.dsd.io/opguk/jre-8:latest
 EXPOSE 8080
 EXPOSE 50000
 
-# Jenkins home directory is a volume. Therefore 
-# configuration and build history can
-# be persisted and survive image upgrades
-VOLUME /srv/jenkins
-
 # Jenkins environment variables.
 ENV JENKINS_VERSION 1.609.2
 ENV JENKINS_HOME /srv/jenkins
+ENV JENKINS_REF /usr/share/jenkins/ref
 ENV JENKINS_SLAVE_AGENT_PORT 50000
 ENV JENKINS_UC https://updates.jenkins-ci.org
 ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
+
+# Jenkins home directory is a volume. Therefore 
+# configuration and build history can
+# be persisted and survive image upgrades
+VOLUME $JENKINS_HOME
 
 # Update and install dependencies etc etc
 RUN apt-get update && \
@@ -64,7 +65,7 @@ COPY docker/usr/local/bin/plugins.sh /usr/local/bin/plugins.sh
 COPY docker/usr/local/bin/jenkins.sh /usr/local/bin/jenkins.sh
 
 # Our jubbly customisations.
-COPY docker/usr/share/jenkins/ref /usr/share/jenkins/ref
+COPY docker/jenkins $JENKINS_REF
 
 # Bootstrap commands, and our Jenkins service.
 COPY docker/etc/confd /etc/confd

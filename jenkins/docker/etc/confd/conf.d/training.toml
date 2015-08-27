@@ -1,6 +1,6 @@
 [template]
 src = "training.tmpl"
-dest = "/srv/jenkins/users/training/config.xml"
+dest = "/usr/share/jenkins/ref/users/training/config.xml"
 keys = [
   "/jenkins"
 ]
