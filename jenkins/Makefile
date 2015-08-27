@@ -1,7 +1,7 @@
 NAME = registry.service.dsd.io/opguk/jenkins
 VERSION = 0.0.2
 TAG ?= ecs
-.PHONY: all bake build clean test tag_latest release ssh
+.PHONY: all build clean test tag_latest release
 
 all: build
 
@@ -11,7 +11,7 @@ build:
 clean:
 	@eval `docker-machine env default` ||:
 	@docker kill `docker ps -a -q` ||:
-	@docker rm -f `docker ps -a -q` ||:
+	@docker rm -f -v `docker ps -a -q` ||:
 	@docker rmi -f `docker images -q` ||:
 
 test:

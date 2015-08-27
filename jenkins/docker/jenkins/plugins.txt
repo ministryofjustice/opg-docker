@@ -9,11 +9,10 @@ copyartifact
 credentials
 discard-old-build
 dry
-envinject
+envinject:1.91.1
 extended-choice-parameter
 extensible-choice-parameter
 git
-git-client
 git-client
 github
 github-api
@@ -27,6 +26,7 @@ jenkinswalldisplay
 locks-and-latches
 mailer
 mapdb-api
+matrix-auth
 matrix-project
 multiple-scms
 naginator

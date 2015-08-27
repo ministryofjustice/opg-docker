@@ -8,10 +8,12 @@
         },
         "JenkinsUserOpgcorePassword": {
             "Description": "",
+            "NoEcho": "true",
             "Type": "String"
         },
         "JenkinsUserOpgcorePubkeys": {
             "Description": "",
+            "NoEcho": "true",
             "Type": "String"
         },
         "JenkinsUserTrainingApikey": {
@@ -20,6 +22,7 @@
         },
         "JenkinsUserTrainingPassword": {
             "Description": "",
+            "NoEcho": "true",
             "Type": "String"
         },
         "DockercfgUsername": {

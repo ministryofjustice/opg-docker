@@ -25,6 +25,7 @@ else
       --template-body file://template.json \
       --capabilities CAPABILITY_IAM \
       --parameters ParameterKey=SSHLocation,ParameterValue="$IPADDRESS/32" \
+ParameterKey=KeyName,ParameterValue="$2" \
 ParameterKey=DNSDomain,ParameterValue="$3" \
 ParameterKey=DockercfgPassword,ParameterValue="$JENKINS_DOCKERCFG_PASSWORD" \
 ParameterKey=DockercfgEmail,ParameterValue="$JENKINS_DOCKERCFG_EMAIL" \

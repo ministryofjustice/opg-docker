@@ -3,7 +3,7 @@ jenkins:
   image: registry.service.dsd.io/opguk/jenkins:0.0.2-ecs
   ports:
    - "8080:8080"
-  volumes:
-   - /srv/jenkins
+  #volumes:
+  # - /srv/jenkins
   env_file:
    - ./environment.sh

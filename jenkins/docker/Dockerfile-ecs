@@ -3,11 +3,8 @@ FROM jenkins
 # Switch to the root user to configure and run the container
 USER root
 
-# Change the JENKINS_HOME ENV to our preference
+# Set the Jenkins home dir to our preference
 ENV JENKINS_HOME=/srv/jenkins
-
-# Change the Volume from the base container to match
-VOLUME $JENKINS_HOME
 
 # Update and install dependencies etc etc
 RUN apt-get update && \
