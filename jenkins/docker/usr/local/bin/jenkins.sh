@@ -15,14 +15,11 @@ copy_reference_file() {
   rel=${f:N}
   dir=$(dirname ${f})
   echo " $f -> $rel" #>> $COPY_REFERENCE_FILE_LOG
-  if [[ ! -e ${JENKINS_HOME}/${rel} ]] 
-  then
-    echo "copy $rel to JENKINS_HOME" #>> $COPY_REFERENCE_FILE_LOG
-    mkdir -p ${JENKINS_HOME}/${dir:N}
-    cp -r ${JENKINS_REF}/${rel} ${JENKINS_HOME}/${rel};
-    # pin plugins on initial copy
-    [[ ${rel} == plugins/*.jpi ]] && touch ${JENKINS_HOME}/${rel}.pinned
-  fi; 
+  echo "copy $rel to JENKINS_HOME" #>> $COPY_REFERENCE_FILE_LOG
+  mkdir -p ${JENKINS_HOME}/${dir:N}
+  cp -r ${JENKINS_REF}/${rel} ${JENKINS_HOME}/${rel};
+  # pin plugins on initial copy
+  [[ ${rel} == plugins/*.jpi ]] && touch ${JENKINS_HOME}/${rel}.pinned
 }
 export -f copy_reference_file
 echo "--- Copying files at $(date)" #>> $COPY_REFERENCE_FILE_LOG
