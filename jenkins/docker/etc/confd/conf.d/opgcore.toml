@@ -1,6 +1,6 @@
 [template]
 src = "opgcore.tmpl"
-dest = "/usr/share/jenkins/ref/users/opgcore/config.xml"
+dest = "/srv/jenkins/users/opgcore/config.xml"
 keys = [
   "/jenkins"
 ]

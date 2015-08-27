@@ -8,11 +8,11 @@ EXPOSE 50000
 # Jenkins home directory is a volume. Therefore 
 # configuration and build history can
 # be persisted and survive image upgrades
-VOLUME /var/jenkins_home
+VOLUME /srv/jenkins
 
 # Jenkins environment variables.
 ENV JENKINS_VERSION 1.609.2
-ENV JENKINS_HOME /var/jenkins_home
+ENV JENKINS_HOME /srv/jenkins
 ENV JENKINS_SLAVE_AGENT_PORT 50000
 ENV JENKINS_UC https://updates.jenkins-ci.org
 ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
@@ -44,7 +44,7 @@ RUN apt-get update && \
 
 # `/usr/share/jenkins/ref/` contains all reference configuration we want 
 # to set on our fresh new installation.
-RUN mkdir -p /usr/share/jenkins/ref
+RUN mkdir -p $JENKINS_HOME
 
 # Use tini as a subreaper in the Docker container 
 # to adopt zombie processes.
@@ -72,8 +72,8 @@ COPY docker/etc/service /etc/service
 COPY docker/root/.ssh /root/.ssh
 
 # Plugins, plugins everywhere.
-RUN /usr/local/bin/plugins.sh /usr/share/jenkins/ref/plugins.txt
+RUN /usr/local/bin/plugins.sh ${JENKINS_HOME}/plugins.txt
 
 # set root as the owner of the jenkins directory
-RUN chown -R root "$JENKINS_HOME" /usr/share/jenkins/ref
+RUN chown -R root "$JENKINS_HOME"
 

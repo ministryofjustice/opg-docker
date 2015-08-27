@@ -1,5 +1,5 @@
 NAME = registry.service.dsd.io/opguk/jenkins
-VERSION = 0.0.1
+VERSION = 0.0.2
 TAG ?= ecs
 .PHONY: all bake build clean test tag_latest release ssh
 

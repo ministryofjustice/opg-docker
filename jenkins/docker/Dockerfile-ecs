@@ -3,6 +3,12 @@ FROM jenkins
 # Switch to the root user to configure and run the container
 USER root
 
+# Change the JENKINS_HOME ENV to our preference
+ENV JENKINS_HOME=/srv/jenkins
+
+# Change the Volume from the base container to match
+VOLUME $JENKINS_HOME
+
 # Update and install dependencies etc etc
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -33,10 +39,10 @@ RUN apt-get update && \
 RUN wget https://github.com/kelseyhightower/confd/releases/download/v0.10.0/confd-0.10.0-linux-amd64 && mv confd-0.10.0-linux-amd64 /usr/bin/confd && chmod 0755 /usr/bin/confd
 
 # Our jubbly customisations.
-COPY docker/usr/share/jenkins/ref /usr/share/jenkins/ref
+COPY docker/jenkins $JENKINS_HOME
 
 # Plugins, plugins everywhere.
-RUN /usr/local/bin/plugins.sh /usr/share/jenkins/ref/plugins.txt
+RUN /usr/local/bin/plugins.sh $JENKINS_HOME/plugins.txt
 
 # Bootstrap commands, and our Jenkins service.
 COPY docker/etc/confd /etc/confd
@@ -46,8 +52,8 @@ COPY docker/sbin/my_init /sbin/my_init
 COPY docker/root/.ssh /root/.ssh
 RUN ln -s /etc/service/jenkins/run /etc/my_init.d/99-jenkins
 
-# set root as the owner of the jenkins directory
-RUN chown -R root "$JENKINS_HOME" /usr/share/jenkins/ref
+# Set root as the owner of the jenkins directory
+RUN chown -R root $JENKINS_HOME
 
 # This env is not carried over from the jenkins 
 # image (for some strange reason)
