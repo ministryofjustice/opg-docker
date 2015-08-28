@@ -1,6 +1,6 @@
 jenkins:
   entrypoint: /sbin/my_init
-  image: registry.service.dsd.io/opguk/jenkins:0.0.2-ecs
+  image: registry.service.dsd.io/opguk/jenkins:0.0.2-moj
   ports:
    - "8080:8080"
   volumes:

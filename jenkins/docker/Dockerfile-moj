@@ -45,7 +45,7 @@ RUN apt-get update && \
 
 # `/usr/share/jenkins/ref/` contains all reference configuration we want 
 # to set on our fresh new installation.
-RUN mkdir -p $JENKINS_HOME
+RUN mkdir -p $JENKINS_REF
 
 # Use tini as a subreaper in the Docker container 
 # to adopt zombie processes.
@@ -73,7 +73,7 @@ COPY docker/etc/service /etc/service
 COPY docker/root/.ssh /root/.ssh
 
 # Plugins, plugins everywhere.
-RUN /usr/local/bin/plugins.sh ${JENKINS_HOME}/plugins.txt
+RUN /usr/local/bin/plugins.sh $JENKINS_REF/plugins.txt
 
 # set root as the owner of the jenkins directory
 RUN chown -R root "$JENKINS_HOME"
