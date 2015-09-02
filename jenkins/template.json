@@ -607,7 +607,7 @@
                 "ContainerDefinitions": [
                     {
                         "Name": "jenkins",
-                        "Image": "registry.service.dsd.io/opguk/jenkins-ecs",
+                        "Image": "registry.service.dsd.io/opguk/jenkins:latest-ecs",
                         "Essential": "true",
                         "Cpu": "2048",
                         "Memory": "2048",
@@ -742,15 +742,28 @@
                         ],
                         "MountPoints": [
                             {
-                                "ContainerPath": "/var/jenkins_home",
+                                "ContainerPath": "/srv/jenkins",
                                 "SourceVolume": "jenkins-home"
+                            },
+                            {
+                                "ContainerPath": "/usr/local/bin/docker",
+                                "SourceVolume": "docker-bin"
                             }
                         ]
                     }
                 ],
                 "Volumes": [
                     {
-                        "Name": "jenkins-home"
+                        "Name": "jenkins-home",
+                        "Host": {
+                            "SourcePath": "/srv/jenkins"
+                        }
+                    },
+                    {
+                        "Name": "docker-bin",
+                        "Host": {
+                            "SourcePath": "/usr/local/bin/docker"
+                        }
                     }
                 ]
             }

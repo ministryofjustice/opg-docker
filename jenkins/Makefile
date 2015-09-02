@@ -1,5 +1,5 @@
 NAME = registry.service.dsd.io/opguk/jenkins
-VERSION = 0.0.2
+VERSION = 1.0.0
 TAG ?= ecs
 .PHONY: all build clean test tag_latest release
 

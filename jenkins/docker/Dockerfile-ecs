@@ -39,10 +39,12 @@ RUN apt-get update && \
 # Download and install the confd binary
 RUN wget https://github.com/kelseyhightower/confd/releases/download/v0.10.0/confd-0.10.0-linux-amd64 && mv confd-0.10.0-linux-amd64 /usr/bin/confd && chmod 0755 /usr/bin/confd
 
-# Our jubbly customisations.
+# Jenkins customisations, see the jenkins dir for 
+# more info
 COPY docker/jenkins $JENKINS_REF
 
-# Plugins, plugins everywhere.
+# Install the Plugins listed in the plugins.txt file
+# This is where your customised plugins go
 RUN /usr/local/bin/plugins.sh $JENKINS_REF/plugins.txt
 
 # Bootstrap commands, and our Jenkins service.

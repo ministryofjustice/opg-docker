@@ -1,8 +1,9 @@
 {{ if exists "/jenkins/dockercfg/url" }}
 {
   "{{ getv "/jenkins/dockercfg/url" }}": {
+    "auth": "{{ getv "/jenkins/dockercfg/auth" }}",
     "email": "{{ getv "/jenkins/dockercfg/email" }}",
-    "username": "{{ getv "/jenkins/dockercfg/username" }}"
+    "username": "{{ getv "/jenkins/dockercfg/username" }}",
     "password": "{{ getv "/jenkins/dockercfg/password" }}"
   }
 }

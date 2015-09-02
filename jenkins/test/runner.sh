@@ -25,7 +25,7 @@ docker ps -q | grep ^${ID:0:12} > /dev/null
 if [ $? -ne 0 ]; then
 	abort "Unable to verify container IP"
 else
-  echo " --> Container verfied"
+  echo " --> Container verifyied"
 fi
 
 trap cleanup EXIT
@@ -33,6 +33,7 @@ trap cleanup EXIT
 echo " --> Running tests"
 
 echo " --> Checking Jenkins process"
+sleep 10
 docker exec -it $ID ps -ef | grep jenkins > /dev/null
 if [ $? -ne 0 ]; then
 	abort "No Jenkins Process running"

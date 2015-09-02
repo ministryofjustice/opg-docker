@@ -1,3 +1,0 @@
-#!/bin/bash
-git config --global user.email "${GIT_EMAIL_ADDRESS}"
-git config --global user.name "${GIT_USERNAME}"

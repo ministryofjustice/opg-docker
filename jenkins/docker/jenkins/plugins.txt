@@ -52,5 +52,6 @@ violations
 xunit
 plain-credentials
 workflow-step-api
-
-
+timestamper
+greenballs
+jenkins-jira-issue-updater

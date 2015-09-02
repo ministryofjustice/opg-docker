@@ -1,9 +1,11 @@
 jenkins:
   entrypoint: /sbin/my_init
-  image: registry.service.dsd.io/opguk/jenkins:0.0.2-moj
+  image: registry.service.dsd.io/opguk/jenkins:1.0.0-ecs
   ports:
    - "8080:8080"
   volumes:
    - /srv/jenkins
+   - /var/run/docker.sock:/var/run/docker.sock
+   - /usr/local/bin/docker:/usr/local/bin/docker
   env_file:
    - ./environment.sh
