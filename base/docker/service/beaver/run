@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # when linked to monitoring container
 # or when MONITORING_ENABLED is set
