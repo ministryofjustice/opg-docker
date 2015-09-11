@@ -18,6 +18,10 @@ RUN  apt-get update && apt-get -y upgrade && apt-get install -y git joe && \
      apt-get clean && apt-get autoremove && \
      rm -rf /var/lib/cache/* /var/lib/log/* /tmp/* /var/tmp/*
 
+# Pip installs
+# Install awscli to override the system one which is broken (with python 3.4.3 as of Sept 2015)
+RUN pip install awscli
+
 # ConfD install
 RUN  wget -O /usr/bin/confd https://github.com/kelseyhightower/confd/releases/download/v0.9.0/confd-0.9.0-linux-amd64 && \
      chmod a+x /usr/bin/confd && \
