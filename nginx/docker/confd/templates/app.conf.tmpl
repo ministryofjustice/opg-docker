@@ -18,10 +18,6 @@ server {
     error_log   /var/log/app/nginx.error.log error;
 
 
-    error_page  500 502 504       /500.html;
-    error_page  503               /503.html;
-    error_page  404               /404.html;
-
     index index.html;
 
     root /app/public;
