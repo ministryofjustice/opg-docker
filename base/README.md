@@ -48,6 +48,8 @@ supported variables
 -------------------
 OPG_DOCKER_TAG - see versions
 SKIP_SSL_GENERATE - when set container will not create self signed certificate on start
+OPG_BASE_SSL_CERT - pass a cert as a multiline or using `"\n"`
+OPG_BASE_SSL_KEY - pass a key as a multiline or using `"\n"`
 
 
 TODO

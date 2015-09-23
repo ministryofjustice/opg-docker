@@ -1,0 +1,2 @@
+{{if exists "/opg/base/ssl/key" }}{{range (split (getv "/opg/base/ssl/key") `\n`)}}{{.}}
+{{end}}{{end}}
