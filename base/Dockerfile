@@ -50,3 +50,4 @@ ADD  docker/my_init.d /etc/my_init.d
 RUN  chmod a+x /etc/my_init.d/*
 
 ADD  docker/confd /etc/confd
+ADD  docker/ebs-snapshot.sh /usr/local/bin/ebs-snapshot.sh && chmod +x /usr/local/bin/ebs-snapshot.sh
