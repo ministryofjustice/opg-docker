@@ -50,3 +50,4 @@ ADD docker/confd /etc/confd
 ADD docker/service/rabbitmq /etc/service/rabbitmq
 RUN chmod a+x /etc/service/rabbitmq/run
 
+ENV OPG_SERVICE rabbitmq

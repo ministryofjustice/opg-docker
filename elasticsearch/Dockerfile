@@ -88,3 +88,5 @@ ADD docker/scripts /scripts/elasticsearch
 
 RUN chmod -R a+x /etc/service/elasticsearch/run
 RUN chmod -R a+x /scripts/elasticsearch
+
+ENV OPG_SERVICE elasticsearch

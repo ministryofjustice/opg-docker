@@ -20,3 +20,5 @@ RUN set -x \
 
 # see CA_CERTIFICATES_JAVA_VERSION notes above
 RUN /var/lib/dpkg/info/ca-certificates-java.postinst configure
+
+ENV OPG_SERVICE jre-8

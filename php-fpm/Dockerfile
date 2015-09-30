@@ -21,19 +21,36 @@ RUN  chown app /app/public/index.php
 
 ADD  docker/logrotate.d/app /etc/logrotate.d/app
 
-ADD  docker/beaver.d /etc/beaver.d
-
 ADD  docker/php/* /etc/php5/
 
 ADD  docker/my_init.d /etc/my_init.d
 RUN  chmod a+x /etc/my_init.d/*
 
-RUN mkdir -p /scripts/php-fpm/xhprof
-ADD docker/scripts/xhprof/profiler /scripts/php-fpm/xhprof/profiler
-RUN chmod -R a+x /scripts/php-fpm
+RUN  mkdir -p /scripts/php-fpm/xhprof
+ADD  docker/scripts/xhprof/profiler /scripts/php-fpm/xhprof/profiler
+RUN  chmod -R a+x /scripts/php-fpm
 
 # disable php5-xdebug by default
 RUN  rm -f /etc/php5/fpm/conf.d/*xdebug*
 RUN  rm -f /etc/php5/cli/conf.d/*xdebug*
 RUN  rm /etc/php5/mods-available/xdebug.ini
 
+ADD  docker/nginx /etc/nginx
+
+RUN  pip install schedule statsd requests
+ADD  https://raw.githubusercontent.com/ministryofjustice/php-fpm-stats-collector/master/php-fpm-stats-collector.py /usr/local/bin/
+RUN  chmod a+x /usr/local/bin/php-fpm-stats-collector.py
+
+ADD  docker/service/php-fpm-stats /etc/service/php-fpm-stats
+RUN  chmod a+x /etc/service/php-fpm-stats/run
+
+
+ENV  OPG_PHP_POOL_CHILDREN_MAX 4
+ENV  OPG_PHP_POOL_REQUESTS_MAX 0
+
+ENV  OPG_SERVICE php-fpm
+
+ENV  STATSD_HOST monitoring
+ENV  STATSD_PORT 8125
+ENV  STATSD_DELAY 10
+ENV  FPM_STATUS_URL http://localhost:81/status

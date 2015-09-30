@@ -1,26 +1,26 @@
 [/var/log/app/nginx.access.json]
 format: rawjson
 type: nginx
-tags: nginx
+tags: nginx, {{ getv "/opg/service" }}
 delimiter: \n
 
 
 [/var/log/app/nginx.error.log]
 format: json
 type: nginx
-tags: nginx
+tags: nginx, {{ getv "/opg/service" }}
 delimiter: \n
 
 
 [/var/log/nginx/error.log]
 format: json
 type: nginx
-tags: nginx
+tags: nginx, {{ getv "/opg/service" }}
 delimiter: \n
 
 
 [/var/log/nginx/access.json]
 format: rawjson
 type: nginx
-tags: nginx
+tags: nginx, {{ getv "/opg/service" }}
 delimiter: \n

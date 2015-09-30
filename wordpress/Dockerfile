@@ -12,3 +12,5 @@ RUN rm -rf /app/*
 RUN ln -s /data /app/public
 
 USER root
+
+ENV OPG_SERVICE wordpress

@@ -1,23 +1,23 @@
 [/var/log/app/application.log]
 format: json
 type: php-fpm
-tags: php-fpm
+tags: php-fpm, {{ getv "/opg/service" }}
 delimiter: \n
 
 [/var/log/app/php-fpm-master.log]
 format: json
 type: php-fpm
-tags: php-fpm, master
+tags: php-fpm, {{ getv "/opg/service" }}, master
 delimiter: \n
 
 [/var/log/app/php-fpm-error.log]
 format: json
 type: php-fpm
-tags: php-fpm, error
+tags: php-fpm, {{ getv "/opg/service" }}, error
 delimiter: \n
 
 [/var/log/app/php-fpm-slow.log]
 format: json
 type: php-fpm
-tags: php-fpm, slow
+tags: php-fpm, {{ getv "/opg/service" }}, slow
 delimiter: \n

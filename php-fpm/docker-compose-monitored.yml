@@ -1,0 +1,23 @@
+#a demo docker compose file
+
+phpfpm:
+  build: .
+  ports:
+  - 80:80
+  - 443:443
+  volumes:
+  - ./docker:/docker
+  environment:
+  - OPG_NGINX_SSL_FORCE_REDIRECT=1
+  - OPG_SERVICE=myservice
+  links:
+  - graphite:monitoring
+
+
+graphite:
+  image: registry.service.dsd.io/opguk/graphite-statsd:latest
+  ports:
+  - 8003:80
+  - 2003:2003
+  - 2003:2003/udp
+  - 8125:8125/udp

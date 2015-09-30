@@ -21,3 +21,5 @@ ENV PATH /go/bin:$PATH
 WORKDIR /go
 
 COPY docker/go-wrapper /usr/local/bin/
+
+ENV OPG_SERVICE golang

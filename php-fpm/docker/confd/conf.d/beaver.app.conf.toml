@@ -1,0 +1,6 @@
+[template]
+src = "beaver.app.conf.tmpl"
+dest = "/etc/beaver.d/app.conf"
+keys = [
+    "/opg/service",
+]

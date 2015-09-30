@@ -6,10 +6,13 @@ Iterates over env variables and for each non empty variable create entry in
 """
 import os
 
+skip_variables = ["LS_COLORS"]
+
+
 with open("/etc/php5/fpm/pool.d/app.conf", "a") as app_conf:
 
     for name, value in os.environ.iteritems():
-        if value:
+        if value and name not in skip_variables:
             app_conf.write("env[{}] = \"{}\"\n".format(name, value))
         else:
             print("Skipping variable {} as it's empty".format(name))

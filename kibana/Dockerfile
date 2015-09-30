@@ -45,3 +45,5 @@ ADD docker/confd /etc/confd
 
 ADD docker/service/kibana /etc/service/kibana
 RUN chmod a+x /etc/service/kibana/run
+
+ENV OPG_SERVICE kibana
