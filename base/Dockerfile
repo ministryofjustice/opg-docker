@@ -45,6 +45,7 @@ ADD  docker/service/beaver /etc/service/beaver
 RUN  chmod a+x /etc/service/beaver/run
 
 ADD  docker/beaver.conf /etc/beaver.conf
+RUN  mkdir -p /etc/beaver.d
 
 ADD  docker/my_init.d /etc/my_init.d
 RUN  chmod a+x /etc/my_init.d/*
