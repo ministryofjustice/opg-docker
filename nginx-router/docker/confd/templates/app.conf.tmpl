@@ -31,5 +31,12 @@ server {
         proxy_set_header X-Forwarded-For   $remote_addr;
         proxy_set_header X-Forwarded-Proto $scheme;
     }
+
+    set $uid $http_x_request_id;
+    if ($uid = '') {
+      set $uid $request_id;
+    }
+    add_header X-Request-Id $uid;
+    proxy_set_header X-Request-Id $uid;
 }
 {{ end }}
