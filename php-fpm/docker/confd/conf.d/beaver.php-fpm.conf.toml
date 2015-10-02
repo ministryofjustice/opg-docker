@@ -1,0 +1,6 @@
+[template]
+src = "beaver.php-fpm.conf.tmpl"
+dest = "/etc/beaver.d/php-fpm.conf"
+keys = [
+    "/opg/service",
+]
