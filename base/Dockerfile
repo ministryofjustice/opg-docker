@@ -52,7 +52,7 @@ RUN  chmod a+x /etc/my_init.d/*
 
 ADD  docker/confd /etc/confd
 
-ADD  docker/ebs-snapshot.sh /usr/local/bin/ebs-snapshot.sh
-RUN chmod +x /usr/local/bin/ebs-snapshot.sh
+ADD  docker/bin /usr/local/bin/
+RUN  chmod a+x /usr/local/bin/*
 
 ENV  OPG_SERVICE base
