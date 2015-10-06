@@ -28,8 +28,8 @@ server {
 
     location / {
         # Force DNS/name resolution by setting target as a parameter
-        set $target {{ getv (printf "/opg/nginx/router/%s/target" $vhost_id) }} 
-        proxy_pass $target
+        set $target "{{ getv (printf "/opg/nginx/router/%s/target" $vhost_id) }}";
+        proxy_pass $target;
         proxy_set_header Host              $host;
         proxy_set_header X-Forwarded-For   $remote_addr;
         proxy_set_header X-Forwarded-Proto $scheme;
