@@ -27,15 +27,9 @@ server {
     proxy_buffering off;
 
     location / {
-        {{ with $force_dns_resolution := (printf "/opg/nginx/router/%s/force/dns/resolution" $vhost_id) }}
-        {{ if exists $force_dns_resolution }}
-        # Force DNS resolution by setting target as a parameter
+        # Force DNS/name resolution by setting target as a parameter
         set $target {{ getv (printf "/opg/nginx/router/%s/target" $vhost_id) }} 
         proxy_pass $target
-        {{ else }}
-        proxy_pass {{ getv (printf "/opg/nginx/router/%s/target" $vhost_id) }}
-        {{ end }}
-        {{ end }}
         proxy_set_header Host              $host;
         proxy_set_header X-Forwarded-For   $remote_addr;
         proxy_set_header X-Forwarded-Proto $scheme;
