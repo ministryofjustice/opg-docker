@@ -10,14 +10,15 @@ server {
 
 
 {{ range lsdir "/opg/nginx/router" }}
+{{ with $vhost_id := . }}
 server {
 {{ if not (exists "/opg/nginx/ssl/force/redirect") }}
     listen     80;
 {{ end }}
     listen     443 ssl;
-    server_name {{ getv (printf "/opg/nginx/router/%s/vhost" .) }};
+    server_name {{ getv (printf "/opg/nginx/router/%s/vhost" $vhost_id) }};
 
-    {{ with $client_max_body_size_key := (printf "/opg/nginx/router/%s/client/max/body/size" .) }}
+    {{ with $client_max_body_size_key := (printf "/opg/nginx/router/%s/client/max/body/size" $vhost_id) }}
     {{ if exists $client_max_body_size_key }}
     client_max_body_size {{ getv $client_max_body_size_key }};
     {{ end }}
@@ -26,7 +27,15 @@ server {
     proxy_buffering off;
 
     location / {
-        proxy_pass {{ getv (printf "/opg/nginx/router/%s/target" .) }};
+        {{ with $force_dns_resolution := (printf "/opg/nginx/router/%s/force/dns/resolution" $vhost_id) }}
+        {{ if exists $force_dns_resolution }}
+        # Force DNS resolution by setting target as a parameter
+        set $target {{ getv (printf "/opg/nginx/router/%s/target" $vhost_id) }} 
+        proxy_pass $target
+        {{ else }}
+        proxy_pass {{ getv (printf "/opg/nginx/router/%s/target" $vhost_id) }}
+        {{ end }}
+        {{ end }}
         proxy_set_header Host              $host;
         proxy_set_header X-Forwarded-For   $remote_addr;
         proxy_set_header X-Forwarded-Proto $scheme;
@@ -39,4 +48,5 @@ server {
     add_header X-Request-Id $uid;
     proxy_set_header X-Request-Id $uid;
 }
+{{ end }}
 {{ end }}
