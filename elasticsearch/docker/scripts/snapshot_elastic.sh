@@ -25,6 +25,8 @@ ELASTICSEARCH_SNAPSHOTS_REPOSITORY_FS_PATH=${ELASTICSEARCH_SNAPSHOTS_REPOSITORY_
 ELASTICSEARCH_SNAPSHOTS_REPOSITORY_NAME=${ELASTICSEARCH_SNAPSHOTS_REPOSITORY_NAME:-snapshot_repo}
 ELASTICSEARCH_SNAPSHOTS_RETAIN_DAYS=${ELASTICSEARCH_SNAPSHOTS_RETAIN_DAYS:-7}
 
+# Main
+#
 echo "Elasticsearch host is ${ELASTICSEARCH_SNAPSHOTS_HOSTNAME} (port ${ELASTICSEARCH_SNAPSHOTS_PORT})"
 echo "Creating repository called ${ELASTICSEARCH_SNAPSHOTS_REPOSITORY_NAME} on ${ELASTICSEARCH_SNAPSHOTS_REPOSITORY_TYPE}"
 case ${ELASTICSEARCH_SNAPSHOTS_REPOSITORY_TYPE} in
@@ -38,16 +40,16 @@ fs)
   ;;
 *)
   echo "Invalid repository type specified ${ELASTICSEARCH_SNAPSHOTS_REPOSITORY_TYPE}"
-  exit 110
+  exit 3
   ;;
 esac
 
 result=$(eval curl -s -XPUT "http://${ELASTICSEARCH_SNAPSHOTS_HOSTNAME}:${ELASTICSEARCH_SNAPSHOTS_PORT}/_snapshot/${ELASTICSEARCH_SNAPSHOTS_REPOSITORY_NAME}" -d "'"${json}"'")
 check=$(echo ${result} | awk '/acknowledged.*true/')
 if [ "${check}" = "" ] ; then
-  echo "Error creating repository ${ELASTICSEARCH_SNAPSHOTS_REPOSITORY_NAME}"
   echo "${result}"
-  exit 120
+  echo "Error creating repository ${ELASTICSEARCH_SNAPSHOTS_REPOSITORY_NAME}"
+  exit 2
 fi
 echo "Repository created successfully"
 
@@ -55,7 +57,7 @@ curator --host ${ELASTICSEARCH_SNAPSHOTS_HOSTNAME} snapshot --repository ${ELAST
 rc=$?
 if [ "${rc}" -ne 0 ] ; then
   echo "Error ${rc} from curator snapshot indices"
-  exit 130
+  exit 2
 fi
 echo "Snapshot created successfully"
 
@@ -64,8 +66,8 @@ curator --host ${ELASTICSEARCH_SNAPSHOTS_HOSTNAME} delete snapshots --repository
 rc=$?
 if [ "${rc}" -ne 0 ] ; then
   echo "Error ${rc} from curator delete snapshot"
-  exit 140
+  exit 1
 fi
 
-echo "Snapshot process completed"
-exit
+echo "Snapshot process completed successfully"
+exit 0
