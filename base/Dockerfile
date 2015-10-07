@@ -14,7 +14,7 @@ RUN  rm -f /etc/apt/sources.list.d/*
 RUN  apt-get update && apt-get -y upgrade && apt-get install -y git joe && \
      apt-get install -y awscli && \
      apt-get install -y python python-pip && pip install Beaver==33.1.0 && \
-     apt-get install -y wget && \
+     apt-get install -y wget dnsmasq && \
      apt-get clean && apt-get autoremove && \
      rm -rf /var/lib/cache/* /var/lib/log/* /tmp/* /var/tmp/*
 
@@ -46,6 +46,10 @@ RUN  chmod a+x /etc/service/beaver/run
 
 ADD  docker/beaver.conf /etc/beaver.conf
 RUN  mkdir -p /etc/beaver.d
+
+# Provide a resolver at localhost for software that can't/won't use /etc/resolv.conf
+ADD  docker/service/dnsmasq /etc/service/dnsmasq
+RUN  chmod a+x /etc/service/dnsmasq/run
 
 ADD  docker/my_init.d /etc/my_init.d
 RUN  chmod a+x /etc/my_init.d/*
