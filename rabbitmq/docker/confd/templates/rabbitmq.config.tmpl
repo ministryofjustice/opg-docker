@@ -2,6 +2,13 @@
  {rabbit,
   [
    {loopback_users, []},
+   {{ if exists "/rabbitmq/ssl" }}
+   {ssl_listeners, [5671]},
+   {ssl_options, [{certfile,"/etc/ssl/cert.pem"},
+                  {keyfile,"/etc/ssl/key.pem"},
+                  {verify,verify_peer},
+                  {fail_if_no_peer_cert,false}]},
+   {{ end }}
    {tcp_listeners, [{{ getv "/rabbitmq/tcp/listeners" }}]},
    {default_vhost,       <<"{{ getv "/rabbitmq/default/vhost" }}">>},
    {default_user,        <<"{{ getv "/rabbitmq/default/user" }}">>},
