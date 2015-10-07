@@ -1,0 +1,64 @@
+#!/bin/bash
+set -e
+
+function abort()
+{
+	echo "$@"
+	exit 1
+}
+
+function cleanup()
+{
+	echo " --> Stopping container"
+	docker stop $ID >/dev/null
+	docker rm $ID >/dev/null
+}
+
+PWD=`pwd`
+
+echo " --> Starting container"
+if [ $RABBITMQ_SSL == "true" ]; then
+  ID=`docker run -d -p 5672:5672 -p 5671:5671 --env RABBITMQ_SSL=true $NAME:$VERSION /sbin/my_init`
+  sleep 1
+else
+  ID=`docker run -d -p 5672:5672 $NAME:$VERSION /sbin/my_init`
+  sleep 1
+fi
+
+echo " --> Verifying container"
+docker ps -q | grep ^${ID:0:12} > /dev/null
+if [ $? -ne 0 ]; then
+	abort "Unable to verify container IP"
+else
+  echo " --> Container verified"
+fi
+
+trap cleanup EXIT
+
+echo " --> Running tests"
+
+echo " --> Checking Rabbitmq process"
+docker exec -it $ID ps -ef | grep rabbitmq > /dev/null
+if [ $? -ne 0 ]; then
+	abort "No Rabbitmq Process running"
+else
+  echo " --> Rabbitmq is running"
+fi
+
+echo " --> Checking port 5672, please wait"
+nc $(docker-machine ip default) 5672 < /dev/null
+if [ $? -ne 0 ]; then
+	abort "Rabbitmq is not open on 5672"
+else
+  echo " --> Connected on port 5672"
+fi
+
+if [ $RABBITMQ_SSL == "true" ]; then
+  echo " --> Checking port 5671, please wait"
+  nc $(docker-machine ip default) 5671 < /dev/null
+  if [ $? -ne 0 ]; then
+  	abort "Rabbitmq is not open on 5671"
+  else
+    echo " --> Connected on port 5671"
+  fi
+fi
