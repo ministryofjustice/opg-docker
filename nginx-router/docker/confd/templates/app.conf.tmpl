@@ -25,6 +25,7 @@ server {
     {{ end }}
 
     proxy_buffering off;
+    resolver 127.0.0.1;
 
     location / {
         # Force DNS/name resolution by setting target as a parameter
