@@ -56,7 +56,8 @@ RUN  chmod a+x /etc/my_init.d/*
 
 ADD  docker/confd /etc/confd
 
-ADD  docker/bin /usr/local/bin/
-RUN  chmod a+x /usr/local/bin/*
+RUN mkdir -p /scripts/base
+ADD docker/scripts /scripts/base
+RUN chmod -R a+x /scripts/base
 
 ENV  OPG_SERVICE base

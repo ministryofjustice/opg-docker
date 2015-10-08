@@ -38,8 +38,6 @@ NC="/bin/nc -q0 -w 60"
 EBS_RETENTION_PERIOD=${EBS_SNAPSHOT_RETENTION_DAYS:-7}
 MONITORING_HOST=${EBS_SNAPSHOT_MONITOR_HOST:-monitoring}
 MONITORING_PORT=${EBS_SNAPSHOT_MONITOR_PORT:-2003}
-SENSU_TTL=${EBS_SNAPSHOT_SENSU_TTL:-86400}
-SENSU_PORT=${EBS_SNAPSHOT_SENSU_PORT:-3030}
 
 # Setup some counters for volumes processed/successfull/failed/cleaned
 VOLUMES_TOTAL=0
@@ -172,20 +170,10 @@ get_volumes() {
   aws ec2 describe-volumes --region $REGION --filters Name=attachment.instance-id,Values=$1 --query Volumes[].VolumeId --output text
 }
 
-# Get gateway IP address (used if inside docker to contact exposed host ports)
-function get_gateway_ip() {
-
-  IP=$(/sbin/ip route \
-      | /usr/bin/awk '/default.*via/ {print $3}' \
-      | /usr/bin/tr -d ' ')
-  echo "${IP}"
-}
-
 # Record some graphite metrics so we can trigger alerts if needs be e.g. if we come here having processed no volumes and log a total volumes
-# metric of zero we can set an alert to look out for zero counters. We'll also log a Sensu event here too so we can get to make sure it
-# sees another one within a given period (TTL)
+# metric of zero we can set an alert to look out for zero counters.
 metrics_and_exit() {
-  EXITCODE=${1:-99}
+  EXITCODE=${1:-3}
   EXITMSG="Completed"
   ((VOLUMES_CHECKSUM=${VOLUMES_TOTAL}-${VOLUMES_SUCCESS}-${VOLUMES_FAILED}))
   NOW=$(/bin/date '+%s')
@@ -205,9 +193,7 @@ metrics_and_exit() {
   echo "${METRICPATH}.volumes_checksum ${VOLUMES_CHECKSUM} ${NOW}" | ${NC} ${MONITORING_HOST} ${MONITORING_PORT}
   log "Sending metric: ${METRICPATH}.volumes_checksum ${VOLUMES_CHECKSUM} ${NOW}"
 
-  GATEWAY="$(get_gateway_ip)"
-
-  # Check some counters and set appropriate status code for the sensu event
+  # Check some counters and set appropriate status message
   #
   if [[ "${VOLUMES_TOTAL}" -eq 0 ]] ; then
     EXITCODE=2
@@ -223,7 +209,7 @@ metrics_and_exit() {
     EXITMSG="Zero successfull volumes"
   fi
 
-  echo '{"name": "'"${SCRIPTNAME}"'", "ttl": '"${SENSU_TTL}"', "output": "'"${EXITMSG}"'", "status": '"${EXITCODE}"'}' | ${NC} "${GATEWAY}" "${SENSU_PORT}"
+  echo "${EXITMSG}"
 
   exit ${EXITCODE}
 
@@ -301,8 +287,6 @@ log "Running in ${RUNMODE} mode"
 log "Recording to metric path ${METRICPATH}"
 log "Logging metrics to ${MONITORING_HOST}:${MONITORING_PORT}"
 log "Snapshots are retained for ${RETENTION_DAYS} days"
-log "Sensu client port is ${SENSU_PORT}"
-log "Sensu alert TTL is ${SENSU_TTL}"
 
 # Setup logging and make sure we have everything we need
 log_setup
