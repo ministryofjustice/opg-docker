@@ -3,11 +3,11 @@
   [
    {loopback_users, []},
    {{ if exists "/rabbitmq/ssl" }}
-   {ssl_listeners, [5671]},
-   {ssl_options, [{certfile,"/etc/ssl/cert.pem"},
-                  {keyfile,"/etc/ssl/key.pem"},
-                  {verify,verify_peer},
-                  {fail_if_no_peer_cert,false}]},
+   {ssl_listeners, [{{ getv "/rabbitmq/ssl/listeners" }}]},
+   {ssl_options, [{certfile,"{{ getv "/rabbitmq/ssl/certfile" }}"},
+                  {keyfile,"{{ getv "/rabbitmq/ssl/keyfile" }}"},
+                  {verify,{{ getv "/rabbitmq/ssl/verify" }}},
+                  {fail_if_no_peer_cert,{{ getv "/rabbitmq/ssl/nopeer" }}}]},
    {{ end }}
    {tcp_listeners, [{{ getv "/rabbitmq/tcp/listeners" }}]},
    {default_vhost,       <<"{{ getv "/rabbitmq/default/vhost" }}">>},
