@@ -2,7 +2,7 @@
 
 currenttag = $(shell semvertag latest)
 newtag = $(shell semvertag bump patch)
-
+registry = registry.service.opg.digital
 containers = base nginx php-fpm golang rabbitmq wordpress jre-8 elasticsearch kibana nginx-router
 
 build:

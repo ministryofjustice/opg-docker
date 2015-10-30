@@ -1,6 +1,6 @@
 .PHONY: build
 newtag ?= latest
-image = registry.service.dsd.io/opguk/elasticsearch
+image = registry.service.opg.digital/opguk/elasticsearch
 
 build:
 	docker build -t "${image}:latest" .

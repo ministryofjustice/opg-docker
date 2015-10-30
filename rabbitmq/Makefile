@@ -1,6 +1,6 @@
 .PHONY: build test
 newtag ?= latest
-image = registry.service.dsd.io/opguk/rabbitmq
+image = registry.service.opg.digital/opguk/rabbitmq
 
 build:
 	docker build -t "${image}:latest" .

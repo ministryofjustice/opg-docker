@@ -1,6 +1,6 @@
 .PHONY: build
 newtag ?= latest
-image = registry.service.dsd.io/opguk/golang
+image = registry.service.opg.digital/opguk/golang
 
 build:
 	docker build -t "${image}:latest" .
