@@ -1,7 +1,10 @@
-.PHONY: build
+.PHONY: build push 
 newtag ?= latest
 image = registry.service.opg.digital/opguk/wordpress
 
 build:
 	docker build -t "${image}:latest" .
 	docker tag -f "${image}:latest" "${image}:${newtag}"
+
+push:
+	docker push "${image}:latest"
