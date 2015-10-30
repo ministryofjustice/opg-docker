@@ -1,4 +1,4 @@
-FROM registry.service.dsd.io/opguk/nginx:latest
+FROM registry.service.opg.digital/opguk/nginx:latest
 
 RUN  apt-get update && apt-get -y upgrade && \
      apt-get install -y php5-fpm php5-cli && \
