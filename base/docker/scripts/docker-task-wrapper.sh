@@ -61,7 +61,7 @@ report_and_exit() {
 
   TASKOUTPUT=$(echo "${TASKOUTPUT}" \
                 | /usr/bin/tail -1 \
-                | /usr/bin/tr -d '\n{}' \
+                | /usr/bin/tr -d '\n\r{}' \
                 | /usr/bin/tr -s ' \t')
 
   echo '{"name": "'"${TASKNAME}"'", "ttl": '"${SENSU_TTL}"', "output": "'"${TASKOUTPUT}"'", "status": '"${EXITCODE}"'}' | ${NC} "${DOCKER_GATEWAY}" "${SENSU_PORT}"
