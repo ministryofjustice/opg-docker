@@ -63,15 +63,18 @@ report_and_exit() {
   EXITCODE="${1:-3}"
   NOW=$(/bin/date '+%s')
 
+# Print out what we saw from the task we ran before we process it and strip out excess lines
+  echo "${TASKOUTPUT}"
+
 # Send some metrics to statsd
 #
 # Exit code
-  echo "Sending metric: ${STATSD_METRICPATH}.${TASKNAME}.exitcode ${EXITCODE} ${NOW}"
+  echo "(${SCRIPTNAME}) Sending metric: ${STATSD_METRICPATH}.${TASKNAME}.exitcode ${EXITCODE} ${NOW}"
   echo "${STATSD_METRICPATH}.${TASKNAME}.exitcode ${EXITCODE} ${NOW}" | ${NC} ${STATSD_HOST} ${STATSD_PORT}
 
 # Elapsed time (seconds)
   ((ELAPSED=${NOW}-${START_TIME}))
-  echo "Sending metric: ${STATSD_METRICPATH}.${TASKNAME}.elapsed ${ELAPSED} ${NOW}"
+  echo "(${SCRIPTNAME}) Sending metric: ${STATSD_METRICPATH}.${TASKNAME}.elapsed ${ELAPSED} ${NOW}"
   echo "${STATSD_METRICPATH}.${TASKNAME}.elapsed ${ELAPSED} ${NOW}" | ${NC} ${STATSD_HOST} ${STATSD_PORT}
 
 # Process any metrics defined via STATSD_METRIC_
@@ -82,13 +85,12 @@ report_and_exit() {
   do
     METRIC_CMD=$(eval echo '${STATSD_METRIC_'${METRIC}'}')
     METRIC_VALUE=$(eval ${METRIC_CMD})
-    echo "Sending metric: ${STATSD_METRICPATH}.${TASKNAME}.${METRIC} ${METRIC_VALUE} ${NOW}"
+    echo "(${SCRIPTNAME}) Sending metric: ${STATSD_METRICPATH}.${TASKNAME}.${METRIC} ${METRIC_VALUE} ${NOW}"
     echo "${STATSD_METRICPATH}.${TASKNAME}.${METRIC} ${METRIC_VALUE} ${NOW}" | ${NC} ${STATSD_HOST} ${STATSD_PORT}
   done
 
-# Print out what we saw from the task we ran before we process it and strip out excess lines
-  echo "${TASKOUTPUT}"
-
+# Strip off special chars that interfere when passing the task output to JSON and take only the last line on multi-line output as it is usually the
+# most relevant e.g. summary info, and pass to Sensu as an event
   TASKOUTPUT=$(echo "${TASKOUTPUT}" \
                 | /usr/bin/tail -1 \
                 | /usr/bin/tr -d '\n\r{}' \
@@ -135,7 +137,7 @@ TASKRC=${?}
 # Handle errors
 #
 if [[ ${TASKRC} -ne 0 ]] ; then
-  echo "Error ${TASKRC} from task execution"
+  echo "(${SCRIPTNAME}) Error ${TASKRC} from task execution"
   if [[ ${TASKRC} -gt 3 ]] ; then
     TASKRC=3
   fi
