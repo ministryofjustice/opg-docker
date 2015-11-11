@@ -14,6 +14,9 @@
 #
 # SENSU_PORT                      (tcp port to reach Sensu API)
 # SENSU_TTL                       (ttl on Sensu events sent (in seconds))
+# STATSD_HOST                     (hostname of the host capturing statsd data)
+# STATSD_PORT                     (port on the statsd host listening)
+# STATSD_METRICPATH               (Prefix for statsd Metrics pushed out by this script)
 #
 
 # Set defaults

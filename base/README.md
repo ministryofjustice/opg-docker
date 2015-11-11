@@ -66,16 +66,34 @@ The script takes the first parameter as a task name (so it should be unique) whi
 Any tasks invoked through this wrapper must:
 
 - Return exit codes in line with Sensu event code standards (https://sensuapp.org/docs/latest/getting-started-with-checks)
+
 - Return a single line of output. For multi-line output (e.g scripts that you cannot control the output of) the last line of the output is taken. Any other lines are discarded along with CR/LF. Stderr is captured in case it's the only output.
 
 Variables that can override the defaults used by the script:
 
-* SENSU_PORT      (TCP port of the Sensu client the wrapper reports to)
-* SENSU_TTL       (Time To Live (in seconds) applied to the event timer)
+* SENSU_PORT          (TCP port of the Sensu client the wrapper reports to)
+* SENSU_TTL           (Time To Live (in seconds) applied to the event timer)
+* STATSD_HOST         (Hostname of the host capturing statsd data)
+* STATSD_PORT         (Port on the StatsD host listening)
+* STATSD_METRICPATH   (Prefix for StatsD Metrics sent off)
 
 Variables that the wrapper exports to be used by tasks called:
 
 * DOCKER_GATEWAY  (IP address of default gateway (useful inside docker to talk to host based ports))
+
+Variables that can be used to define custom StatsD metrics:
+
+By default the wrapper script will send the exit code and elapsed time (in seconds) of the task to StatsD. You can define custom metrics using variables in the format:
+
+* STATSD_METRIC_metricname
+
+where `metricname` is the name of the metric to pass to StatsD and the value of the variable is a command to be evaluated by the script (evaluated so variable contents can be exposed and parsed).
+
+For example, to look through the output from an `aws s3 sync` task wrapped by this script, and count up the number of files copied and send that value as a metric called `filessyncd` in your `docker-compose` `env` file you would define:
+
+`STATSD_METRIC_filessyncd=echo "$TASKOUTPUT" | cat -vet | grep -ci 'copy:.*s3:'`
+
+You can define zero or more custom metrics this way.
 
 TODO
 ----
