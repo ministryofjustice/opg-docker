@@ -25,4 +25,4 @@ EXPOSE 4568
 RUN mkdir -p /var/lib/sqs
 
 # Service tag
-ENV OPG_SERVICE fake_sqs
+ENV OPG_SERVICE fake-sqs
