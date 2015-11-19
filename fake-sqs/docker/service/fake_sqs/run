@@ -1,0 +1,3 @@
+#!/bin/bash
+
+/usr/local/bin/fake_sqs -p 4568 --no-daemonize
