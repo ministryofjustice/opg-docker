@@ -1,0 +1,24 @@
+#!/bin/sh
+#
+# Create a queue in fake SQS
+#
+# Background the entire process so that /sbin/my_init continues and starts the SQS service that this relies on
+#
+
+# Check for queue name and if unset just exit. If set, create a queue of that name
+#
+if [ -z ${FAKE_SQS_QUEUENAME} ] ; then
+  exit 0
+fi
+
+(rc=1
+while [ $rc -ne 0 ] ;
+do
+  /bin/nc -vz localhost 4568
+  rc=$?
+  sleep 5
+done
+
+/usr/bin/curl --data "Action=CreateQueue&Version=2012-11-05&QueueName=${FAKE_SQS_QUEUENAME}" http://localhost:4568) &
+
+exit 0

@@ -3,7 +3,7 @@
 currenttag = $(shell semvertag latest)
 newtag = $(shell semvertag bump patch)
 
-containers = base nginx php-fpm golang rabbitmq wordpress jre-8 elasticsearch kibana nginx-router
+containers = base nginx php-fpm golang rabbitmq wordpress jre-8 elasticsearch kibana nginx-router fake-sqs
 
 build:
 	semvertag tag ${newtag}
@@ -17,6 +17,7 @@ build:
 	$(MAKE) -C elasticsearch newtag=${newtag}
 	$(MAKE) -C kibana newtag=${newtag}
 	$(MAKE) -C nginx-router newtag=${newtag}
+	$(MAKE) -C fake-sqs newtag=${newtag}
 
 push:
 	docker push registry.service.dsd.io/opguk/base:${currenttag}
@@ -39,6 +40,8 @@ push:
 	docker push registry.service.dsd.io/opguk/kibana:latest
 	docker push registry.service.dsd.io/opguk/nginx-router:${currenttag}
 	docker push registry.service.dsd.io/opguk/nginx-router:latest
+	docker push registry.service.dsd.io/opguk/fake-sqs:${currenttag}
+	docker push registry.service.dsd.io/opguk/fake-sqs:latest
 
 pull:
 	docker pull registry.service.dsd.io/opguk/base
@@ -51,3 +54,4 @@ pull:
 	docker pull registry.service.dsd.io/opguk/elasticsearch
 	docker pull registry.service.dsd.io/opguk/kibana
 	docker pull registry.service.dsd.io/opguk/nginx-router
+	docker pull registry.service.dsd.io/opguk/fake-sqs
