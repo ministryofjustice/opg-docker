@@ -72,4 +72,5 @@ server {
     if ($uid = '') {
       set $uid $request_id;
     }
+    add_header X-Request-Id $uid;
 }
