@@ -51,6 +51,13 @@ RUN  mkdir -p /etc/beaver.d
 ADD  docker/service/dnsmasq /etc/service/dnsmasq
 RUN  chmod a+x /etc/service/dnsmasq/run
 
+# disable MTU on vixie cron
+ADD  docker/cron/crontab /etc/crontab
+ADD  docker/cron/root /var/spool/cron/crontabs/root
+RUN  chmod 600 /var/spool/cron/crontabs/root
+ADD  docker/cron/app /var/spool/cron/crontabs/app
+RUN  chown app:crontab /var/spool/cron/crontabs/app && chmod 600 /var/spool/cron/crontabs/app
+
 ADD  docker/my_init.d /etc/my_init.d
 RUN  chmod a+x /etc/my_init.d/*
 
@@ -59,5 +66,6 @@ ADD  docker/confd /etc/confd
 RUN mkdir -p /scripts/base
 ADD docker/scripts /scripts/base
 RUN chmod -R a+x /scripts/base
+
 
 ENV  OPG_SERVICE base
