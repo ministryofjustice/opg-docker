@@ -1,0 +1,5 @@
+#!/bin/sh
+
+sed 's/localhost/localhost salt/g' /etc/hosts > /tmp/$$.out
+cat /tmp/$$.out > /etc/hosts
+rm -f /tmp/$$.out

@@ -1,0 +1,34 @@
+#!/bin/bash
+
+(count=0
+keys=0
+saltup=0
+while [[ ${saltup} -eq 0 && ${count} -lt 12 ]] ;
+do
+  service salt-master status
+  rc=$?
+  if [[ ${rc} -eq 0 ]] ; then
+    saltup=1
+    break
+  fi
+  sleep 10
+  ((count=${count}+1))
+done
+
+if [[ ${saltup} -eq 0 ]] ; then
+  exit
+fi
+
+while [[ ${keys} -eq 0 && ${count} -lt 12 ]] ;
+do
+  keys=$(salt-key -L \
+    | grep -c '^[0-9a-f].*[0-9a-f]$' \
+    | tr -d ' ')
+  if [[ ${keys} -gt 0 ]] ; then
+    break
+  fi
+  sleep 10
+  ((count=${count}+1))
+done
+salt-key -y -A) &
+exit 0
