@@ -7,6 +7,13 @@ RUN echo "deb http://repo.saltstack.com/apt/ubuntu/ubuntu14/latest trusty main" 
 
 RUN apt-get update && apt-get install -y salt-master && apt-get install -y salt-minion
 
+RUN /bin/echo -e "tcp_keepalive_idle: 300\ntcp_keepalive: True\n" >> /etc/salt/minion
+
+RUN mkdir -p /srv/salt/_libs/base /srv/salt/salt-formulas /srv/pillar
+
+ADD docker/salt/_libs/base /srv/salt/_libs/base
+ADD docker/salt/top.sls /srv/salt/top.sls
+
 ADD docker/service/salt-master /etc/service/salt-master
 RUN chmod a+x /etc/service/salt-master/run
 
