@@ -1,4 +1,5 @@
-deb mirror://mirrors.ubuntu.com/mirrors.txt trusty main restricted universe multiverse
-deb mirror://mirrors.ubuntu.com/mirrors.txt trusty-updates main restricted universe multiverse
-deb mirror://mirrors.ubuntu.com/mirrors.txt trusty-security main restricted universe multiverse
-deb mirror://mirrors.ubuntu.com/mirrors.txt trusty-proposed main restricted universe multiverse
+# based on http://askubuntu.com/questions/37753/how-can-i-get-apt-to-use-a-mirror-close-to-me-or-choose-a-faster-mirror/125252#125252
+deb http://eu-west-1.clouds.archive.ubuntu.com/ubuntu/ trusty main restricted universe multiverse
+deb http://eu-west-1.clouds.archive.ubuntu.com/ubuntu/ trusty-updates main restricted universe multiverse
+deb http://eu-west-1.clouds.archive.ubuntu.com/ubuntu/ trusty-security main restricted universe multiverse
+deb http://eu-west-1.clouds.archive.ubuntu.com/ubuntu/ trusty-proposed main restricted universe multiverse
