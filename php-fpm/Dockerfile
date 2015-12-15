@@ -6,8 +6,7 @@ RUN  apt-get update && apt-get -y upgrade && \
      apt-get clean && apt-get autoremove && \
      rm -rf /var/lib/cache/* /var/lib/log/* /tmp/* /var/tmp/*
 
-RUN  rm -f /etc/php5/fpm/php-fpm.conf
-RUN  rm /etc/php5/fpm/pool.d/www.conf
+RUN  rm -f /etc/php5/fpm/php-fpm.conf /etc/php5/fpm/pool.d/www.conf /etc/cron.d/php5
 
 RUN  mkdir -p /data/session
 
