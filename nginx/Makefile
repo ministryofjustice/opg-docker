@@ -3,7 +3,7 @@ newtag ?= latest
 image = registry.service.dsd.io/opguk/nginx
 
 build:
-	docker build -t "${image}:latest" .
+	docker build --no-cache=true -t "${image}:latest" .
 	docker tag -f "${image}:latest" "${image}:${newtag}"
 
 clean:
