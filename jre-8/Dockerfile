@@ -2,23 +2,20 @@ FROM registry.service.dsd.io/opguk/base:latest
 
 RUN apt-get update && apt-get install -y unzip && rm -rf /var/lib/apt/lists/*
 
-RUN add-apt-repository ppa:openjdk-r/ppa -y
+ENV JAVA_MAJOR_VERSION=8
+ENV JAVA_UPDATE_VERSION=60
+ENV JAVA_BUILD_NUMER=27
 
-# Default to UTF-8 file.encoding
-ENV LANG C.UTF-8
-
-ENV JAVA_VERSION 8u45
-ENV JAVA_UBUNTU_VERSION 8u45-b14-1~14.04
-ENV CA_CERTIFICATES_JAVA_VERSION 20130815ubuntu1
-
-RUN set -x \
-  && apt-get update \
-  && apt-get install -y \
-    openjdk-8-jre-headless="$JAVA_UBUNTU_VERSION" \
-    ca-certificates-java="$CA_CERTIFICATES_JAVA_VERSION" \
-  && rm -rf /var/lib/apt/lists/*
-
-# see CA_CERTIFICATES_JAVA_VERSION notes above
-RUN /var/lib/dpkg/info/ca-certificates-java.postinst configure
+# install java
+ENV JAVA_VERSION=1.${JAVA_MAJOR_VERSION}.0_${JAVA_UPDATE_VERSION}
+ENV JAVA_TARBALL=jre-${JAVA_MAJOR_VERSION}u${JAVA_UPDATE_VERSION}-linux-x64.tar.gz
+ENV JAVA_HOME=/opt/java/jre${JAVA_VERSION}
+RUN wget --no-check-certificate --directory-prefix=/tmp \
+         --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" \
+         http://download.oracle.com/otn-pub/java/jdk/${JAVA_MAJOR_VERSION}u${JAVA_UPDATE_VERSION}-b${JAVA_BUILD_NUMER}/${JAVA_TARBALL} && \
+    mkdir -p /opt/java && \
+    tar -xzf /tmp/${JAVA_TARBALL} -C /opt/java/ && \
+    alternatives --install /usr/bin/java java /opt/java/jre${JAVA_VERSION}/bin/java 100 && \
+    rm -rf /tmp/* && rm -rf /var/log/*
 
 ENV OPG_SERVICE jre-8
