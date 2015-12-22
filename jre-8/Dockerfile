@@ -15,7 +15,6 @@ RUN wget --no-check-certificate --directory-prefix=/tmp \
          http://download.oracle.com/otn-pub/java/jdk/${JAVA_MAJOR_VERSION}u${JAVA_UPDATE_VERSION}-b${JAVA_BUILD_NUMER}/${JAVA_TARBALL} && \
     mkdir -p /opt/java && \
     tar -xzf /tmp/${JAVA_TARBALL} -C /opt/java/ && \
-    alternatives --install /usr/bin/java java /opt/java/jre${JAVA_VERSION}/bin/java 100 && \
     rm -rf /tmp/* && rm -rf /var/log/*
 
 ENV OPG_SERVICE jre-8
