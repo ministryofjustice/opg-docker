@@ -18,6 +18,7 @@ build:
 	$(MAKE) -C kibana newtag=${newtag}
 	$(MAKE) -C nginx-router newtag=${newtag}
 	$(MAKE) -C fake-sqs newtag=${newtag}
+	$(MAKE) -C mkhtmlpdf newtag=${newtag}
 
 push:
 	docker push registry.service.dsd.io/opguk/base:${currenttag}
@@ -42,6 +43,8 @@ push:
 	docker push registry.service.dsd.io/opguk/nginx-router:latest
 	docker push registry.service.dsd.io/opguk/fake-sqs:${currenttag}
 	docker push registry.service.dsd.io/opguk/fake-sqs:latest
+	docker push registry.service.dsd.io/opguk/mkhtmlpdf:${currenttag}
+	docker push registry.service.dsd.io/opguk/mkhtmlpdf:latest
 
 pull:
 	docker pull registry.service.dsd.io/opguk/base
@@ -55,3 +58,4 @@ pull:
 	docker pull registry.service.dsd.io/opguk/kibana
 	docker pull registry.service.dsd.io/opguk/nginx-router
 	docker pull registry.service.dsd.io/opguk/fake-sqs
+	docker pull registry.service.dsd.io/opguk/mkhtmlpdf
