@@ -1,6 +1,6 @@
 .PHONY: build
 newtag ?= latest
-image = registry.service.dsd.io/opguk/mkhtmlpdf
+image = registry.service.dsd.io/opguk/wkhtmlpdf
 
 build:
 	docker build -t "${image}:latest" .

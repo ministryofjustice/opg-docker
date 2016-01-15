@@ -3,7 +3,7 @@
 currenttag = $(shell semvertag latest)
 newtag = $(shell semvertag bump patch)
 
-containers = base nginx php-fpm golang rabbitmq wordpress jre-8 elasticsearch kibana nginx-router fake-sqs
+containers = base nginx php-fpm golang rabbitmq wordpress jre-8 elasticsearch kibana nginx-router fake-sqs wkhtmlpdf
 
 build:
 	semvertag tag ${newtag}
@@ -18,7 +18,7 @@ build:
 	$(MAKE) -C kibana newtag=${newtag}
 	$(MAKE) -C nginx-router newtag=${newtag}
 	$(MAKE) -C fake-sqs newtag=${newtag}
-	$(MAKE) -C mkhtmlpdf newtag=${newtag}
+	$(MAKE) -C wkhtmlpdf newtag=${newtag}
 
 push:
 	docker push registry.service.dsd.io/opguk/base:${currenttag}
@@ -43,8 +43,8 @@ push:
 	docker push registry.service.dsd.io/opguk/nginx-router:latest
 	docker push registry.service.dsd.io/opguk/fake-sqs:${currenttag}
 	docker push registry.service.dsd.io/opguk/fake-sqs:latest
-	docker push registry.service.dsd.io/opguk/mkhtmlpdf:${currenttag}
-	docker push registry.service.dsd.io/opguk/mkhtmlpdf:latest
+	docker push registry.service.dsd.io/opguk/wkhtmlpdf:${currenttag}
+	docker push registry.service.dsd.io/opguk/wkhtmlpdf:latest
 
 pull:
 	docker pull registry.service.dsd.io/opguk/base
@@ -58,4 +58,4 @@ pull:
 	docker pull registry.service.dsd.io/opguk/kibana
 	docker pull registry.service.dsd.io/opguk/nginx-router
 	docker pull registry.service.dsd.io/opguk/fake-sqs
-	docker pull registry.service.dsd.io/opguk/mkhtmlpdf
+	docker pull registry.service.dsd.io/opguk/wkhtmlpdf
