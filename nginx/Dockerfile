@@ -14,7 +14,7 @@ ADD  docker/nginx /etc/nginx
 ADD  docker/service/nginx /etc/service/nginx
 RUN  chmod a+x /etc/service/nginx/run
 
-RUN  mkdir -p /app/public
+RUN  mkdir -p /app/public /etc/nginx/app.conf.d
 RUN  echo "Hello World from opguk/nginx" > /app/public/index.html
 
 ADD  docker/confd /etc/confd
