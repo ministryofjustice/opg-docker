@@ -1,0 +1,10 @@
+{{ if not (exists "/opg/nginx/redirect/droppath") }}
+    rewrite ^   {{getv "/opg/nginx/redirect/url"}}$request_uri? permanent;
+{{ end }}
+{{ if exists "/opg/nginx/redirect/droppath" }}
+    rewrite ^   {{getv "/opg/nginx/redirect/url"}} permanent;
+{{ end }}
+
+    error_page  500 502 504       /500.html;
+    error_page  503               /503.html;
+    error_page  404               /404.html;

@@ -1,0 +1,6 @@
+[template]
+src = "redirect.conf.tmpl"
+dest = "/etc/nginx/app.conf.d/redirect.conf"
+keys = [
+    "/opg/nginx",
+]
