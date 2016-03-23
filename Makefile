@@ -3,7 +3,7 @@
 currenttag = $(shell semvertag latest)
 newtag = $(shell semvertag bump patch)
 
-containers = base nginx php-fpm golang rabbitmq wordpress jre-8 elasticsearch kibana nginx-router fake-sqs wkhtmlpdf
+containers = base nginx php-fpm golang rabbitmq wordpress jre-8 elasticsearch kibana nginx-router fake-sqs wkhtmlpdf nginx-redirect
 
 build:
 	semvertag tag ${newtag}
@@ -19,6 +19,7 @@ build:
 	$(MAKE) -C nginx-router newtag=${newtag}
 	$(MAKE) -C fake-sqs newtag=${newtag}
 	$(MAKE) -C wkhtmlpdf newtag=${newtag}
+	$(MAKE) -C nginx-redirect newtag=${newtag}
 
 push:
 	docker push registry.service.dsd.io/opguk/base:${currenttag}
@@ -45,6 +46,8 @@ push:
 	docker push registry.service.dsd.io/opguk/fake-sqs:latest
 	docker push registry.service.dsd.io/opguk/wkhtmlpdf:${currenttag}
 	docker push registry.service.dsd.io/opguk/wkhtmlpdf:latest
+	docker push registry.service.dsd.io/opguk/nginx-redirect:${currenttag}
+	docker push registry.service.dsd.io/opguk/nginx-redirect:latest
 
 pull:
 	docker pull registry.service.dsd.io/opguk/base
@@ -59,3 +62,4 @@ pull:
 	docker pull registry.service.dsd.io/opguk/nginx-router
 	docker pull registry.service.dsd.io/opguk/fake-sqs
 	docker pull registry.service.dsd.io/opguk/wkhtmlpdf
+	docker pull registry.service.dsd.io/opguk/nginx-redirect
