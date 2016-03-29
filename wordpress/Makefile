@@ -1,6 +1,7 @@
 .PHONY: build
 newtag ?= latest
-image = registry.service.dsd.io/opguk/wordpress
+registryUrl ?= registry.service.opg.digital
+image = ${registryUrl}/opguk/wordpress
 
 build:
 	docker build -t "${image}:latest" .

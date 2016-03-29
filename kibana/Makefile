@@ -1,6 +1,7 @@
 .PHONY: build
 newtag ?= latest
-image = registry.service.dsd.io/opguk/kibana
+registryUrl ?= registry.service.opg.digital
+image = ${registryUrl}/opguk/kibana
 
 build:
 	docker build -t "${image}:latest" .

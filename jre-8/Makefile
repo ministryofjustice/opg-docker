@@ -1,6 +1,7 @@
 .PHONY: build
 newtag ?= latest
-image = registry.service.dsd.io/opguk/jre-8
+registryUrl ?= registry.service.opg.digital
+image = ${registryUrl}/opguk/jre-8
 
 build:
 	docker build -t "${image}:latest" .
