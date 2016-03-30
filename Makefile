@@ -66,7 +66,7 @@ pull:
 	docker pull ${registryUrl}/opguk/nginx-redirect
 
 test:
-	echo Registry: ${registryUrl}
-	echo Newtag: ${newtag}
-	echo Current Tag: ${currenttag}
-	echo Container List: ${containers}
+	@echo Registry: ${registryUrl}
+	@echo Newtag: ${newtag}
+	@echo Current Tag: ${currenttag}
+	@echo Container List: ${containers}
