@@ -5,4 +5,4 @@ image = ${registryUrl}/opguk/nginx-router
 
 build:
 	docker build -t "${image}:latest" .
-	docker tag -f "${image}:latest" "${image}:${newtag}"
+	docker tag "${image}:latest" "${image}:${newtag}"
