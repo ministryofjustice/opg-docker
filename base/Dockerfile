@@ -33,7 +33,7 @@ RUN  locale-gen en_GB en_GB.UTF-8
 
 # Let's disable ssh access (on phusion/baseimage:0.9.16 you still need to remove server key)
 RUN  rm /etc/my_init.d/00_regen_ssh_host_keys.sh
-RUN  rm -Rf /etc/service/sshd
+RUN  unlink /etc/service/sshd
 
 # Application user and location
 RUN  useradd -m -d /app app
@@ -41,8 +41,9 @@ RUN  mkdir -p /var/log/app && chown app /var/log/app
 RUN  mkdir -p /data && chown app /data
 RUN  mkdir -p /var/run/app && chown app /var/run/app
 
-ADD  docker/service/beaver /etc/service/beaver
-RUN  chmod a+x /etc/service/beaver/run
+ADD  docker/service/beaver /etc/sv/beaver
+RUN  chmod a+x /etc/sv/beaver/run
+RUN  ln -s /etc/sv/beaver /etc/service/
 
 ADD  docker/beaver.conf /etc/beaver.conf
 RUN  mkdir -p /etc/beaver.d

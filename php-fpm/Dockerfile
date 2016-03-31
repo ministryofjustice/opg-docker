@@ -12,8 +12,9 @@ RUN  mkdir -p /data/session
 
 ADD  docker/confd /etc/confd
 
-ADD  docker/service/php-fpm /etc/service/php-fpm
-RUN  chmod a+x /etc/service/php-fpm/run
+ADD  docker/service/php-fpm /etc/sv/php-fpm
+RUN  chmod a+x /etc/sv/php-fpm/run
+RUN  ln -s /etc/sv/php-fpm /etc/service/
 
 RUN  echo "<?php phpinfo(); ?>" > /app/public/index.php
 RUN  chown app /app/public/index.php
@@ -40,8 +41,9 @@ RUN  pip install schedule statsd requests
 ADD  https://raw.githubusercontent.com/ministryofjustice/php-fpm-stats-collector/master/php-fpm-stats-collector.py /usr/local/bin/
 RUN  chmod a+x /usr/local/bin/php-fpm-stats-collector.py
 
-ADD  docker/service/php-fpm-stats /etc/service/php-fpm-stats
-RUN  chmod a+x /etc/service/php-fpm-stats/run
+ADD  docker/service/php-fpm-stats /etc/sv/php-fpm-stats
+RUN  chmod a+x /etc/sv/php-fpm-stats/run
+RUN  ln -s /etc/sv/php-fpm-stats /etc/service/
 
 
 ENV  OPG_PHP_POOL_CHILDREN_MAX 4

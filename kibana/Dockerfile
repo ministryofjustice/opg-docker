@@ -43,7 +43,8 @@ EXPOSE 5601
 
 ADD docker/confd /etc/confd
 
-ADD docker/service/kibana /etc/service/kibana
-RUN chmod a+x /etc/service/kibana/run
+ADD docker/service/kibana /etc/sv/kibana
+RUN chmod a+x /etc/sv/kibana/run
+RUN  ln -s /etc/sv/kibana /etc/service/
 
 ENV OPG_SERVICE kibana
