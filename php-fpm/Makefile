@@ -1,7 +1,8 @@
 .PHONY: build
 newtag ?= latest
-image = registry.service.dsd.io/opguk/php-fpm
+registryUrl ?= registry.service.opg.digital
+image = ${registryUrl}/opguk/php-fpm
 
 build:
 	docker build -t "${image}:latest" .
-	docker tag -f "${image}:latest" "${image}:${newtag}"
+	docker tag "${image}:latest" "${image}:${newtag}"

@@ -1,4 +1,19 @@
 # opg-docker
+Usage
+---
+To run a build run 
+
+```
+make
+```
+
+By default this will use the regitry URL registry.service.opg.digital.  To overwrite use
+
+```
+make registryUrl="<your registry url>"
+```
+
+If using authentication, ensure the docker config is correctly configured to support this.
 
 Q&A
 ---

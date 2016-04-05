@@ -1,7 +1,8 @@
 .PHONY: build
 newtag ?= latest
-image = registry.service.dsd.io/opguk/nginx-redirect
+registryUrl ?= registry.service.opg.digital
+image = ${registryUrl}/opguk/nginx-redirect
 
 build:
 	docker build -t "${image}:latest" .
-	docker tag -f "${image}:latest" "${image}:${newtag}"
+	docker tag "${image}:latest" "${image}:${newtag}"

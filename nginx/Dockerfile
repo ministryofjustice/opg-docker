@@ -1,4 +1,4 @@
-FROM registry.service.dsd.io/opguk/base:latest
+FROM registry.service.opg.digital/opguk/base:latest
 
 RUN  apt-get update && apt-get -y upgrade && \
      apt-get install -y libpcre3-dev zlib1g-dev libssl-dev libossp-uuid-dev uuid && \
@@ -10,14 +10,15 @@ RUN /tmp/compile_nginx.sh
 RUN rm -rf /var/lib/cache/* /var/lib/log/* /tmp/* /var/tmp/*
 
 ADD  docker/nginx /etc/nginx
+ADD  docker/confd /etc/confd
 
-ADD  docker/service/nginx /etc/service/nginx
-RUN  chmod a+x /etc/service/nginx/run
+ADD  docker/service/nginx /etc/sv/nginx
+RUN  chmod a+x /etc/sv/nginx/run
+RUN  ln -s /etc/sv/nginx /etc/service/
 
 RUN  mkdir -p /app/public /etc/nginx/app.conf.d
 RUN  echo "Hello World from opguk/nginx" > /app/public/index.html
 
-ADD  docker/confd /etc/confd
 
 EXPOSE 80
 EXPOSE 443

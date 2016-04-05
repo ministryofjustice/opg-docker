@@ -1,4 +1,4 @@
-FROM registry.service.dsd.io/opguk/base:latest
+FROM registry.service.opg.digital/opguk/base:latest
 
 # Set correct HOME
 ENV HOME /root
@@ -12,8 +12,9 @@ RUN apt-get update && apt-get -y install ruby && \
 RUN gem install fake_sqs
 
 # Start up scripts
-ADD docker/service/fake_sqs /etc/service/fake_sqs
-RUN chmod a+x /etc/service/fake_sqs/run
+ADD docker/service/fake_sqs /etc/sv/fake_sqs
+RUN chmod a+x /etc/sv/fake_sqs/run
+RUN  ln -s /etc/sv/fake_sqs /etc/service/
 
 ADD docker/my_init.d /etc/my_init.d
 RUN chmod a+x /etc/my_init.d/*

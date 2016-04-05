@@ -1,4 +1,4 @@
-FROM registry.service.dsd.io/opguk/jre-8:latest
+FROM registry.service.opg.digital/opguk/jre-8:latest
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN groupadd -r elasticsearch && useradd -r -d /home/elasticsearch -m -g elasticsearch elasticsearch
@@ -82,11 +82,14 @@ RUN chown elasticsearch $ELASTICSEARCH_PATH_REPO
 RUN chgrp elasticsearch $ELASTICSEARCH_PATH_REPO
 
 ADD docker/confd /etc/confd
-ADD docker/service/elasticsearch /etc/service/elasticsearch
+ADD docker/service/elasticsearch /etc/sv/elasticsearch
 RUN mkdir -p /scripts/elasticsearch
 ADD docker/scripts /scripts/elasticsearch
 
-RUN chmod -R a+x /etc/service/elasticsearch/run
+RUN chmod -R a+x /etc/sv/elasticsearch/run
 RUN chmod -R a+x /scripts/elasticsearch
+
+RUN  ln -s /etc/sv/elasticsearch /etc/service/
+
 
 ENV OPG_SERVICE elasticsearch

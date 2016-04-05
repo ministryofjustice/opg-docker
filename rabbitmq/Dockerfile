@@ -1,4 +1,4 @@
-FROM registry.service.dsd.io/opguk/base:latest
+FROM registry.service.opg.digital/opguk/base:latest
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN groupadd -r rabbitmq && useradd -r -d /var/lib/rabbitmq -m -g rabbitmq rabbitmq
@@ -52,7 +52,8 @@ ENV RABBITMQ_SSL_NOPEER false
 
 ADD docker/confd /etc/confd
 
-ADD docker/service/rabbitmq /etc/service/rabbitmq
-RUN chmod a+x /etc/service/rabbitmq/run
+ADD docker/service/rabbitmq /etc/sv/rabbitmq
+RUN chmod a+x /etc/sv/rabbitmq/run
+RUN  ln -s /etc/sv/rabbitmq /etc/service/
 
 ENV OPG_SERVICE rabbitmq
