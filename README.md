@@ -7,7 +7,7 @@ To run a build run
 make
 ```
 
-By default this will use the regitry URL registry.services.opg.digital.  To overwrite use
+By default this will use the regitry URL registry.service.opg.digital.  To overwrite use
 
 ```
 make registryUrl="<your registry url>"
