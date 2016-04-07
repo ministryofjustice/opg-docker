@@ -1,2 +1,6 @@
 *~
 .idea
+.DS_Store
+commit.txt
+id_rsa
+*.pem

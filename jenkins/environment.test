@@ -1,0 +1,39 @@
+#!/bin/bash
+# Set the user and private Docker registry env's.
+# JENKINS_GITHUB_PUBKEY=
+# JENKINS_GITHUB_PRIVKEY=
+# JENKINS_GITHUB_AUTHKEYS=
+
+# A web user for logging into the user interface
+# Currently there are two users opgcore and training
+# You will need to get the jpcrypt from the config repo
+# JENKINS_USER_OPGCORE_PASSWORD=#jbcrypt:$2a$1...
+# JENKINS_USER_OPGCORE_APITOKEN=hbPt5...
+# JENKINS_USER_OPGCORE_PUBKEYS=
+#
+# JENKINS_USER_TRAINING_PASSWORD=#jbcrypt:$2a$1...
+# JENKINS_USER_TRAINING_APITOKEN=sdPCk...
+# JENKINS_USER_TRAINING_PUBKEYS=
+
+# Configures the Dockercfg if pushing to a remote registry
+# Leave blank if only using local docker registry
+# JENKINS_DOCKERCFG_URL=
+# JENKINS_DOCKERCFG_EMAIL=
+# JENKINS_DOCKERCFG_USERNAME=
+# JENKINS_DOCKERCFG_PASSWORD=
+# JENKINS_DOCKERCFG_AUTH=
+
+# Git needs to be configured with a user.name and user.email
+# GIT_USERNAME=whoami
+# GIT_EMAIL_ADDRESS=your.name@address.who
+
+# Tweakables for setting the branches to build from
+# OPG_CORE_AUTH_MEMBRANE_BRANCH=develop
+# OPG_CORE_FRONT_END_BRANCH=develop
+# OPG_CORE_BACK_END_BRANCH=develop
+
+# Set the downstream branch to merge to
+# and the docker tag suffix
+# DOWNSTREAM_BRANCH=master 
+# DOCKER_SUFFIX=dev
+
