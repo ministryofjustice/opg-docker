@@ -6,18 +6,17 @@ RUN  apt-get update && apt-get -y upgrade && \
      apt-get clean && apt-get autoremove && \
      rm -rf /var/lib/cache/* /var/lib/log/* /tmp/* /var/tmp/*
 
-RUN  rm -f /etc/php5/fpm/php-fpm.conf /etc/php5/fpm/pool.d/www.conf /etc/cron.d/php5
-
-RUN  mkdir -p /data/session
+RUN  rm -f /etc/php5/fpm/php-fpm.conf /etc/php5/fpm/pool.d/www.conf /etc/cron.d/php5 && \
+     mkdir -p /data/session
 
 ADD  docker/confd /etc/confd
 
 ADD  docker/service/php-fpm /etc/sv/php-fpm
-RUN  chmod a+x /etc/sv/php-fpm/run
-RUN  ln -s /etc/sv/php-fpm /etc/service/
+RUN  chmod a+x /etc/sv/php-fpm/run && \
+     ln -s /etc/sv/php-fpm /etc/service/
 
-RUN  echo "<?php phpinfo(); ?>" > /app/public/index.php
-RUN  chown app /app/public/index.php
+RUN  echo "<?php phpinfo(); ?>" > /app/public/index.php && \
+     chown app /app/public/index.php
 
 ADD  docker/logrotate.d/app /etc/logrotate.d/app
 
@@ -26,7 +25,6 @@ ADD  docker/php/* /etc/php5/
 ADD  docker/my_init.d /etc/my_init.d
 RUN  chmod a+x /etc/my_init.d/*
 
-RUN  mkdir -p /scripts/php-fpm/xhprof
 ADD  docker/scripts/xhprof/profiler /scripts/php-fpm/xhprof/profiler
 RUN  chmod -R a+x /scripts/php-fpm
 
@@ -44,7 +42,6 @@ RUN  chmod a+x /usr/local/bin/php-fpm-stats-collector.py
 ADD  docker/service/php-fpm-stats /etc/sv/php-fpm-stats
 RUN  chmod a+x /etc/sv/php-fpm-stats/run
 RUN  ln -s /etc/sv/php-fpm-stats /etc/service/
-
 
 ENV  OPG_PHP_POOL_CHILDREN_MAX 4
 ENV  OPG_PHP_POOL_REQUESTS_MAX 0

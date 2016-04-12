@@ -1,7 +1,0 @@
-#!/bin/bash
-SCRIPTS=/etc/my_init.d/*
-for SCRIPT in $SCRIPTS; do
-  if [ -f $SCRIPT -a -x $SCRIPT ]; then
-    $SCRIPT
-  fi
-done

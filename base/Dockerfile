@@ -10,17 +10,16 @@ ENV DEBIAN_FRONTEND noninteractive
 # Basic packages
 # Log aggregation
 ADD  docker/sources.list /etc/apt/sources.list
-RUN  rm -f /etc/apt/sources.list.d/*
-RUN  apt-get update && apt-get -y upgrade && apt-get install -y git joe && \
-     apt-get install -y awscli && \
-     apt-get install -y python python-pip && pip install Beaver==33.1.0 && \
+RUN  rm -f /etc/apt/sources.list.d/* && \
+     apt-get update && apt-get -y upgrade && apt-get install -y git joe && \
+     apt-get install -y python python-pip && \
      apt-get install -y wget dnsmasq && \
      apt-get clean && apt-get autoremove && \
      rm -rf /var/lib/cache/* /var/lib/log/* /tmp/* /var/tmp/*
 
 # Pip installs
 # Install awscli to override the system one which is broken (with python 3.4.3 as of Sept 2015)
-RUN pip install awscli
+RUN pip install -U pip && pip install awscli Beaver==36.2.0
 
 # ConfD install
 RUN  wget -O /usr/bin/confd https://github.com/kelseyhightower/confd/releases/download/v0.9.0/confd-0.9.0-linux-amd64 && \
@@ -32,21 +31,20 @@ RUN  wget -O /usr/bin/confd https://github.com/kelseyhightower/confd/releases/do
 RUN  locale-gen en_GB en_GB.UTF-8
 
 # Let's disable ssh access (on phusion/baseimage:0.9.16 you still need to remove server key)
-RUN  rm /etc/my_init.d/00_regen_ssh_host_keys.sh
-RUN  unlink /etc/service/sshd
+RUN  rm /etc/my_init.d/00_regen_ssh_host_keys.sh && \
+     unlink /etc/service/sshd || true && \
+     rm -rf /etc/service/sshd || true
 
 # Application user and location
-RUN  useradd -m -d /app app
-RUN  mkdir -p /var/log/app && chown app /var/log/app
-RUN  mkdir -p /data && chown app /data
-RUN  mkdir -p /var/run/app && chown app /var/run/app
+RUN  useradd -m -d /app app && \
+     mkdir -p /var/log/app /data /var/run/app && chown app /var/log/app /data /var/run/app
 
 ADD  docker/service/beaver /etc/sv/beaver
-RUN  chmod a+x /etc/sv/beaver/run
-RUN  ln -s /etc/sv/beaver /etc/service/
+RUN  chmod a+x /etc/sv/beaver/run && \
+     ln -s /etc/sv/beaver /etc/service/ && \
+     mkdir -p /etc/beaver.d
 
 ADD  docker/beaver.conf /etc/beaver.conf
-RUN  mkdir -p /etc/beaver.d
 
 # Provide a resolver at localhost for software that can't/won't use /etc/resolv.conf
 ADD  docker/service/dnsmasq /etc/service/dnsmasq
@@ -69,4 +67,4 @@ ADD docker/scripts /scripts/base
 RUN chmod -R a+x /scripts/base
 
 
-ENV  OPG_SERVICE base
+ENV OPG_SERVICE base

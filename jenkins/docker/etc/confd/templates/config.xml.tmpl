@@ -8,8 +8,9 @@
   {{ if exists "/jenkins/oauth/client/id" }}
   <authorizationStrategy class="org.jenkinsci.plugins.GithubAuthorizationStrategy" plugin="github-oauth@0.22.2">
     <rootACL>
-      <organizationNameList class="linked-list">
-        <string></string>
+      <organizationNameList class="linked-list">{{if exists "/jenkins/oauth/org"}} {{range split (getv "/jenkins/oauth/org") "," }}
+        <string>{{.}}</string>{{end}}
+{{end}}
       </organizationNameList>
       <adminUserNameList class="linked-list">{{if exists "/jenkins/admins"}} {{range split (getv "/jenkins/admins") "," }}
         <string>{{.}}</string>{{end}}
