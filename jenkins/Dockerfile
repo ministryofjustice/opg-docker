@@ -8,8 +8,7 @@ RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 581
     vim \
     wget \
     apparmor \
-    docker-engine \
-    python-pip \
+    docker-engine=1.9.1-0~trusty \
     libcurl4-gnutls-dev \
     libexpat1-dev \
     gettext \
@@ -19,7 +18,6 @@ RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 581
     python3-dev \
     libxslt1-dev \
     libxml2-dev \
-    git \
     curl \
     zip \
     ttf-dejavu \
@@ -86,8 +84,6 @@ EXPOSE 50000
 ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
 
 USER ${user}
-
-#ENTRYPOINT ["/bin/tini", "--", "/usr/local/bin/jenkins.sh"]
 
 # Install the Plugins listed in the plugins.txt file
 # This is where your customised plugins go
