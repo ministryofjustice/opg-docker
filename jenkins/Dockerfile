@@ -55,11 +55,9 @@ VOLUME $JENKINS_HOME
 # `/usr/share/jenkins/ref/` contains all reference configuration we want
 # to set on a fresh new installation. Use it to bundle additional plugins
 # or config file with your custom jenkins Docker image.
-RUN mkdir -p /usr/share/jenkins/ref/users/opgops
-
-# Use tini as subreaper in Docker container to adopt zombie processes
-#RUN curl -fsSL https://github.com/krallin/tini/releases/download/v0.5.0/tini-static -o /bin/tini && \
-#    chmod +x /bin/tini 
+RUN mkdir -p /usr/share/jenkins/ref/users/opgops /usr/share/jenkins/ref/.docker /srv/jenkins/.ssh && \
+    chown app /srv/jenkins/.ssh && \
+    chmod 0700 /srv/jenkins/.ssh
 
 COPY docker/jenkins $JENKINS_REF
 # Bootstrap commands, and our Jenkins service.

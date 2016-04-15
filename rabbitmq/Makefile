@@ -1,11 +1,10 @@
 .PHONY: build test
 newtag ?= latest
 registryUrl ?= registry.service.opg.digital
-image = ${registryUrl}/opguk/rabbitmq
+image = $(registryUrl)/opguk/rabbitmq
 
 build:
-	docker build -t "${image}:latest" .
-	docker tag "${image}:latest" "${image}:${newtag}"
+	docker build -t "$(image):$(newtag)" -t "$(image):latest" .
 
 clean:
 	@eval `docker-machine env default` ||:

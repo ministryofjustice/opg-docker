@@ -1,6 +1,6 @@
 [template]
 src = "dockercfg.tmpl"
-dest = "/usr/share/jenkins/ref/.dockercfg"
+dest = "/usr/share/jenkins/ref/.docker/config.json"
 keys = [
   "/jenkins"
 ]
