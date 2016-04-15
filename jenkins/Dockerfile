@@ -45,6 +45,9 @@ ARG gid=1000
 # ensure you use the same uid
 RUN usermod -d "$JENKINS_HOME" -m -s /bin/bash ${user}
 
+#Fix docker GID to sync with underlying ECS so that the user can access the docker socket
+RUN groupmod -g 497 docker && adduser app docker
+
 # Jenkins home directory is a volume, so configuration and build history
 # can be persisted and survive image upgrades
 VOLUME $JENKINS_HOME
