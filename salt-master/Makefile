@@ -1,5 +1,4 @@
 image = salt-master
 
 build:
-	docker build -t "${image}:latest" .
-	docker tag "${image}:latest" "${image}:latest"
+	docker build -t "$(image):$(newtag)" -t "$(image):latest" .
