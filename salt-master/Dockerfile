@@ -8,17 +8,17 @@ RUN wget -O - https://repo.saltstack.com/apt/ubuntu/ubuntu14/latest/SALTSTACK-GP
     /bin/echo -e "tcp_keepalive_idle: 300\ntcp_keepalive: True\n" >> /etc/salt/minion && \
     mkdir -p /srv/salt/_libs/base /srv/salt/salt-formulas /srv/pillar
 
-ADD docker/salt/ /srv/salt/
+COPY docker/salt/ /srv/salt/
 
-ADD docker/service/salt-master /etc/sv/salt-master
+COPY docker/service/salt-master /etc/sv/salt-master
 RUN chmod a+x /etc/sv/salt-master/run && \
     ln -s /etc/sv/salt-master /etc/service/
 
-ADD docker/service/salt-minion /etc/sv/salt-minion
+COPY docker/service/salt-minion /etc/sv/salt-minion
 RUN chmod a+x /etc/sv/salt-minion/run && \
     ln -s /etc/sv/salt-minion /etc/service/
 
-ADD docker/my_init.d /etc/my_init.d
+COPY docker/my_init.d /etc/my_init.d
 RUN chmod a+x /etc/my_init.d/*
 
-ADD docker/confd /etc/confd
+COPY docker/confd /etc/confd
