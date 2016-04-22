@@ -8,6 +8,7 @@ tagrepo = yes
 currenttag := $(shell semvertag latest)
 newtag := $(shell semvertag bump patch)
 registryUrl = registry.service.opg.digital
+dockerVersion := $(shell docker info 2>/dev/null| grep 'Server Version' | tr -d ' ' | cut -d ':' -f 2| grep '^1\.[0-9]\.')
 
 buildcore: $(CORE_CONTAINERS)
 buildchild: $(CHILD_CONTAINERS)
@@ -20,14 +21,14 @@ else
 endif
 
 $(CORE_CONTAINERS):
-	$(MAKE) -C $@ newtag=$(newtag) registryUrl=$(registryUrl)
+	$(MAKE) -C $@ newtag=$(newtag) registryUrl=$(registryUrl) dockerVersion=$(dockerVersion)
 
 $(CHILD_CONTAINERS):
-	$(MAKE) -C $@ newtag=$(newtag) registryUrl=$(registryUrl)
+	$(MAKE) -C $@ newtag=$(newtag) registryUrl=$(registryUrl) dockerVersion=$(dockerVersion)
 
 push:
 	for i in $(CORE_CONTAINERS) $(CHILD_CONTAINERS); do \
-       	    docker push $(registryUrl)/opguk/$$i:$(currenttag) ; \
+       	    docker push $(registryUrl)/opguk/$$i:$(newtag) ; \
        	    docker push $(registryUrl)/opguk/$$i:latest ; \
    	done
 
@@ -37,6 +38,7 @@ pull:
    	done
 
 showinfo:
+	@echo Docker version: $(dockerVersion)
 	@echo Registry: $(registryUrl)
 	@echo Newtag: $(newtag)
 	@echo Current Tag: $(currenttag)
@@ -52,3 +54,5 @@ clean:
        	    docker rmi $(registryUrl)/opguk/$$i:$(newtag) || true ; \
        	    docker rmi $(registryUrl)/opguk/$$i:latest || true ; \
    	done
+
+all: showinfo build push clean
