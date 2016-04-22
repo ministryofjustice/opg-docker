@@ -4,7 +4,8 @@ registryUrl ?= registry.service.opg.digital
 image = $(registryUrl)/opguk/nginx
 
 build:
-	docker build -t "$(image):$(newtag)" -t "$(image):latest" .
+        docker build -t "$(image):$(newtag)" .
+        docker tag "$(image):$(newtag)" "$(image):latest"
 
 clean:
 	@eval `docker-machine env default` ||:

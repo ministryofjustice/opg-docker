@@ -4,4 +4,6 @@ registryUrl ?= registry.service.opg.digital
 image = $(registryUrl)/opguk/jre-8
 
 build:
-	docker build -t "$(image):$(newtag)" -t "$(image):latest" .
+	build:
+        docker build -t "$(image):$(newtag)" .
+        docker tag "$(image):$(newtag)" "$(image):latest"

@@ -4,4 +4,5 @@ registryUrl ?= registry.service.opg.digital
 image = $(registryUrl)/opguk/jenkins
 
 build:
-	docker build -t "$(image):$(newtag)" -t "$(image):latest" .
+        docker build -t "$(image):$(newtag)" .
+        docker tag "$(image):$(newtag)" "$(image):latest"

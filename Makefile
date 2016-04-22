@@ -27,7 +27,7 @@ $(CHILD_CONTAINERS):
 
 push:
 	for i in $(CORE_CONTAINERS) $(CHILD_CONTAINERS); do \
-       	    docker push $(registryUrl)/opguk/$$i:$(currenttag) ; \
+       	    docker push $(registryUrl)/opguk/$$i:$(newtag) ; \
        	    docker push $(registryUrl)/opguk/$$i:latest ; \
    	done
 
@@ -52,3 +52,5 @@ clean:
        	    docker rmi $(registryUrl)/opguk/$$i:$(newtag) || true ; \
        	    docker rmi $(registryUrl)/opguk/$$i:latest || true ; \
    	done
+
+all: showinfo build push clean
