@@ -8,7 +8,7 @@ tagrepo = yes
 currenttag := $(shell semvertag latest)
 newtag := $(shell semvertag bump patch)
 registryUrl = registry.service.opg.digital
-dockerVersion := $(shell docker info 2>/dev/null| grep 'Server Version' | tr -d ' ' | cut -d ':' -f 2| grep '^1\.[0-9]\.')
+dockerVersion := $(shell docker --version 2>/dev/null| grep 'Docker version' | awk '{print $3}'  | grep '^1\.[0-9]\.')
 
 buildcore: $(CORE_CONTAINERS)
 buildchild: $(CHILD_CONTAINERS)
