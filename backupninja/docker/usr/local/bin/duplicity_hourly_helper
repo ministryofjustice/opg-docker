@@ -1,0 +1,38 @@
+#!/bin/sh
+
+name=$(basename $0 )
+conf_file="/usr/local/etc/${name}.conf"
+
+if [ -r $conf_file ]; then
+  . $conf_file
+else
+  echo "Could not read config file '${conf_file}'. Aborting."
+  exit 1
+fi
+
+command=$1
+shift
+
+usage() {
+    echo "$name - simple wrapper around duplicity recovery and management"
+    echo ""
+    echo "Usage:"
+    echo "   $name help"
+    echo "   $name (files|list-current-files) {options} # list files in backup set"
+    echo "   $name (sets|collection-status) {options}   # list backup set statuses"
+    echo "   $name restore {options} target_dir         # restore files to target_dir"
+    echo
+    echo "See duplicity(1) for specific command options"
+}
+
+case $command in
+  "help") { usage; exit 0; };;
+  "list-current-files") BASE_COMMAND="list-current-files" ;;
+  "files") BASE_COMMAND="list-current-files" ;;
+  "collection-status") BASE_COMMAND="collection-status" ;;
+  "sets") BASE_COMMAND="collection-status" ;;
+  "restore") BASE_COMMAND="restore" ;;
+  *) { echo "Unrecognised options: $*"; usage; exit 2; };;
+esac
+
+duplicity $BASE_COMMAND $DUPLICITY_EXTRA_OPTS $DUPLICITY_BACKEND_URL $*
