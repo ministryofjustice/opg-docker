@@ -1,0 +1,36 @@
+systemLog:
+  destination: file
+  path: "/var/log/mongodb/mongodb.log"
+  logAppend: true
+storage:
+  dbPath: /data/mongodb
+  engine: wiredTiger
+  wiredTiger:
+    engineConfig:
+      cacheSizeGB: 1
+  journal:
+    enabled: true
+processManagement:
+  fork: false
+  pidFilePath: /var/run/mongodb.pid
+net:
+  port: 27017
+{{if exists "/mongo/ssl/pem" }}
+  ssl:
+      mode: preferSSL
+      PEMKeyFile: "/etc/mongo.pem"
+{{if exists "/mongo/ssl/cacert" }}
+      CAFile: "/etc/mongoca.pem"
+{{end}}
+{{end}}
+security:
+{{if exists "/mongo/security/auth" }}
+  authorization: enabled
+{{end}}
+{{if exists "/mongo/security/key" }}
+  keyFile: /etc/mongodb.key
+{{end}}
+{{if exists "/mongo/replicaset/name" }}
+replication:
+  replSetName: {{ getv "/mongo/replicaset/name" }}
+{{end}}
