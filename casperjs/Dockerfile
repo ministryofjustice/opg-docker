@@ -12,7 +12,9 @@ RUN apt-get update && \
     apt-get install -y php5-imap && \
     php5enmod imap
 
-ADD https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-linux-x86_64.tar.bz2 /tmp/phantomjs.tar.bz2
+# The bitbucket location gives occasional "403 Forbidden" errors, breaking the build, so we're using our own source instead
+# ADD https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-linux-x86_64.tar.bz2 /tmp/phantomjs.tar.bz2
+ADD https://raw.githubusercontent.com/ministryofjustice/opg-phantomjs/master/phantomjs-1.9.8-linux-x86_64.tar.bz2 /tmp/phantomjs.tar.bz2
 
 RUN tar xjfv /tmp/phantomjs.tar.bz2 -C /usr/local/  && \
     ln -sf /usr/local/phantomjs*/bin/phantomjs /usr/local/bin/phantomjs && \
