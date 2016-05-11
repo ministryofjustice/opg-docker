@@ -10,7 +10,6 @@ Dockerfile Environment Variables
 * ELASTICSEARCH_VERSION             (version of Elasticsearch to install)
 * ELASTICSEARCH_CURATOR_VERSION     (version of Curator to install)
 * ELASTICSEARCH_CLOUD_AWS           (version of AWS cloud plugin to install)
-* MARVEL_VERSION                    (version of Marvel plugin to install)
 * LICENSE_VERSION                   (version of License plugin to install)
 * WATCHER_VERSION                   (version of Watcher plugin to install)
 ```
@@ -224,7 +223,7 @@ Using the sample compose entries above, to take a snapshot to a repository calle
 
 ### Restoring Snapshots
 
-To restore from a snapshot, the process that works best is to close all indices, restore from the snapshot, close them all again and then open them all. Open indices cannot be restored (hence closing all before restoring) and a second close is issued to ensure that any indices being written during the restore (e.g. Marvel) are closed before all are opened (else the process errors).
+To restore from a snapshot, the process that works best is to close all indices, restore from the snapshot, close them all again and then open them all. Open indices cannot be restored (hence closing all before restoring).
 
 Assuming the use of the `elasticsnapshot` service used above to demonstrate snapshots, to restore from a snapshot called `snaptest` from a repository called `testrepo`:
 
@@ -237,10 +236,6 @@ Assuming the use of the `elasticsnapshot` service used above to demonstrate snap
  #
  # docker-compose -f <docker-compose-file> run elasticsnapshot \
  curl -XPOST http://elasticsearch:9200/_all/_close?wait_for_completion=true?ignore_unavailable=true
- #
- # docker-compose -f <docker-compose-file> run elasticsnapshot \
- curl -XPOST http://elasticsearch:9200/_all/_open?wait_for_completion=true?ignore_unavailable=true
- #
  ```
 
 ### Sample Restore
@@ -361,7 +356,3 @@ To snapshot to AWS (S3) using the AWS Cloud Plugin:
 
 https://github.com/elastic/elasticsearch-cloud-aws
 
-Marvel
-------
-
-The URL for Marvel is `http://<elasticsearchhost>:9200/_plugin/marvel`
