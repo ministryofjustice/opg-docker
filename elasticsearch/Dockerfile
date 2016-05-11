@@ -19,7 +19,6 @@ RUN apt-key adv --keyserver ha.pool.sks-keyservers.net --recv-keys 46095ACC85485
 ENV ELASTICSEARCH_VERSION 1.6.0
 ENV ELASTICSEARCH_CURATOR_VERSION 3.2.0
 ENV ELASTICSEARCH_CLOUD_AWS 2.6.0
-ENV MARVEL_VERSION latest
 ENV LICENSE_VERSION latest
 ENV WATCHER_VERSION latest
 
@@ -34,7 +33,6 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 
 RUN /usr/share/elasticsearch/bin/plugin install elasticsearch/elasticsearch-cloud-aws/$ELASTICSEARCH_CLOUD_AWS
-RUN /usr/share/elasticsearch/bin/plugin install elasticsearch/marvel/$MARVEL_VERSION
 RUN /usr/share/elasticsearch/bin/plugin install elasticsearch/license/$LICENSE_VERSION
 RUN /usr/share/elasticsearch/bin/plugin install elasticsearch/watcher/$WATCHER_VERSION
 
