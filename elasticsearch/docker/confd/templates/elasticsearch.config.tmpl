@@ -1,6 +1,5 @@
 {{if exists "/elasticsearch/number/of/replicas" }}index.number_of_replicas: {{ getv "/elasticsearch/number/of/replicas" }}{{end}}
 {{if exists "/elasticsearch/network/bind/host" }}network.bind_host: {{ getv "/elasticsearch/network/bind/host" }}{{end}}
-{{if exists "/elasticsearch/script/disable/dynamic" }}script.disable_dynamic: {{ getv "/elasticsearch/script/disable/dynamic" }}{{end}}
 {{if exists "/elasticsearch/path/data" }}path.data: {{ getv "/elasticsearch/path/data" }}{{end}}
 {{if exists "/elasticsearch/path/repo" }}path.repo: {{ getv "/elasticsearch/path/repo" }}{{end}}
 
