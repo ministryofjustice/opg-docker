@@ -3,6 +3,7 @@
 import os
 import time
 from subprocess import call
+import subprocess
 
 import sys
 import socket
@@ -11,7 +12,7 @@ if os.getenv('MONGO_SKIP_SETUP','False') == 'True':
   print "MONGO_SKIP_SETUP is set to True - exiting"
   sys.exit()
 
-host_ip = os.environ['HOST_IP'].replace("['","").replace("']","")
+host_ip = os.environ['MONGO_HOST_IP']
 rs_hosts = os.environ['MONGO_RS_HOSTS'].split(',')
 admin_username = 'admin'
 admin_password = os.environ['MONGO_ADMIN_PASSWORD']
@@ -37,14 +38,24 @@ else:
     id_number += 1
   rs_initiate_js += "]});"
 
-admin_create_js = "db.createUser({user: 'admin', pwd: '" + admin_password + "', roles: [ 'root', 'userAdminAnyDatabase' ]});"
-
-wait_for_master_js = "while(db.isMaster().ismaster != true){}"
-
 print 'Setting up replica set'
 call(["/usr/bin/mongo","admin","--eval",rs_initiate_js])
-print 'Waiting to become master'
-call(["/usr/bin/mongo","admin","--eval",wait_for_master_js])
+
+command = ["/usr/bin/mongo","admin","--eval","result = db.isMaster().ismaster; printjson(result);"] 
+attempt_count = 0
+response_text = ""
+while "true" not in response_text:
+  print 'Waiting to become master'
+  p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+  response_text = p.stdout.read()
+  retcode = p.wait()
+  attempt_count += 1
+  time.sleep(5)
+  if attempt_count > 12:
+    print "Failed to become master after 60 seconds"
+    sys.exit(1)
+
+admin_create_js = "db.createUser({user: 'admin', pwd: '" + admin_password + "', roles: [ 'root', 'userAdminAnyDatabase' ]});"
 print 'Creating admin user'
 call(["/usr/bin/mongo","admin","--eval",admin_create_js])
 
