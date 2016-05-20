@@ -22,3 +22,11 @@ base_pkgs:
       - vim
 root@b87a73bd5c39:/#
 ```
+
+### Custom reactor example
+
+These are badly documented, however what is missing in the docs is the following
+If you are going to use a custom namespace these cannot be wildcarded, if you want to
+use wild cards and matching it seems they need to go into the `salt/custom` namespace
+
+See examples in reactor_templates and salt_master.conf.tmpl
