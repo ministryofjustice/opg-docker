@@ -1,5 +1,5 @@
 create_file:
-  local.file.touch:
+  local.cmd.run:
     tgt: '*'
     arg:
-      - '/tmp/foo'
+      - 'touch /tmp/foo'

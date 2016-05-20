@@ -30,3 +30,42 @@ If you are going to use a custom namespace these cannot be wildcarded, if you wa
 use wild cards and matching it seems they need to go into the `salt/custom` namespace
 
 See examples in reactor_templates and salt_master.conf.tmpl
+
+To test them...
+
+```bash
+
+$ salt-call event.send 'salt/custom/start_highstate'
+
+#A call to jobs.list_jobs
+
+$ salt-run jobs.list_jobs
+  ...#Output
+  20160520143647697134:
+    ----------
+    Arguments:
+        - salt/custom/start_highstate
+    Function:
+        event.send
+    StartTime:
+        2016, May 20 14:36:47.697134
+    Target:
+        e4c55b2205dd
+    Target-type:
+        glob
+    User:
+        root
+  20160520143647722175:
+    ----------
+    Arguments:
+    Function:
+        state.highstate
+    StartTime:
+        2016, May 20 14:36:47.722175
+    Target:
+        *
+    Target-type:
+        glob
+    User:
+        root
+```

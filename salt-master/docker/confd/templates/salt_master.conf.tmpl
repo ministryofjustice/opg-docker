@@ -5,6 +5,7 @@ file_roots:
     - /srv/salt
     - /srv/salt/_libs
     - /srv/salt-formulas
+    - /srv/salt/reactor
 pillar_roots:
   base:
     - /srv/pillar
@@ -12,9 +13,9 @@ fileserver_backend:
   - roots
 reactor:
   - 'salt/custom/*':
-    - 'salt://reactor/salt_custom.sls'
-  - 'file/create':
-    - 'salt://reactor/reactor.sls'
+    - 'salt://salt_custom.sls'
+  - 'foofile':
+    - 'salt://reactor.sls'
 peer:
   .*:
     - grains.get
