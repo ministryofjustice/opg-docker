@@ -10,6 +10,11 @@ pillar_roots:
     - /srv/pillar
 fileserver_backend:
   - roots
+reactor:
+  - 'salt/custom/*':
+    - 'salt://reactor/salt_custom.sls'
+  - 'file/create':
+    - 'salt://reactor/reactor.sls'
 peer:
   .*:
     - grains.get
