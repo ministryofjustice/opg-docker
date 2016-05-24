@@ -81,7 +81,7 @@ RUN chgrp elasticsearch $ELASTICSEARCH_PATH_REPO
 
 ADD docker/confd /etc/confd
 ADD docker/service/elasticsearch /etc/sv/elasticsearch
-RUN mkdir -p /scripts/elasticsearch
+RUN mkdir -p /scripts/elasticsearch $HOME/config/scripts $HOME/logs
 ADD docker/scripts /scripts/elasticsearch
 
 RUN chmod -R a+x /etc/sv/elasticsearch/run
