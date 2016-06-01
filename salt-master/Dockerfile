@@ -6,9 +6,10 @@ RUN wget -O - https://repo.saltstack.com/apt/ubuntu/ubuntu14/latest/SALTSTACK-GP
     echo "deb http://repo.saltstack.com/apt/ubuntu/ubuntu14/latest trusty main" >> /etc/apt/sources.list && \
     apt-get update && apt-get install -y salt-master && apt-get install -y salt-minion && \
     /bin/echo -e "tcp_keepalive_idle: 300\ntcp_keepalive: True\n" >> /etc/salt/minion && \
-    mkdir -p /srv/salt/_libs/base /srv/salt/salt-formulas /srv/pillar /srv/salt/reactor
+    mkdir -p /srv/salt/_libs/base /srv/salt/salt-formulas /srv/common /srv/salt/reactor
 
 COPY docker/salt/ /srv/salt/
+COPY docker/pillar/ /srv/common/
 COPY docker/reactor_templates /srv/salt/reactor
 COPY docker/service/salt-master /etc/sv/salt-master
 RUN chmod a+x /etc/sv/salt-master/run && \
