@@ -11,8 +11,6 @@ kibana:
   links:
     - elasticsearch
 
-
-# data on volume
 elasticsearch:
   image: registry.service.dsd.io/opguk/elasticsearch:latest
   ports:
