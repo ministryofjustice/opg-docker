@@ -1,0 +1,24 @@
+dashboards:
+  build: .
+
+kibana:
+  image: registry.service.dsd.io/opguk/kibana:latest
+  environment:
+    ELASTICSEARCH: elasticsearch
+    ELASTICSEARCH_PORT_9200_TCP: 9200
+  ports:
+    - 5601:5601
+  links:
+    - elasticsearch
+
+
+# data on volume
+elasticsearch:
+  image: registry.service.dsd.io/opguk/elasticsearch:latest
+  ports:
+    - 9200:9200
+    - 9300:9300
+  volumes:
+    - /tmp/dashboards:/data/dashboards
+  volumes_from:
+    - dashboards

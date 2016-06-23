@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Usage examples:
 # env KIBANA_INDEX='.kibana_env1' ./load.sh
@@ -13,7 +13,7 @@ KIBANA_INDEX=".kibana"
 
 print_usage() {
   echo "
-  
+
 Load the dashboards, visualizations and index patterns into the given
 Elasticsearch instance.
 
@@ -27,6 +27,7 @@ Options:
     Elasticseacrh URL. By default is $ELASTICSEARCH.
   -u | -user
     Username and password for authenticating to Elasticsearch using Basic
+    Authentication. The username and password should be separated by a
     Authentication. The username and password should be separated by a
     colon (i.e. "admin:secret"). By default no username and password are
     used.
@@ -82,14 +83,13 @@ esac
 shift 2
 done
 
-DIR=dashboards/beats
-echo "Loading dashboards to $ELASTICSEARCH in $KIBANA_INDEX"  
+DIR=./
+echo "Loading dashboards to $ELASTICSEARCH in $KIBANA_INDEX"
 
 # Workaround for: https://github.com/elastic/beats-dashboards/issues/94
 $CURL -XPUT "$ELASTICSEARCH/$KIBANA_INDEX"
 $CURL -XPUT "$ELASTICSEARCH/$KIBANA_INDEX/_mapping/search" -d'{"search": {"properties": {"hits": {"type": "integer"}, "version": {"type": "integer"}}}}'
 
-for file in $DIR/search/*.json
 do
     name=`basename $file .json`
     echo "Loading search $name:"
