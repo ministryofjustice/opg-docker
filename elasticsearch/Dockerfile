@@ -83,7 +83,9 @@ ADD docker/confd /etc/confd
 ADD docker/service/elasticsearch /etc/sv/elasticsearch
 RUN mkdir -p /scripts/elasticsearch $HOME/config/scripts $HOME/logs
 ADD docker/scripts /scripts/elasticsearch
+ADD docker/my_init.d /etc/my_init.d
 
+RUN chmod a+x /etc/my_init.d/*
 RUN chmod -R a+x /etc/sv/elasticsearch/run
 RUN chmod -R a+x /scripts/elasticsearch
 

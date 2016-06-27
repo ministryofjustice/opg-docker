@@ -82,7 +82,7 @@ esac
 shift 2
 done
 
-DIR=.
+DIR=${DASHBOARD_PATH}
 echo "Loading dashboards to $ELASTICSEARCH in $KIBANA_INDEX"  
 
 # Workaround for: https://github.com/elastic/beats-dashboards/issues/94

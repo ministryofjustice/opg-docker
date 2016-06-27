@@ -1,4 +1,4 @@
-dashboards:
+elasticsearchshareddata:
   build: .
 
 kibana:
@@ -16,7 +16,11 @@ elasticsearch:
   ports:
     - 9200:9200
     - 9300:9300
+  environment:
+    SHARED_DATA_BASE: /tmp
+    SHARED_DATA_PATHS:
+      - /elasticsearchshareddata/beats
   volumes:
-    - /tmp/dashboards:/data/dashboards
+    - /tmp/elasticsearchshareddata
   volumes_from:
-    - dashboards
+    - elasticsearchshareddata
