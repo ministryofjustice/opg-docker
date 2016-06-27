@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import os
+import sys
 import time
 import subprocess
 from __builtin__ import any
@@ -15,6 +16,12 @@ es_host = os.environ.get('ELASTICSEARCH_HOST', 'localhost')
 es_port = os.environ.get('ELASTICSEARCH_PORT', '9200')
 es_kibana_index = os.environ.get('KIBANA_INDEX', '.kibana')
 request_url = "http://{}:{}".format(es_host, es_port)
+
+old_stdout = sys.stdout
+old_stderr = sys.stderr
+logfile = open("/var/log/elastic-scripts.log", "w+")
+sys.stdout = logfile
+sys.stderr = logfile
 
 try:
     data_paths = literal_eval(os.getenv('SHARED_DATA_PATHS'))
@@ -35,6 +42,8 @@ def install_scripts(scripts=[]):
     '''
 
     for script_path in scripts:
+        print "Loading {}".format(script_path)
+
         payload = json.load(open(script_path))
         headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
         if 'beats' in script_path:
@@ -64,6 +73,7 @@ def find_scripts(directory='', extension='.json'):
 
 
 def create_default_indices():
+    print "Creating default indices"
     headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
     r = requests.put("{}/{}".format(request_url, es_kibana_index), headers=headers)
     print r.text
@@ -75,10 +85,17 @@ def create_default_indices():
 # We sit and poll to see if elastic search has started, if not, wait 30 seconds and try again
 while True:
     res = subprocess.Popen(["/usr/bin/sv", "status", "elasticsearch"], stdout=subprocess.PIPE)
+    print res.stdout
     if any(es_running in item for item in res.stdout.readlines()):
         print "Elastic search is running"
+        print "Waiting for indeces to create"
+        time.sleep(120)
         create_default_indices()
         find_and_install_scripts()
+        sys.stdout = old_stdout
+        sys.stderr = old_stderr
+        logfile.close()
         exit(0)
 
+    print "Elastic search has not started, waiting."
     time.sleep(30)
