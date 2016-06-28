@@ -11,14 +11,15 @@ import json
 
 assert os.getenv('SHARED_DATA_BASE')
 assert os.getenv('SHARED_DATA_PATHS')
+
 es_running = "run: elasticsearch: (pid"
 es_host = os.environ.get('ELASTICSEARCH_HOST', 'localhost')
 es_port = os.environ.get('ELASTICSEARCH_PORT', '9200')
 es_kibana_index = os.environ.get('KIBANA_INDEX', '.kibana')
 request_url = "http://{}:{}".format(es_host, es_port)
 
-old_stdout = sys.stdout
-old_stderr = sys.stderr
+sleep_timeout = float(os.environ.get('DASHBOARD_SLEEP_TIMEOUT', 120))
+
 logfile = open("/var/log/elastic-scripts.log", "w+")
 sys.stdout = logfile
 sys.stderr = logfile
@@ -37,25 +38,20 @@ def find_and_install_scripts():
             install_scripts(scripts)
 
 
-def install_scripts(scripts=[]):
-    '''Currently we only handle the beats payloads
-    '''
+def install_scripts(scripts):
 
     for script_path in scripts:
         print "Loading {}".format(script_path)
 
         payload = json.load(open(script_path))
         headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
-        if 'beats' in script_path:
-            file_data = script_path.split('/')
-            name = file_data.pop().replace('.json', '')
-            target = file_data.pop()
+        file_data = script_path.split('/')
+        name = file_data.pop().replace('.json', '')
+        target = file_data.pop()
 
-            r = requests.put("{}/{}/{}/{}".format(request_url, es_kibana_index, target, name),
-                             data=json.dumps(payload),
-                             headers=headers)
-        else:
-            r = requests.put(request_url, data=json.dumps(payload), headers=headers)
+        r = requests.put("{}/{}/{}/{}".format(request_url, es_kibana_index, target, name),
+                         data=json.dumps(payload),
+                         headers=headers)
 
         print r.text
 
@@ -77,25 +73,21 @@ def create_default_indices():
     headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
     r = requests.put("{}/{}".format(request_url, es_kibana_index), headers=headers)
     print r.text
-    r = requests.put("{}/{}/_mapping/search".format(request_url, es_kibana_index),
-                 headers=headers,
-                 data='{"search": {"properties": {"hits": {"type": "integer"}, "version": {"type": "integer"}}}}')
+    data = '{"search": {"properties": {"hits": {"type": "integer"}, "version": {"type": "integer"}}}}'
+    r = requests.put("{}/{}/_mapping/search".format(request_url, es_kibana_index), headers=headers, data=data)
     print r.text
 
 # We sit and poll to see if elastic search has started, if not, wait 30 seconds and try again
 while True:
-    res = subprocess.Popen(["/usr/bin/sv", "status", "elasticsearch"], stdout=subprocess.PIPE)
-    print res.stdout
-    if any(es_running in item for item in res.stdout.readlines()):
-        print "Elastic search is running"
-        print "Waiting for indeces to create"
-        time.sleep(120)
-        create_default_indices()
-        find_and_install_scripts()
-        sys.stdout = old_stdout
-        sys.stderr = old_stderr
-        logfile.close()
-        exit(0)
-
     print "Elastic search has not started, waiting."
     time.sleep(30)
+    res = subprocess.Popen(["/usr/bin/sv", "status", "elasticsearch"], stdout=subprocess.PIPE)
+
+    if any(es_running in item for item in res.stdout.readlines()):
+        print "Elastic search is running"
+        print "Waiting {} seconds for indices to be created".format(sleep_timeout)
+        time.sleep(sleep_timeout)
+        create_default_indices()
+        find_and_install_scripts()
+        logfile.close()
+        exit(0)
