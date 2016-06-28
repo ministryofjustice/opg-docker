@@ -20,7 +20,7 @@ elasticsearch:
     SHARED_DATA_BASE: /tmp
     SHARED_DATA_PATHS:
       - /elasticsearchshareddata/beats
-      - /elasticsearchshareddata/cheese
+    DASHBOARD_SLEEP_TIMEOUT: 90
   volumes:
     - /tmp/elasticsearchshareddata
   volumes_from:
