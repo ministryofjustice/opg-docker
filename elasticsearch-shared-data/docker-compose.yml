@@ -18,8 +18,7 @@ elasticsearch:
     - 9300:9300
   environment:
     SHARED_DATA_BASE: /tmp
-    SHARED_DATA_PATHS:
-      - /elasticsearchshareddata/beats
+    SHARED_DATA_PATHS: "['/elasticsearchshareddata/beats']"
     DASHBOARD_SLEEP_TIMEOUT: 90
   volumes:
     - /tmp/elasticsearchshareddata
