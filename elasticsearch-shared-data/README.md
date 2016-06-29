@@ -31,7 +31,7 @@ ie:
 ['path', 'path', 'path']
 ```
 
-<script src="https://github.com/ministryofjustice/opg-docker/blob/master/elasticsearch-shared-data/docker-compose.yml"></script>
+[Example docker-compose](docker-compose.yml)
 
 
 Index-patterns
