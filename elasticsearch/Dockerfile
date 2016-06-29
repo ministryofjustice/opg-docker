@@ -93,4 +93,7 @@ RUN chmod -R a+x /opt
 
 RUN  ln -s /etc/sv/elasticsearch /etc/service/
 
+# forward request and error logs to docker log collector
+RUN ln -sf /dev/stdout /var/log/elastic-scripts.log
+
 ENV OPG_SERVICE elasticsearch

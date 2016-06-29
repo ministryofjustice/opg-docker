@@ -3,8 +3,6 @@ OPG elasticsearch-shared-data docker image
 
 A simple way to get various dashboards/templates and indexes into elasticsearch
 
-All output is logged to `/var/log/elastic-scripts.log` in the elasticsearch container
-
 Dockerfile Environment Variables
 --------------------------------
 
