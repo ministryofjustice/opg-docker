@@ -49,6 +49,9 @@ def install_scripts(scripts):
         name = file_data.pop().replace('.json', '')
         target = file_data.pop()
 
+        if target == 'index-pattern' and '-*' not in target:
+            name += '-*'
+
         r = requests.put("{}/{}/{}/{}".format(request_url, es_kibana_index, target, name),
                          data=json.dumps(payload),
                          headers=headers)
