@@ -49,7 +49,7 @@ def install_scripts(scripts):
         name = file_data.pop().replace('.json', '')
         target = file_data.pop()
 
-        if target == 'index-pattern' and '-*' not in target:
+        if target == 'index-pattern':
             name += '-*'
 
         r = requests.put("{}/{}/{}/{}".format(request_url, es_kibana_index, target, name),
