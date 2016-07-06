@@ -29,6 +29,9 @@ server {
         deny  all;
     }
 
+    # Add HTTP Strict Transport Security header - required for .service.gov.uk domains
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; ";
+
     # Optionally include app-specific config files
     include /etc/nginx/app.conf.d/*.conf;
 
