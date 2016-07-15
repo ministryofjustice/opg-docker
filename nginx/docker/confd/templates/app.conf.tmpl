@@ -17,7 +17,16 @@ server {
     access_log  /var/log/app/nginx.access.json logstash_json;
     error_log   /var/log/app/nginx.error.log error;
 
-    root /app/public;
+
+# Defaults to /app/public if OPG_NGINX_ROOT isn't set
+{{ if exists "/opg/nginx/root" }}
+    set $root "{{ getv "/opg/nginx/root" }}";
+{{ end }}
+{{ if not (exists "/opg/nginx/root") }}
+    set $root "/app/public";
+{{ end }}
+
+    root $root;
 
     location =/meta.json {
         alias /app/META;
