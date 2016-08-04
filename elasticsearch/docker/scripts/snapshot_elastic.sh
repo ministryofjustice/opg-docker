@@ -62,7 +62,7 @@ fi
 echo "Snapshot created successfully"
 
 echo "Removing snapshots older than ${ELASTICSEARCH_SNAPSHOTS_RETAIN_DAYS} days"
-curator --host ${ELASTICSEARCH_SNAPSHOTS_HOSTNAME} delete snapshots --repository ${ELASTICSEARCH_SNAPSHOTS_REPOSITORY_NAME} --older-than ${ELASTICSEARCH_SNAPSHOTS_RETAIN_DAYS} --time-unit days
+curator --timeout 120 --host ${ELASTICSEARCH_SNAPSHOTS_HOSTNAME} delete snapshots --repository ${ELASTICSEARCH_SNAPSHOTS_REPOSITORY_NAME} --older-than ${ELASTICSEARCH_SNAPSHOTS_RETAIN_DAYS} --time-unit days
 rc=$?
 if [ "${rc}" -ne 0 ] ; then
   echo "Error ${rc} from curator delete snapshot"
