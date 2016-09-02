@@ -86,7 +86,7 @@ Sample docker-compose entries
 
 ```
 elasticsearch:
-  image: registry.service.dsd.io/opguk/elasticsearch:latest
+  image: registry.service.opg.digital/opguk/elasticsearch:latest
   ports:
     - 9200:9200
 ```
@@ -101,7 +101,7 @@ Start container with:
 
 ```
 elasticsearch01:
-  image: registry.service.dsd.io/opguk/elasticsearch:latest
+  image: registry.service.opg.digital/opguk/elasticsearch:latest
   links:
     - elasticsearch02:elasticsearch-02
   ports:
@@ -109,7 +109,7 @@ elasticsearch01:
   env_file: ./env/es1.env
 
 elasticsearch02:
-  image: registry.service.dsd.io/opguk/elasticsearch:latest
+  image: registry.service.opg.digital/opguk/elasticsearch:latest
   links:
     - elasticsearch03:elasticsearch-03
   ports:
@@ -117,7 +117,7 @@ elasticsearch02:
   env_file: ./env/es2.env
 
 elasticsearch03:
-  image: registry.service.dsd.io/opguk/elasticsearch:latest
+  image: registry.service.opg.digital/opguk/elasticsearch:latest
   ports:
     - 9203:9200
   env_file: ./env/es3.env
@@ -152,7 +152,7 @@ ELASTICSEARCH_CLUSTER_NODES_THREE=elasticsearch-03
 
 ```
 elasticcurator:
-  image: registry.service.dsd.io/opguk/elasticsearch:latest
+  image: registry.service.opg.digital/opguk/elasticsearch:latest
   external_links:
     - opgcoredocker_elasticsearch_1:elasticsearch
 ```
@@ -167,7 +167,7 @@ Assuming a running elasticsearch container has been started as above, to run cur
 
 ```
 elasticsnapshot:
-  image: registry.service.dsd.io/opguk/elasticsearch:latest
+  image: registry.service.opg.digital/opguk/elasticsearch:latest
   external_links:
     - opgcoredocker_elasticsearch_1:elasticsearch
 ```
@@ -250,7 +250,7 @@ To avoid TCP port clash with the monitoring stack, port 9200 is mapped to host p
 Note: a full list of indices within the snapshot has been shortened for the sake of brevity.
 
 ```
-(production01)root@monitoring-01:~# docker run -itd -p 19200:9200 registry.service.dsd.io/opguk/elasticsearch:0.1.97
+(production01)root@monitoring-01:~# docker run -itd -p 19200:9200 registry.service.opg.digital/opguk/elasticsearch:0.1.97
 ce04387a7992ddc6809d5b180ea3f0c56633537959d513874dc21dfb42f7f2a7
 (production01)root@monitoring-01:~#
 (production01)root@monitoring-01:~# docker exec -it ce04387a7992 bash -o vi

@@ -4,9 +4,10 @@ CLEAN_CONTAINERS := $(CORE_CONTAINERS) $(CHILD_CONTAINERS)
 
 .PHONY: build push pull showinfo test $(CORE_CONTAINERS) $(CHILD_CONTAINERS) clean
 
-tagrepo = yes
+tagrepo = no
 currenttag := $(shell semvertag latest)
-newtag := $(shell semvertag bump patch)
+#newtag := $(shell semvertag bump patch)
+newtag = latest
 registryUrl = registry.service.opg.digital
 dockerVersion := $(shell docker --version | cut -f3 -d' '  | grep '^1\.[0-9]\.')
 

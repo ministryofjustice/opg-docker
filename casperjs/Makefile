@@ -1,6 +1,6 @@
 .PHONY: build
 newtag ?= latest
-registryUrl ?= registry.service.dsd.io
+registryUrl ?= registry.service.opg.digital
 image = $(registryUrl)/opguk/casperjs
 
 build:

@@ -20,7 +20,7 @@ Sample docker-compose entries
 
 ```
 kibana:
-  image: registry.service.dsd.io/opguk/kibana:latest
+  image: registry.service.opg.digital/opguk/kibana:latest
   elasticsearch: http://localhost:9200
   kibana_index: .kibana
   default_app_id: discover

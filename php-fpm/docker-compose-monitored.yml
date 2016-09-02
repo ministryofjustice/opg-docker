@@ -15,7 +15,7 @@ phpfpm:
 
 
 graphite:
-  image: registry.service.dsd.io/opguk/graphite-statsd:latest
+  image: registry.service.opg.digital/opguk/graphite-statsd:latest
   ports:
   - 8003:80
   - 2003:2003

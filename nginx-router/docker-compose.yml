@@ -30,9 +30,9 @@ router2:
 
 
 php:
-  image: registry.service.dsd.io/opguk/php-fpm
+  image: registry.service.opg.digital/opguk/php-fpm
 
 
 nginx:
-  image: registry.service.dsd.io/opguk/nginx
+  image: registry.service.opg.digital/opguk/nginx
 
