@@ -16,6 +16,7 @@ RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 581
     build-essential \
     python2.7-dev \
     python3-dev \
+    python-dev \
     libxslt1-dev \
     libxml2-dev \
     curl \
@@ -23,7 +24,9 @@ RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 581
     ttf-dejavu \
     fontconfig \
     libyaml-dev \
-    libgmp3-dev && \
+    libgmp3-dev \
+    libffi-dev \
+    libssl-dev && \
     apt-get clean && rm -rf /tmp/* /var/tmp/* && rm -rf /var/lib/apt/lists/*
 
 #Upgrade the verison of pip and install pip requirements
@@ -36,13 +39,11 @@ RUN curl -L https://github.com/docker/machine/releases/download/v0.8.1/docker-ma
 
 #Download and install terraform
 RUN cd /tmp && \
-    pwd && \
     wget https://releases.hashicorp.com/terraform/0.7.4/terraform_0.7.4_linux_amd64.zip && \
     unzip terraform*.zip && \
-    mkdir -p /opt/terraform && \
-    mv /tmp/terraform/*.* /opt/terraform/. && \
+    mv terraform /usr/bin/terraform && \
     rm -rf /tmp/terraform* && \
-    echo "PATH=:/opt/terraform/" > /etc/environment
+    echo which terraform
 
 ARG user=app
 ARG group=app
