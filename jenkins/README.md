@@ -157,3 +157,8 @@ The final command in the ```/etc/my_init.d``` directory can the be set to the je
 ---
 <sup>1</sup>Thank God[↩](#a1)</br>
 
+
+# TODO
+- add terraform install
+- add jmeter, jmeter-http
+- ~~add virtualenv~~ 

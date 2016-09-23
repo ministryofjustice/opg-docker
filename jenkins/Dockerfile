@@ -26,11 +26,11 @@ RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 581
 
 #Upgrade the verison of pip and install pip requirements
 RUN pip install -U pip && \
-    pip install meta-compose  git+https://github.com/ministryofjustice/semvertag.git
+    pip install meta-compose  git+https://github.com/ministryofjustice/semvertag.git virtualenv
 
-# Download and install docker-machine and doker compose
-RUN curl -L https://github.com/docker/machine/releases/download/v0.6.0/docker-machine-Linux-x86_64 > /usr/local/bin/docker-machine && \
- chmod +x /usr/local/bin/docker-machine 
+# Download and install docker-machine and docker compose
+RUN curl -L https://github.com/docker/machine/releases/download/v0.8.1/docker-machine-x86_64 >/usr/local/bin/docker-machine && \
+  chmod +x /usr/local/bin/docker-machine
 
 ENV JENKINS_HOME /srv/jenkins
 ENV JENKINS_SLAVE_AGENT_PORT 50000

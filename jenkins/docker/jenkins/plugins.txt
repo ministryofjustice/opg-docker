@@ -61,3 +61,5 @@ greenballs
 jenkins-jira-issue-updater
 downstream-ext
 join
+performance
+build-name-setter
