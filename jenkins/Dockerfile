@@ -1,52 +1,12 @@
-FROM registry.service.dsd.io/opguk/jre-8:latest
-
-#Install tools
-RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D && \
-    echo 'deb https://apt.dockerproject.org/repo ubuntu-trusty main' > /etc/apt/sources.list.d/docker.list && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \
-    vim \
-    wget \
-    apparmor \
-    docker-engine=1.9.1-0~trusty \
-    libcurl4-gnutls-dev \
-    libexpat1-dev \
-    gettext \
-    libssl-dev \
-    build-essential \
-    python2.7-dev \
-    python3-dev \
-    libxslt1-dev \
-    libxml2-dev \
-    curl \
-    zip \
-    ttf-dejavu \
-    fontconfig && \
-    apt-get clean && rm -rf /tmp/* /var/tmp/* && rm -rf /var/lib/apt/lists/*
-
-#Upgrade the verison of pip and install pip requirements
-RUN pip install -U pip && \
-    pip install meta-compose  git+https://github.com/ministryofjustice/semvertag.git virtualenv
-
-# Download and install docker-machine and docker compose
-RUN curl -L https://github.com/docker/machine/releases/download/v0.8.1/docker-machine-x86_64 >/usr/local/bin/docker-machine && \
-  chmod +x /usr/local/bin/docker-machine
+FROM registry.service.dsd.io/opguk/jenkins-base:latest
 
 ENV JENKINS_HOME /srv/jenkins
 ENV JENKINS_SLAVE_AGENT_PORT 50000
-
-ARG user=app
-ARG group=app
-ARG uid=1000
-ARG gid=1000
 
 # Jenkins is run with user `app`, uid = 1000
 # If you bind mount a volume from the host or a data container,
 # ensure you use the same uid
 RUN usermod -d "$JENKINS_HOME" -m -s /bin/bash ${user}
-
-#Fix docker GID to sync with underlying ECS so that the user can access the docker socket
-RUN groupmod -g 497 docker && adduser app docker
 
 # Jenkins home directory is a volume, so configuration and build history
 # can be persisted and survive image upgrades
