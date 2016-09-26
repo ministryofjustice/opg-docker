@@ -5,6 +5,13 @@ ARG group=app
 ARG uid=1000
 ARG gid=1000
 
+# Download and install docker-machine and docker compose
+RUN curl -L https://github.com/docker/machine/releases/download/v0.8.1/docker-machine-x86_64 >/usr/local/bin/docker-machine && \
+  chmod +x /usr/local/bin/docker-machine
+
+#Fix docker GID to sync with underlying ECS so that the user can access the docker socket
+RUN groupmod -g 497 docker && adduser app docker
+
 ENV JENKINS_HOME /srv/jenkins
 ENV JENKINS_SLAVE_AGENT_PORT 50000
 
