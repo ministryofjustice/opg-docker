@@ -1,4 +1,9 @@
-FROM registry.service.dsd.io/opguk/jenkins-base:latest
+FROM registry.service.dsd.io/opguk/jre-8:latest
+
+ARG user=app
+ARG group=app
+ARG uid=1000
+ARG gid=1000
 
 ENV JENKINS_HOME /srv/jenkins
 ENV JENKINS_SLAVE_AGENT_PORT 50000
