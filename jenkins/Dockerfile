@@ -1,5 +1,12 @@
 FROM registry.service.dsd.io/opguk/jre-8:latest
 
+RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D && \
+    echo 'deb https://apt.dockerproject.org/repo ubuntu-trusty main' > /etc/apt/sources.list.d/docker.list && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+    docker-engine && \
+    apt-get clean && rm -rf /tmp/* /var/tmp/* && rm -rf /var/lib/apt/lists/*
+
 ARG user=app
 ARG group=app
 ARG uid=1000
