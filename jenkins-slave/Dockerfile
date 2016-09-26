@@ -8,7 +8,7 @@ RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 581
     vim \
     wget \
     apparmor \
-    docker-engine=1.9.1-0~trusty \
+    docker-engine \
     libcurl4-gnutls-dev \
     libexpat1-dev \
     gettext \
