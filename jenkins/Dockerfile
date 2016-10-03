@@ -16,12 +16,17 @@ RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 581
     build-essential \
     python2.7-dev \
     python3-dev \
+    python-dev \
     libxslt1-dev \
     libxml2-dev \
     curl \
     zip \
     ttf-dejavu \
-    fontconfig && \
+    fontconfig \
+    libyaml-dev \
+    libgmp3-dev \
+    libffi-dev \
+    libssl-dev && \
     apt-get clean && rm -rf /tmp/* /var/tmp/* && rm -rf /var/lib/apt/lists/*
 
 #Upgrade the verison of pip and install pip requirements
@@ -32,21 +37,36 @@ RUN pip install -U pip && \
 RUN curl -L https://github.com/docker/machine/releases/download/v0.8.1/docker-machine-x86_64 >/usr/local/bin/docker-machine && \
   chmod +x /usr/local/bin/docker-machine
 
-ENV JENKINS_HOME /srv/jenkins
-ENV JENKINS_SLAVE_AGENT_PORT 50000
+#Download and install terraform
+RUN cd /tmp && \
+    wget https://releases.hashicorp.com/terraform/0.7.4/terraform_0.7.4_linux_amd64.zip && \
+    unzip terraform*.zip && \
+    mv terraform /usr/bin/terraform && \
+    rm -rf /tmp/terraform* && \
+    echo which terraform
 
 ARG user=app
 ARG group=app
 ARG uid=1000
 ARG gid=1000
 
+#Fix docker GID to sync with underlying ECS so that the user can access the docker socket
+RUN groupmod -g 497 docker && adduser app docker
+
+# Download and install docker-machine and docker compose
+RUN curl -L https://github.com/docker/machine/releases/download/v0.8.1/docker-machine-x86_64 >/usr/local/bin/docker-machine && \
+  chmod +x /usr/local/bin/docker-machine
+
+#Fix docker GID to sync with underlying ECS so that the user can access the docker socket
+RUN groupmod -g 497 docker && adduser app docker
+
+ENV JENKINS_HOME /srv/jenkins
+ENV JENKINS_SLAVE_AGENT_PORT 50000
+
 # Jenkins is run with user `app`, uid = 1000
 # If you bind mount a volume from the host or a data container,
 # ensure you use the same uid
 RUN usermod -d "$JENKINS_HOME" -m -s /bin/bash ${user}
-
-#Fix docker GID to sync with underlying ECS so that the user can access the docker socket
-RUN groupmod -g 497 docker && adduser app docker
 
 # Jenkins home directory is a volume, so configuration and build history
 # can be persisted and survive image upgrades
@@ -66,7 +86,7 @@ COPY docker/etc/service /etc/sv/
 RUN ln -s /etc/sv/jenkins /etc/service
 
 ARG JENKINS_VERSION
-ENV JENKINS_VERSION ${JENKINS_VERSION:-1.642.4}
+ENV JENKINS_VERSION ${JENKINS_VERSION:-1.658}
 
 # ADD jenkins war
 ADD http://repo.jenkins-ci.org/public/org/jenkins-ci/main/jenkins-war/${JENKINS_VERSION}/jenkins-war-${JENKINS_VERSION}.war /usr/share/jenkins/jenkins.war

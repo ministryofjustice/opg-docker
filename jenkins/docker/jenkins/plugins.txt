@@ -63,3 +63,8 @@ downstream-ext
 join
 performance
 build-name-setter
+authentication-tokens
+durable-task
+docker-commons
+docker-slaves
+
