@@ -78,6 +78,3 @@ RUN mkdir -p /usr/share/jenkins/ref/users/opgops /usr/share/jenkins/ref/.docker 
 
 COPY docker/etc/confd /etc/confd
 
-# will be used by attached slave agents:
-EXPOSE 50000
-
