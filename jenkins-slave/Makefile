@@ -1,7 +1,7 @@
 .PHONY: build
 newtag ?= latest
 registryUrl ?= registry.service.opg.digital
-image = $(registryUrl)/opguk/jenkins-base
+image = $(registryUrl)/opguk/jenkins-slave
 
 build:
 ifeq ($(dockerVersion),)
