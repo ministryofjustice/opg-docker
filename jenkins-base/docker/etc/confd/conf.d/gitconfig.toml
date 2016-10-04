@@ -1,6 +1,0 @@
-[template]
-src = "gitconfig.tmpl"
-dest = "/usr/share/jenkins/ref/.gitconfig"
-keys = [
-  "/git"
-]
