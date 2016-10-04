@@ -1,0 +1,6 @@
+[template]
+src = "opgops.tmpl"
+dest = "/usr/share/jenkins/ref/users/opgops/config.xml"
+keys = [
+  "/jenkins"
+]
