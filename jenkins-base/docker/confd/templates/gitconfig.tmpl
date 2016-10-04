@@ -1,0 +1,3 @@
+[user]
+	email = {{if exists "/git/email/address" }}{{ getv "/git/email/address" }}{{end}}
+	name = {{if exists "/git/username" }}{{ getv "/git/username" }}{{end}}
