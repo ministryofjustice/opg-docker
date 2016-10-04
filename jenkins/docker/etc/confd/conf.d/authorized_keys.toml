@@ -1,8 +1,0 @@
-[template]
-src = "authorized_keys.tmpl"
-dest = "/srv/jenkins/.ssh/authorized_keys"
-mode = "0600"
-uid = 1000
-keys = [
-  "/jenkins"
-]
