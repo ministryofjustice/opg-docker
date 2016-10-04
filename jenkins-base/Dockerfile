@@ -76,6 +76,8 @@ RUN mkdir -p /usr/share/jenkins/ref/users/opgops /usr/share/jenkins/ref/.docker 
     chown app /srv/jenkins/.ssh && \
     chmod 0700 /srv/jenkins/.ssh
 
+COPY docker/etc/confd /etc/confd
+
 # will be used by attached slave agents:
 EXPOSE 50000
 
