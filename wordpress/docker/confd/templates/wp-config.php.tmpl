@@ -42,14 +42,14 @@ define('DB_COLLATE', '');
  *
  * @since 2.6.0
  */
-define('AUTH_KEY',         'THUTEcuquwe7reth');
-define('SECURE_AUTH_KEY',  'sWApuqa53aKuC7aQ');
-define('LOGGED_IN_KEY',    'muqAdAsEFrAb5d77');
-define('NONCE_KEY',        '4UstarUkaCErEHaB');
-define('AUTH_SALT',        'vucrapRub4ew5sPe');
-define('SECURE_AUTH_SALT', 'sajABrAmaxa8Ra3h');
-define('LOGGED_IN_SALT',   'Pr7pHazuPucHacuD');
-define('NONCE_SALT',       'prePhatrahEPhu3W');
+define('AUTH_KEY',         '{{getv "/auth/auth/key"}}');
+define('SECURE_AUTH_KEY',  '{{getv "/auth/secure/auth/key"}}');
+define('LOGGED_IN_KEY',    '{{getv "/auth/logged/in/key"}}');
+define('NONCE_KEY',        '{{getv "/auth/nonce/key"}}');
+define('AUTH_SALT',        '{{getv "/auth/auth/salt"}}');
+define('SECURE_AUTH_SALT', '{{getv "/auth/secure/auth/salt"}}');
+define('LOGGED_IN_SALT',   '{{getv "/auth/logged/in/salt"}}');
+define('NONCE_SALT',       '{{getv "/auth/nonce/salt"}}');
 
 /**#@-*/
 
