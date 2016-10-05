@@ -1,0 +1,8 @@
+jenkins-slave:
+  build: .
+  environment:
+    JENKINS_MASTER_AUTHKEYS: "ssh-rsa "
+    JENKINS_MASTER_URL: "https://jenkins.service.opg.digital/"
+    JENKINS_MASTER_PORT: 443
+    JENKINS_SLAVE_NAME: "test_slave"
+

@@ -58,23 +58,18 @@ RUN curl -L https://github.com/docker/machine/releases/download/v0.8.1/docker-ma
 RUN groupmod -g 497 docker && adduser app docker
 
 ENV JENKINS_HOME /srv/jenkins
-ENV JENKINS_SLAVE_AGENT_PORT 50000
 
 # Jenkins is run with user `app`, uid = 1000
 # If you bind mount a volume from the host or a data container,
 # ensure you use the same uid
 RUN usermod -d "$JENKINS_HOME" -m -s /bin/bash ${user}
 
-# Jenkins home directory is a volume, so configuration and build history
-# can be persisted and survive image upgrades
-VOLUME $JENKINS_HOME
-
 # `/usr/share/jenkins/ref/` contains all reference configuration we want
 # to set on a fresh new installation. Use it to bundle additional plugins
 # or config file with your custom jenkins Docker image.
-RUN mkdir -p /usr/share/jenkins/ref/users/opgops /usr/share/jenkins/ref/.docker /srv/jenkins/.ssh && \
+RUN mkdir -p /usr/share/jenkins/ref/{users/opgops, .docker} && \
+    mkdir -p /srv/jenkins/.ssh && \
     chown app /srv/jenkins/.ssh && \
     chmod 0700 /srv/jenkins/.ssh
 
 COPY docker/etc/confd /etc/confd
-
