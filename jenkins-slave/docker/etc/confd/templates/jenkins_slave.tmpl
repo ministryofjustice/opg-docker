@@ -1,6 +1,13 @@
 #! /bin/bash
 {{ if exists "/jenkins/master/url" }}
 set -e
+url={{ getv "/jenkins/master/url" }}
+port={{ getv "/jenkins/master/port" }}
+slave_name={{ getv "/jenkins/slave/name" }}
 
-java -jar slave.jar -jnlpUrl http://{{ getv "/jenkins/master/url" }}:{{ getv "/jenkins/master/port/" }}computer/{{ getv "/jenkins/slave/name" }}/slave-agent.jnlp
+rm slave*jar*
+
+wget ${url}/jnlpJars/slave.jar
+
+java -jar slave.jar -jnlpUrl ${url}:${port}/computer/${slave_name}/slave-agent.jnlp
 {{ end }}
