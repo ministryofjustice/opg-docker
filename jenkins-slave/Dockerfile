@@ -66,15 +66,19 @@ ENV JENKINS_HOME /srv/jenkins
 # ensure you use the same uid
 RUN usermod -d "$JENKINS_HOME" -m -s /bin/bash ${user}
 
+ADD  docker/etc/my_init.d /etc/my_init.d
+
 # `/usr/share/jenkins/ref/` contains all reference configuration we want
 # to set on a fresh new installation. Use it to bundle additional plugins
 # or config file with your custom jenkins Docker image.
+
 RUN mkdir -p /usr/share/jenkins/ref/{users/opgops, .docker} && \
     mkdir -p /srv/jenkins/.ssh && \
     mkdir -p /srv/jenkins/builds && \
     chown app /srv/jenkins/.ssh && \
     chown app /srv/jenkins/builds && \
-    chmod 0700 /srv/jenkins/.ssh
+    chmod 0700 /srv/jenkins/.ssh && \
+    chmod a+x /etc/my_init.d/*
 
 COPY docker/etc/confd /etc/confd
 COPY docker/etc/ssh /etc/ssh
