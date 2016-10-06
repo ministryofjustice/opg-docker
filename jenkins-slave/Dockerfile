@@ -27,7 +27,9 @@ RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 581
     libgmp3-dev \
     libffi-dev \
     libssl-dev && \
-    apt-get clean && rm -rf /tmp/* /var/tmp/* && rm -rf /var/lib/apt/lists/*
+    apt-get clean && \
+    apt-get autoremove && \
+    rm -rf /tmp/* /var/tmp/* && rm -rf /var/lib/apt/lists/*
 
 #Upgrade the verison of pip and install pip requirements
 RUN pip install -U pip && \
@@ -69,7 +71,12 @@ RUN usermod -d "$JENKINS_HOME" -m -s /bin/bash ${user}
 # or config file with your custom jenkins Docker image.
 RUN mkdir -p /usr/share/jenkins/ref/{users/opgops, .docker} && \
     mkdir -p /srv/jenkins/.ssh && \
+    mkdir -p /srv/jenkins/builds && \
     chown app /srv/jenkins/.ssh && \
+    chown app /srv/jenkins/builds && \
     chmod 0700 /srv/jenkins/.ssh
 
 COPY docker/etc/confd /etc/confd
+COPY docker/etc/ssh /etc/ssh
+
+EXPOSE 2222
