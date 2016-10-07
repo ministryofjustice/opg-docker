@@ -1,0 +1,8 @@
+[template]
+src = "jenkins_slave.tmpl"
+dest = "/srv/jenkins/jenkins_slave.sh"
+mode = "0755"
+uid = 1000
+keys = [
+  "/jenkins"
+]
