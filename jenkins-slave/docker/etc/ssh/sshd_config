@@ -1,4 +1,4 @@
-Port 2222
+Port 22
 #AddressFamily any
 #ListenAddress 0.0.0.0
 #ListenAddress ::
@@ -116,3 +116,5 @@ Subsystem       sftp    /usr/lib/openssh/sftp-server
 #       X11Forwarding no
 #       AllowTcpForwarding no
 #       ForceCommand cvs server
+
+AllowUsers app 
