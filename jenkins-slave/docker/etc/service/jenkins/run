@@ -1,3 +1,0 @@
-#!/bin/bash
-
-exec /scripts/base/docker-task-wrapper.sh "opg-jenkins" /sbin/setuser app /usr/local/bin/jenkins.sh
