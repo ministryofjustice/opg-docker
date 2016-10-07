@@ -1,8 +1,27 @@
 jenkins-slave:
   build: .
   environment:
-    JENKINS_MASTER_AUTHKEYS: "ssh-rsa "
-    JENKINS_MASTER_URL: "https://jenkins.service.opg.digital/"
-    JENKINS_MASTER_PORT: 443
-    JENKINS_SLAVE_NAME: "test_slave"
+    JENKINS_MASTER_AUTHKEYS: ""
+    JENKINS_GITHUB_USERNAME: ""
+    JENKINS_GITHUB_EMAIL: ""
+  ports:
+    - "2222:2222"
 
+
+jenkins-slave-the-second:
+  build: .
+  environment:
+    JENKINS_MASTER_AUTHKEYS: ""
+    JENKINS_GITHUB_USERNAME: ""
+    JENKINS_GITHUB_EMAIL: ""
+  ports:
+    - "2223:2222"
+
+jenkins-slave-the-third:
+  build: .
+  environment:
+    JENKINS_MASTER_AUTHKEYS: ""
+    JENKINS_GITHUB_USERNAME: ""
+    JENKINS_GITHUB_EMAIL: ""
+  ports:
+    - "2224:2222"
