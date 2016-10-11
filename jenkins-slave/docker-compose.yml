@@ -4,24 +4,13 @@ jenkins-slave:
     JENKINS_MASTER_AUTHKEYS: ""
     JENKINS_GITHUB_USERNAME: ""
     JENKINS_GITHUB_EMAIL: ""
+    JENKINS_MASTER_URL: ""
+    JENKINS_MASTER_PORT: "443"
+    JENKINS_SLAVE_NAME: ""
+    JENKINS_AUTH_TOKEN: ""
+    JENKINS_JOB_NAME: ""
   ports:
-    - "2222:2222"
-
-
-jenkins-slave-the-second:
-  build: .
-  environment:
-    JENKINS_MASTER_AUTHKEYS: ""
-    JENKINS_GITHUB_USERNAME: ""
-    JENKINS_GITHUB_EMAIL: ""
-  ports:
-    - "2223:2222"
-
-jenkins-slave-the-third:
-  build: .
-  environment:
-    JENKINS_MASTER_AUTHKEYS: ""
-    JENKINS_GITHUB_USERNAME: ""
-    JENKINS_GITHUB_EMAIL: ""
-  ports:
-    - "2224:2222"
+    - "22"
+  volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+  privileged: true
