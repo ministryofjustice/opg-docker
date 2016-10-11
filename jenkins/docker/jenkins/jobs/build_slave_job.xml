@@ -1,0 +1,130 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+    <actions/>
+    <description>Automatically registers a remote slave</description>
+    <keepDependencies>false</keepDependencies>
+    <properties>
+        <hudson.model.ParametersDefinitionProperty>
+            <parameterDefinitions>
+                <hudson.model.StringParameterDefinition>
+                    <name>SLAVE_NAME</name>
+                    <description>The name of the jenkins slave</description>
+                    <defaultValue></defaultValue>
+                </hudson.model.StringParameterDefinition>
+                <hudson.model.StringParameterDefinition>
+                    <name>REMOTE_HOST</name>
+                    <description>The remote IP address of the slave</description>
+                    <defaultValue></defaultValue>
+                </hudson.model.StringParameterDefinition>
+                <hudson.model.StringParameterDefinition>
+                    <name>REMOTE_PORT</name>
+                    <description>The remote port we want to connect to</description>
+                    <defaultValue>22</defaultValue>
+                </hudson.model.StringParameterDefinition>
+                <hudson.model.StringParameterDefinition>
+                    <name>SLAVE_BUILD_ROOT</name>
+                    <description>The root mount point for builds</description>
+                    <defaultValue>/srv/jenkins/build/</defaultValue>
+                </hudson.model.StringParameterDefinition>
+                <hudson.model.StringParameterDefinition>
+                    <name>SLAVE_NUM_EXECUTORS</name>
+                    <description>The number of executors on the slave</description>
+                    <defaultValue>1</defaultValue>
+                </hudson.model.StringParameterDefinition>
+                <hudson.model.StringParameterDefinition>
+                    <name>SLAVE_LABELS</name>
+                    <description>The labels to attach to the slave</description>
+                    <defaultValue></defaultValue>
+                </hudson.model.StringParameterDefinition>
+            </parameterDefinitions>
+        </hudson.model.ParametersDefinitionProperty>
+        <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17">
+            <optOut>false</optOut>
+        </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
+        <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+            <autoRebuild>false</autoRebuild>
+            <rebuildDisabled>false</rebuildDisabled>
+        </com.sonyericsson.rebuild.RebuildSettings>
+        <de.pellepelster.jenkins.walldisplay.WallDisplayJobProperty plugin="jenkinswalldisplay@0.6.30"/>
+    </properties>
+    <scm class="hudson.scm.NullSCM"/>
+    <canRoam>true</canRoam>
+    <disabled>false</disabled>
+    <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+    <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+    <authToken>foobarbaz</authToken>
+    <triggers/>
+    <concurrentBuild>false</concurrentBuild>
+    <builders>
+        <hudson.plugins.groovy.SystemGroovy plugin="groovy@1.29">
+            <scriptSource class="hudson.plugins.groovy.StringScriptSource">
+                <command>import jenkins.model.*
+                    import hudson.model.*
+                    import hudson.slaves.*
+                    import hudson.plugins.sshslaves.*
+                    import java.util.ArrayList;
+                    import hudson.slaves.EnvironmentVariablesNodeProperty.Entry;
+
+
+                    def slaveLabels = build.environment.get(&quot;SLAVE_LABELS&quot;) ?: build.environment.get(&quot;SLAVE_NAME&quot;) + &quot;_SLAVE&quot;;
+
+                    Slave slave = new DumbSlave(
+                    build.environment.get(&quot;SLAVE_NAME&quot;),
+                    &quot;Remote slave &quot; + build.environment.get(&quot;SLAVE_NAME&quot;),
+                    build.environment.get(&quot;SLAVE_BUILD_ROOT&quot;),
+                    build.environment.get(&quot;SLAVE_NUM_EXECUTORS&quot;),
+                    Node.Mode.NORMAL,
+                    slaveLabels,
+                    new SSHLauncher(
+                    build.environment.get(&quot;REMOTE_HOST&quot;),
+                    Integer.parseInt(build.environment.get(&quot;REMOTE_PORT&quot;)),
+                    build.environment.get(&quot;AUTH_CREDENTIALS&quot;),
+                    &quot;&quot;,
+                    &quot;&quot;,
+                    &quot;&quot;,
+                    &quot;&quot;,
+                    0,
+                    0,
+                    0
+                    ),
+                    new RetentionStrategy.Always(),
+                    new LinkedList()
+                    );
+
+                    Jenkins.instance.addNode(slave);
+                </command>
+            </scriptSource>
+            <bindings></bindings>
+            <classpath></classpath>
+        </hudson.plugins.groovy.SystemGroovy>
+    </builders>
+    <publishers/>
+    <buildWrappers>
+        <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.8.7"/>
+        <EnvInjectBuildWrapper plugin="envinject@1.93.1">
+            <info>
+                <groovyScriptContent>import jenkins.model.Jenkins
+                    import hudson.model.*
+
+                    def currentBuild = Thread.currentThread().executable;
+
+                    def creds = com.cloudbees.plugins.credentials.CredentialsProvider.lookupCredentials(
+                    com.cloudbees.plugins.credentials.common.StandardUsernameCredentials.class,
+                    Jenkins.instance,
+                    null,
+                    null
+                    );
+
+                    for (c in creds) {
+                    println(c.username);
+
+                    if (&apos;app&apos; == c.username) {
+                    return [AUTH_CREDENTIALS: c.id];
+                    }
+                    }
+                </groovyScriptContent>
+                <loadFilesFromMaster>false</loadFilesFromMaster>
+            </info>
+        </EnvInjectBuildWrapper>
+    </buildWrappers>
+</project>
