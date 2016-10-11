@@ -1,8 +1,10 @@
 #!/bin/sh
 
+env | grep JENKINS
+
 if [ ${#JENKINS_MASTER_URL} -ne 0 ]
 then
     HOST_IP=`ifconfig eth0 | grep "inet addr" | cut -d: -f2 | awk '{ print $1 }'`
 
-    curl "${JENKINS_MASTER_URL}:${JENKINS_MASTER_PORT}/job/${JENKINS_JOB_NAME}/buildWithParameters?token=${JENKINS_AUTH_TOKEN}&REMOTE_HOST=${HOST_IP}&SLAVE_NAME=${JENKINS_SLAVE_NAME}"
+    curl "${JENKINS_MASTER_URL}:${JENKINS_MASTER_PORT}/job/${JENKINS_JOB_NAME}/buildWithParameters?token=${JENKINS_AUTH_TOKEN}&REMOTE_HOST=${HOST_IP}&SLAVE_NAME=${JENKINS_SLAVE_NAME}&REMOTE_PORT=${JENKINS_REMOTE_PORT:-22}"
 fi
