@@ -75,7 +75,7 @@ RUN mkdir -p /usr/share/jenkins/ref/{users/opgops, .docker} && \
     chmod 0700 /srv/jenkins/.ssh && \
     chmod a+x /etc/my_init.d/* && \
     usermod -p '*' app && \
-    ln -s /var/log/syslog /dev/stdout
+    ln -s /dev/stdout /var/log/auth.log
     
 COPY docker/etc/confd /etc/confd
 COPY docker/etc/ssh /etc/ssh
