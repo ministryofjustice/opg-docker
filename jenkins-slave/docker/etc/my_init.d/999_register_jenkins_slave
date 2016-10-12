@@ -62,7 +62,7 @@ class SelfRegistration:
             )
 
     def register(self):
-        request = urllib2.Request(self.jenkins_url)
+        request = urllib2.Request(self.jenkins_url())
 
         try:
             response = urllib2.urlopen(request)
