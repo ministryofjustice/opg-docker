@@ -11,21 +11,21 @@ import json
 from datetime import datetime
 
 
-assert os.getenv('SHARED_DATA_BASE')
-assert os.getenv('SHARED_DATA_PATHS')
+if os.getenv('SHARED_DATA_BASE') and os.getenv('SHARED_DATA_PATHS'):
 
-es_running = "run: elasticsearch: (pid"
-es_host = os.environ.get('ELASTICSEARCH_HOST', 'localhost')
-es_port = os.environ.get('ELASTICSEARCH_PORT', '9200')
-es_kibana_index = os.environ.get('KIBANA_INDEX', '.kibana')
-request_url = "http://{}:{}".format(es_host, es_port)
+    es_running = "run: elasticsearch: (pid"
+    es_host = os.environ.get('ELASTICSEARCH_HOST', 'localhost')
+    es_port = os.environ.get('ELASTICSEARCH_PORT', '9200')
+    es_kibana_index = os.environ.get('KIBANA_INDEX', '.kibana')
+    request_url = "http://{}:{}".format(es_host, es_port)
 
-sleep_timeout = float(os.environ.get('DASHBOARD_SLEEP_TIMEOUT', 120))
+    sleep_timeout = float(os.environ.get('DASHBOARD_SLEEP_TIMEOUT', 120))
 
-logfile = open("/var/log/elastic-scripts.log", "w")
-sys.stdout = logfile
-sys.stderr = logfile
-
+    logfile = open("/var/log/elastic-scripts.log", "w")
+    sys.stdout = logfile
+    sys.stderr = logfile
+else:
+    print "Beats installation not initialised, skipping"
 
 def log_message(message, message_type="info"):
     output = {
