@@ -64,16 +64,18 @@ class SelfRegistration:
 
     def register(self):
         request = urllib2.Request(self.jenkins_url)
-        response = urllib2.open(request)
+
         try:
+            response = urllib2.urlopen(request)
             result = response.read()
         except urllib2.URLError as e:
             if hasattr(e, 'reason'):
-                print 'We failed to reach a server.'
-                print 'Reason: ', e.reason
+                print "We failed to reach the jenkins server."
+                print "Reason: {}".format(e.reason)
             elif hasattr(e, 'code'):
-                print 'The server couldn\'t fulfill the request.'
-                print 'Error code: ', e.code
+                print "The server returned a {} response".format(e.code)
+        else:
+            print result
 
 # Entrypoint
 if DockerConfiguration.jenkins_defined():
