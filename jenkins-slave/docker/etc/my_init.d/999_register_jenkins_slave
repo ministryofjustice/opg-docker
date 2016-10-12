@@ -7,53 +7,78 @@ import subprocess
 import json
 
 
-class DockerConfiguration():
+class DockerConfiguration:
 
     host_ssh_port = ''
     host_ip_address = ''
-
 
     @staticmethod
     def jenkins_defined():
         return os.environ['JENKINS_MASTER_URL'] is not None
 
-
     @staticmethod
-    def get_enviroment_data():
-        result = subprocess.check_output(['docker', 'inspect', socket.gethostname()], stderr=subprocess.STDOUT)
+    def _get_environment_data():
+        result = subprocess.check_output(
+            ['docker', 'inspect', socket.gethostname()],
+            stderr=subprocess.STDOUT
+        )
         return result
 
-
-    def extract_config_to_vars(self, json_string):
+    def _extract_config_to_vars(self, json_string):
         json_data = json.loads(json_string)[0]
         host_bindings = json_data['NetworkSettings']['Ports']
         self.host_ip_address = host_bindings['22/tcp'][0]['HostIp']
         self.host_ssh_port = host_bindings['22/tcp'][0]['HostPort']
         print self.host_ssh_port, self.host_ip_address, host_bindings["22/tcp"]
 
-
     def __init__(self):
-        if self.jenkins_defined():
-            self.extract_config_to_vars(self.get_enviroment_data())
-        else:
-            print "Aborting self registration, no Jenkins Master defined"
+        self._extract_config_to_vars(self._get_environment_data())
 
 
-conf = DockerConfiguration()
-url = '{}:{}/job/{}/buildWithParameters?token={}&REMOTE_HOST={}&SLAVE_NAME={}&REMOTE_PORT={}'.format(
-    os.environ['JENKINS_MASTER_URL'],
-    os.environ['JENKINS_MASTER_PORT'],
-    os.environ['JENKINS_JOB_NAME'],
-    os.environ['JENKINS_AUTH_TOKEN'],
-    conf.host_ip_address,
-    os.environ['JENKINS_SLAVE_NAME'],
-    conf.host_ssh_port)
+class SelfRegistration:
+    """
+    Class that does the jenkins self registration
+    """
+    jenkins_url = ''
+    config_data = None
 
-print url
+    def __init__(self, config_instance):
+        self.config_data = config_instance
+        self.generate_registration_url()
 
-request = urllib2.Request(url)
-response = urllib2.open(request)
-try:
-    result = response.read()
-except urllib2.HTTPError as e:
-    print e.code
+    def generate_registration_url(self):
+        self.jenkins_url = '{}:{}/job/{}/buildWithParameters' \
+                           '?token={}' \
+                           '&REMOTE_HOST={}' \
+                           '&SLAVE_NAME={}' \
+                           '&REMOTE_PORT={}'\
+            .format(
+                os.environ['JENKINS_MASTER_URL'],
+                os.environ['JENKINS_MASTER_PORT'],
+                os.environ['JENKINS_JOB_NAME'],
+                os.environ['JENKINS_AUTH_TOKEN'],
+                self.config_data.host_ip_address,
+                os.environ['JENKINS_SLAVE_NAME'],
+                conf.host_ssh_port
+            )
+
+    def register(self):
+        request = urllib2.Request(self.jenkins_url)
+        response = urllib2.open(request)
+        try:
+            result = response.read()
+        except urllib2.URLError as e:
+            if hasattr(e, 'reason'):
+            print 'We failed to reach a server.'
+            print 'Reason: ', e.reason
+        elif hasattr(e, 'code'):
+            print 'The server couldn\'t fulfill the request.'
+            print 'Error code: ', e.code
+
+# Entrypoint
+if DockerConfiguration.jenkins_defined():
+    conf = DockerConfiguration()
+    registration = SelfRegistration(conf)
+    registration.register()
+else:
+    print "Aborting self registration, no Jenkins Master defined"
