@@ -69,11 +69,11 @@ class SelfRegistration:
             result = response.read()
         except urllib2.URLError as e:
             if hasattr(e, 'reason'):
-            print 'We failed to reach a server.'
-            print 'Reason: ', e.reason
-        elif hasattr(e, 'code'):
-            print 'The server couldn\'t fulfill the request.'
-            print 'Error code: ', e.code
+                print 'We failed to reach a server.'
+                print 'Reason: ', e.reason
+            elif hasattr(e, 'code'):
+                print 'The server couldn\'t fulfill the request.'
+                print 'Error code: ', e.code
 
 # Entrypoint
 if DockerConfiguration.jenkins_defined():
