@@ -46,8 +46,9 @@ class SelfRegistration:
         self.generate_registration_url()
 
     def generate_registration_url(self):
-        self.jenkins_url = '{}:{}/job/{}/buildWithParameters' \
-                           '?token={}' \
+        self.jenkins_url = '{}:{}/buildByToken/buildWithParameters' \
+                           '?job={}' \
+                           '&token={}' \
                            '&REMOTE_HOST={}' \
                            '&SLAVE_NAME={}' \
                            '&REMOTE_PORT={}'\
@@ -60,6 +61,7 @@ class SelfRegistration:
                 "jenkins_slave_{}".format(socket.gethostname()),
                 conf.host_ssh_port
             )
+        print self.jenkins_url
 
     def register(self):
         request = urllib2.Request(self.jenkins_url)
