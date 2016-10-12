@@ -27,9 +27,8 @@ class DockerConfiguration:
     def _extract_config_to_vars(self, json_string):
         json_data = json.loads(json_string)[0]
         host_bindings = json_data['NetworkSettings']['Ports']
-        self.host_ip_address = host_bindings['22/tcp'][0]['HostIp']
+        self.host_ip_address = os.environ['SLAVE_HOST_IP']
         self.host_ssh_port = host_bindings['22/tcp'][0]['HostPort']
-        print self.host_ssh_port, self.host_ip_address, host_bindings["22/tcp"]
 
     def __init__(self):
         self._extract_config_to_vars(self._get_environment_data())
@@ -58,7 +57,7 @@ class SelfRegistration:
                 os.environ['JENKINS_JOB_NAME'],
                 os.environ['JENKINS_AUTH_TOKEN'],
                 self.config_data.host_ip_address,
-                os.environ['JENKINS_SLAVE_NAME'],
+                "jenkins_slave_{}".format(socket.gethostname()),
                 conf.host_ssh_port
             )
 
