@@ -8,13 +8,15 @@ import json
 
 
 class DockerConfiguration:
-
+    """
+    class that extracts host ip and port bindings for the instance
+    """
     host_ssh_port = ''
     host_ip_address = ''
 
     @staticmethod
     def jenkins_defined():
-        return os.environ['JENKINS_MASTER_URL'] is not None
+        return os.environ.get('JENKINS_MASTER_URL', None)
 
     @staticmethod
     def _get_environment_data():
@@ -27,7 +29,7 @@ class DockerConfiguration:
     def _extract_config_to_vars(self, json_string):
         json_data = json.loads(json_string)[0]
         host_bindings = json_data['NetworkSettings']['Ports']
-        self.host_ip_address = os.environ['SLAVE_HOST_IP']
+        self.host_ip_address = os.environ.get('SLAVE_HOST_IP', host_bindings['22/tcp'][0]['HostIp'])
         self.host_ssh_port = host_bindings['22/tcp'][0]['HostPort']
 
     def __init__(self):
@@ -45,20 +47,59 @@ class SelfRegistration:
         self.config_data = config_instance
         self.generate_registration_url()
 
+    @staticmethod
+    def _generate_slave_name():
+        slave_name = "jenkins_slave_{}".format(socket.gethostname())
+        if os.environ.get('SLAVE_PROJECT_NAME', None) and os.environ.get('SLAVE_STACK_NAME', None):
+            slave_name = "{}_{}_{}".format(
+                os.environ['SLAVE_PROJECT_NAME'],
+                os.environ['SLAVE_STACK_NAME'],
+                socket.gethostname()
+            )
+
+        return slave_name
+
+    @staticmethod
+    def _generate_slave_labels():
+        slave_labels = os.environ.get('SLAVE_LABELS', '')
+
+        if slave_labels is not '':
+            if os.environ.get('SLAVE_PROJECT_NAME', None) and os.environ.get('SLAVE_STACK_NAME', None):
+                slave_labels = "{} {} {}_{}".format(
+                    os.environ['SLAVE_PROJECT_NAME'],
+                    os.environ['SLAVE_STACK_NAME'],
+                    os.environ['SLAVE_PROJECT_NAME'],
+                    os.environ['SLAVE_STACK_NAME']
+                )
+        return slave_labels
+
+    @staticmethod
+    def _generate_jenkins_host():
+        host_url = os.environ['JENKINS_MASTER_URL'].rstrip('/')
+
+        if os.environ.get('JENKINS_MASTER_PORT', None):
+            host_url = "{}:{}".format(
+                host_url,
+                os.environ['JENKINS_MASTER_PORT']
+            )
+
+        return host_url
+
     def generate_registration_url(self):
-        self.jenkins_url = '{}:{}/buildByToken/buildWithParameters' \
+        self.jenkins_url = '{}/buildByToken/buildWithParameters' \
                            '?job={}' \
                            '&token={}' \
                            '&REMOTE_HOST={}' \
                            '&SLAVE_NAME={}' \
-                           '&REMOTE_PORT={}'\
+                           '&SLAVE_LABELS={}' \
+                           '&REMOTE_PORT={}' \
             .format(
-                os.environ['JENKINS_MASTER_URL'],
-                os.environ['JENKINS_MASTER_PORT'],
+                self._generate_jenkins_host(),
                 os.environ['JENKINS_JOB_NAME'],
                 os.environ['JENKINS_AUTH_TOKEN'],
                 self.config_data.host_ip_address,
-                "jenkins_slave_{}".format(socket.gethostname()),
+                self._generate_slave_name(),
+                self._generate_slave_labels(),
                 conf.host_ssh_port
             )
         print self.jenkins_url
@@ -78,7 +119,7 @@ class SelfRegistration:
         else:
             print result
 
-# Entrypoint
+# Entry-point
 if DockerConfiguration.jenkins_defined():
     conf = DockerConfiguration()
     registration = SelfRegistration(conf)
