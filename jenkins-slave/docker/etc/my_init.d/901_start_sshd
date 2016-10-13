@@ -6,4 +6,3 @@ if [ $? -eq 0 ]
 then
     service ssh start > /dev/null
 fi
-
