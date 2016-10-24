@@ -42,10 +42,10 @@ RUN cd /tmp && \
     mv terraform /usr/bin/terraform && \
     rm -rf /tmp/terraform*
 
-ARG user=app
-ARG group=app
-ARG uid=1000
-ARG gid=1000
+#ARG user=app
+#ARG group=app
+#ARG uid=1000
+#ARG gid=1000
 
 #Fix docker GID to sync with underlying ECS so that the user can access the docker socket
 RUN groupmod -g 497 docker && adduser app docker
@@ -55,7 +55,7 @@ ENV JENKINS_HOME /srv/jenkins
 # Jenkins is run with user `app`, uid = 1000
 # If you bind mount a volume from the host or a data container,
 # ensure you use the same uid
-RUN usermod -d "$JENKINS_HOME" -m -s /bin/bash ${user}
+RUN usermod -d "$JENKINS_HOME" -m -s /bin/bash app
 
 ADD  docker/etc/my_init.d /etc/my_init.d
 
