@@ -5,21 +5,17 @@ RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 581
     echo 'deb https://apt.dockerproject.org/repo ubuntu-trusty main' > /etc/apt/sources.list.d/docker.list && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
-    vim \
-    wget \
     apparmor \
     docker-engine=1.9.1-0~trusty \
     libcurl4-gnutls-dev \
     libexpat1-dev \
     gettext \
     libssl-dev \
-    build-essential \
     python2.7-dev \
     python3-dev \
     python-dev \
     libxslt1-dev \
     libxml2-dev \
-    curl \
     zip \
     ttf-dejavu \
     fontconfig \
@@ -42,8 +38,9 @@ RUN cd /tmp && \
     wget https://releases.hashicorp.com/terraform/0.7.4/terraform_0.7.4_linux_amd64.zip && \
     unzip terraform*.zip && \
     mv terraform /usr/bin/terraform && \
-    rm -rf /tmp/terraform* && \
-    echo which terraform
+    rm -rf /tmp/terraform*
+
+ENV JENKINS_GROOVY_VERSION=2.4.7
 
 ARG user=app
 ARG group=app
@@ -56,9 +53,6 @@ RUN groupmod -g 497 docker && adduser app docker
 # Download and install docker-machine and docker compose
 RUN curl -L https://github.com/docker/machine/releases/download/v0.8.1/docker-machine-x86_64 >/usr/local/bin/docker-machine && \
   chmod +x /usr/local/bin/docker-machine
-
-#Fix docker GID to sync with underlying ECS so that the user can access the docker socket
-RUN groupmod -g 497 docker && adduser app docker
 
 ENV JENKINS_HOME /srv/jenkins
 ENV JENKINS_SLAVE_AGENT_PORT 50000

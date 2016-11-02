@@ -1,0 +1,6 @@
+[template]
+src = "hudson.plugins.groovy.Groovy.tmpl"
+dest = "/usr/share/jenkins/ref/hudson.plugins.groovy.Groovy.xml"
+keys = [
+  "/jenkins"
+]
