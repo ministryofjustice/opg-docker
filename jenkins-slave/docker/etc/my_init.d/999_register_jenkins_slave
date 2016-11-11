@@ -19,6 +19,15 @@ class DockerConfiguration:
         return os.environ.get('JENKINS_MASTER_URL', None)
 
     @staticmethod
+    def _get_host_ip():
+        try:
+            request  = urllib2.Request("http://169.254.169.254/latest/meta-data/local-ipv4")
+            response = urllib2.urlopen(request)
+            return response.read()
+        except urllib2.URLError as e:
+            raise e
+
+    @staticmethod
     def _get_environment_data():
         result = subprocess.check_output(
             ['docker', 'inspect', socket.gethostname()],
@@ -29,10 +38,7 @@ class DockerConfiguration:
     def _extract_config_to_vars(self, json_string):
         json_data = json.loads(json_string)[0]
         host_bindings = json_data['NetworkSettings']['Ports']
-        self.host_ip_address = os.environ.get(
-            'SLAVE_HOST_IP',
-            host_bindings['22/tcp'][0]['HostIp']
-        )
+        self.host_ip_address = self._get_host_ip()
         self.host_ssh_port = host_bindings['22/tcp'][0]['HostPort']
 
     def __init__(self):
@@ -107,7 +113,6 @@ class SelfRegistration:
                 self._generate_slave_labels(),
                 conf.host_ssh_port
             )
-        print self.jenkins_url
 
     def register(self):
         request = urllib2.Request(self.jenkins_url)
@@ -119,8 +124,10 @@ class SelfRegistration:
             if hasattr(e, 'reason'):
                 print "We failed to reach the jenkins server."
                 print "Reason: {}".format(e.reason)
+                raise
             elif hasattr(e, 'code'):
                 print "The server returned a {} response".format(e.code)
+                raise
         else:
             print result
 
