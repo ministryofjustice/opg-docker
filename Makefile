@@ -9,6 +9,7 @@ currenttag := $(shell semvertag latest)
 #newtag := $(shell semvertag bump patch)
 newtag = latest
 registryUrl = registry.service.opg.digital
+oldRegistryUrl = registry.service.dsd.io
 dockerVersion := $(shell docker --version | cut -f3 -d' '  | grep '^1\.[0-9]\.')
 
 buildcore: $(CORE_CONTAINERS)
@@ -31,6 +32,11 @@ push:
 	for i in $(CORE_CONTAINERS) $(CHILD_CONTAINERS); do \
        	    docker push $(registryUrl)/opguk/$$i:$(newtag) ; \
        	    docker push $(registryUrl)/opguk/$$i:latest ; \
+   	done
+	#push to old registry
+	for i in $(CORE_CONTAINERS) $(CHILD_CONTAINERS); do \
+       	    docker push $(oldRegistryUrl)/opguk/$$i:$(newtag) ; \
+       	    docker push $(oldRegistryUrl)/opguk/$$i:latest ; \
    	done
 
 pull:
