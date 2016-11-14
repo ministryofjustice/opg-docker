@@ -30,12 +30,10 @@ $(CHILD_CONTAINERS):
 push:
 	for i in $(CORE_CONTAINERS) $(CHILD_CONTAINERS); do \
        	    docker push $(registryUrl)/opguk/$$i:$(newtag) ; \
-       	    docker push $(registryUrl)/opguk/$$i:latest ; \
    	done
 	#push to old registry
 	for i in $(CORE_CONTAINERS) $(CHILD_CONTAINERS); do \
        	    docker push $(oldRegistryUrl)/opguk/$$i:$(newtag) ; \
-       	    docker push $(oldRegistryUrl)/opguk/$$i:latest ; \
    	done
 
 pull:
