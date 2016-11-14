@@ -3,7 +3,7 @@
 registryUrl ?= registry.service.opg.digital
 oldRegistryUrl ?= registry.service.dsd.io
 
-image =
+image = opguk/kibana
 
 build:
 ifeq ($(dockerVersion),)
