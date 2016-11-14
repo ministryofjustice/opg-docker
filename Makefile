@@ -6,8 +6,7 @@ CLEAN_CONTAINERS := $(CORE_CONTAINERS) $(CHILD_CONTAINERS)
 
 tagrepo = no
 currenttag := $(shell semvertag latest)
-#newtag := $(shell semvertag bump patch)
-newtag = latest
+newtag := $(shell semvertag bump patch)
 registryUrl = registry.service.opg.digital
 oldRegistryUrl = registry.service.dsd.io
 dockerVersion := $(shell docker --version | cut -f3 -d' '  | grep '^1\.[0-9]\.')
