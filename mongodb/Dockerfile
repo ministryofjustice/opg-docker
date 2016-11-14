@@ -1,4 +1,4 @@
-FROM registry.service.dsd.io/opguk/backupninja:latest
+FROM registry.service.opg.digital/opguk/backupninja:latest
 
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10 && \
     echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.0 multiverse" > /etc/apt/sources.list.d/mongodb-org.list && \

@@ -8,7 +8,7 @@ no queue is created (but the service is still started).
 For example:
 
 ```
-$ docker run -p 4568:4568 -e FAKE_SQS_QUEUENAME=myqueue -itd registry.service.dsd.io/opguk/fake-sqs:latest
+$ docker run -p 4568:4568 -e FAKE_SQS_QUEUENAME=myqueue -itd registry.service.opg.digital/opguk/fake-sqs:latest
 d1c4c6c1e6e426252c1badc448111e4a9f4d90f96bb26610c01fd077228c0062
 
 $ docker logs $(docker ps -q) | tail -10

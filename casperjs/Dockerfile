@@ -1,4 +1,4 @@
-FROM registry.service.dsd.io/opguk/base:latest
+FROM registry.service.opg.digital/opguk/base:latest
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TERM=linux

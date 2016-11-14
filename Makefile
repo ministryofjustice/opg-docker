@@ -4,10 +4,11 @@ CLEAN_CONTAINERS := $(CORE_CONTAINERS) $(CHILD_CONTAINERS)
 
 .PHONY: build push pull showinfo test $(CORE_CONTAINERS) $(CHILD_CONTAINERS) clean
 
-tagrepo = yes
+tagrepo = no
 currenttag := $(shell semvertag latest)
 newtag := $(shell semvertag bump patch)
 registryUrl = registry.service.opg.digital
+oldRegistryUrl = registry.service.dsd.io
 dockerVersion := $(shell docker --version | cut -f3 -d' '  | grep '^1\.[0-9]\.')
 
 buildcore: $(CORE_CONTAINERS)
@@ -29,7 +30,10 @@ $(CHILD_CONTAINERS):
 push:
 	for i in $(CORE_CONTAINERS) $(CHILD_CONTAINERS); do \
        	    docker push $(registryUrl)/opguk/$$i:$(newtag) ; \
-       	    docker push $(registryUrl)/opguk/$$i:latest ; \
+   	done
+	#push to old registry
+	for i in $(CORE_CONTAINERS) $(CHILD_CONTAINERS); do \
+       	    docker push $(oldRegistryUrl)/opguk/$$i:$(newtag) ; \
    	done
 
 pull:

@@ -1,14 +1,16 @@
 .PHONY: build test
-newtag ?= latest
+
 registryUrl ?= registry.service.opg.digital
-image = $(registryUrl)/opguk/nginx
+oldRegistryUrl ?= registry.service.dsd.io
+
+image = opguk/nginx
 
 build:
 ifeq ($(dockerVersion),)
-	docker build -t "$(image):$(newtag)" -t "$(image):latest" .
+	docker build -t "$(registryUrl)/$(image):$(newtag)" -t "$(oldRegistryUrl)/$(image):$(newtag)" .
 else
-	docker build -t "$(image):$(newtag)" .
-	docker tag -f "$(image):$(newtag)" "$(image):latest"
+	docker build -t "$(registryUrl)/$(image):$(newtag)" .
+	docker tag -f "$(registryUrl)/$(image):$(newtag)" "$(oldRegistryUrl)/$(image):$(newtag)"
 endif
 
 clean:
