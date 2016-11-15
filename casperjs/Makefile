@@ -6,10 +6,8 @@ oldRegistryUrl ?= registry.service.dsd.io
 image = opguk/casperjs
 
 build:
-ifeq ($(dockerVersion),)
-	docker build -t "$(registryUrl)/$(image):$(newtag)" -t "$(oldRegistryUrl)/$(image):$(newtag)" .
-else
-	docker build -t "$(registryUrl)/$(image):$(newtag)" .
-	docker tag -f "$(registryUrl)/$(image):$(newtag)" "$(oldRegistryUrl)/$(image):$(newtag)"
-endif
+	docker build -t "$(registryUrl)/$(image)" .
+	docker tag "$(registryUrl)/$(image)" "$(registryUrl)/$(image):$(newtag)"
+	docker tag "$(registryUrl)/$(image)" "$(oldRegistryUrl)/$(image)"
+	docker tag "$(registryUrl)/$(image)" "$(oldRegistryUrl)/$(image):$(newtag)"
 

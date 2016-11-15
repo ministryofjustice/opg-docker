@@ -1,4 +1,4 @@
-FROM registry.service.opg.digital/opguk/nginx:latest
+FROM registry.service.opg.digital/opguk/nginx
 
 ADD docker/confd /etc/confd
 

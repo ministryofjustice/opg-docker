@@ -1,13 +1,10 @@
 .PHONY: build
-newtag ?= latest
+
 registryUrl ?= registry.service.opg.digital
 image = $(registryUrl)/opguk/backupninja
 
 build:
-ifeq ($(dockerVersion),)
-	docker build -t "$(image):$(newtag)" -t "$(image):latest" .
-else
-	docker build -t "$(image):$(newtag)" .
-	docker tag -f "$(image):$(newtag)" "$(image):latest"
-endif
-
+	docker build -t "$(registryUrl)/$(image)" .
+	docker tag "$(registryUrl)/$(image)" "$(registryUrl)/$(image):$(newtag)"
+	docker tag "$(registryUrl)/$(image)" "$(oldRegistryUrl)/$(image)"
+	docker tag "$(registryUrl)/$(image)" "$(oldRegistryUrl)/$(image):$(newtag)"

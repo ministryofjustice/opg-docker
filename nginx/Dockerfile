@@ -1,4 +1,4 @@
-FROM registry.service.opg.digital/opguk/base:latest
+FROM registry.service.opg.digital/opguk/base
 
 RUN  apt-get update && apt-get -y upgrade && \
      apt-get install -y libpcre3-dev zlib1g-dev libssl-dev libossp-uuid-dev uuid && \

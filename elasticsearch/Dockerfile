@@ -1,4 +1,4 @@
-FROM registry.service.opg.digital/opguk/jre-8:latest
+FROM registry.service.opg.digital/opguk/jre-8
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN groupadd -r elasticsearch && useradd -r -d /home/elasticsearch -m -g elasticsearch elasticsearch

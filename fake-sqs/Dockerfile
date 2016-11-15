@@ -1,4 +1,4 @@
-FROM registry.service.opg.digital/opguk/base:latest
+FROM registry.service.opg.digital/opguk/base
 
 # Set correct HOME
 ENV HOME /root
