@@ -1,7 +1,9 @@
 .PHONY: build
 
 registryUrl ?= registry.service.opg.digital
-image = $(registryUrl)/opguk/backupninja
+oldRegistryUrl ?= registry.service.dsd.io
+
+image = opguk/backupninja
 
 build:
 	docker build -t "$(registryUrl)/$(image)" .
