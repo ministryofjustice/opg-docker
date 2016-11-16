@@ -37,6 +37,7 @@ jenkinswalldisplay
 jira
 join
 jquery
+leastload
 locks-and-latches
 mailer
 mapdb-api
@@ -59,6 +60,7 @@ shared-objects
 show-build-parameters
 simple-theme-plugin
 slack
+slave-setup
 ssh-credentials
 ssh-slaves
 structs:1.1
