@@ -29,17 +29,19 @@ $(CHILD_CONTAINERS):
 
 push:
 	for i in $(CORE_CONTAINERS) $(CHILD_CONTAINERS); do \
-       	    docker push $(registryUrl)/opguk/$$i:$(newtag) ; \
-   	done
+			docker push $(registryUrl)/opguk/$$i ; \
+			docker push $(registryUrl)/opguk/$$i:$(newtag) ; \
+	done
 	#push to old registry
 	for i in $(CORE_CONTAINERS) $(CHILD_CONTAINERS); do \
-       	    docker push $(oldRegistryUrl)/opguk/$$i:$(newtag) ; \
-   	done
+			docker push $(oldRegistryUrl)/opguk/$$i ; \
+			docker push $(oldRegistryUrl)/opguk/$$i:$(newtag) ; \
+	done
 
 pull:
 	for i in $(CORE_CONTAINERS) $(CHILD_CONTAINERS); do \
-       	    docker pull $(registryUrl)/opguk/$$i ; \
-   	done
+			docker pull $(registryUrl)/opguk/$$i ; \
+	done
 
 showinfo:
 	@echo Docker version: $(dockerVersion)
@@ -55,8 +57,10 @@ endif
 
 clean:
 	for i in $(CLEAN_CONTAINERS); do \
-       	    docker rmi $(registryUrl)/opguk/$$i:$(newtag) || true ; \
-       	    docker rmi $(registryUrl)/opguk/$$i:latest || true ; \
-   	done
+		docker rmi $(oldRegistryUrl)/opguk/$$i || true ; \
+		docker rmi $(registryUrl)/opguk/$$i:$(newtag) || true ; \
+		docker rmi $(oldRegistryUrl)/opguk/$$i:$(newtag) || true ; \
+		docker rmi $(registryUrl)/opguk/$$i || true ; \
+	done
 
 all: showinfo build push clean
