@@ -9,7 +9,6 @@ currenttag := $(shell semvertag latest)
 newtag := $(shell semvertag bump patch)
 registryUrl = registry.service.opg.digital
 oldRegistryUrl = registry.service.dsd.io
-dockerVersion := $(shell docker --version | cut -f3 -d' '  | grep '^1\.[0-9]\.')
 
 buildcore: $(CORE_CONTAINERS)
 buildchild: $(CHILD_CONTAINERS)
@@ -22,10 +21,10 @@ else
 endif
 
 $(CORE_CONTAINERS):
-	$(MAKE) -C $@ newtag=$(newtag) registryUrl=$(registryUrl) dockerVersion=$(dockerVersion)
+	$(MAKE) -C $@ newtag=$(newtag) registryUrl=$(registryUrl)
 
 $(CHILD_CONTAINERS):
-	$(MAKE) -C $@ newtag=$(newtag) registryUrl=$(registryUrl) dockerVersion=$(dockerVersion)
+	$(MAKE) -C $@ newtag=$(newtag) registryUrl=$(registryUrl)
 
 push:
 	for i in $(CORE_CONTAINERS) $(CHILD_CONTAINERS); do \
@@ -44,7 +43,6 @@ pull:
 	done
 
 showinfo:
-	@echo Docker version: $(dockerVersion)
 	@echo Registry: $(registryUrl)
 	@echo Newtag: $(newtag)
 	@echo Current Tag: $(currenttag)
