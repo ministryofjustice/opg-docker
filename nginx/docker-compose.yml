@@ -7,3 +7,4 @@ nginx:
   - 443:443
   environment:
   - OPG_NGINX_SSL_FORCE_REDIRECT=1
+  - OPG_NGINX_SERVER_NAMES=localhost
