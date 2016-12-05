@@ -14,29 +14,34 @@ server {
 {{   end }}
     #Using global cert let's also listen on 443
     listen     443 ssl;
+{{   if exists "/opg/nginx/server/names" }}
     server_name {{ getv "/opg/nginx/server/names" }};
-
+{{   end }}
     rewrite_log  on;
     access_log  /var/log/app/nginx.access.json logstash_json;
     error_log   /var/log/app/nginx.error.log error;
 
 
-    index index.php;
+# Defaults to /app/public if OPG_NGINX_ROOT isn't set
+{{   if exists "/opg/nginx/root" }}
+    set $root "{{ getv "/opg/nginx/root" }}";
+{{   else }}
+    set $root "/app/public";
+{{   end }}
 
-    client_max_body_size 64M;
-
-    root /app/public;
+    root $root;
 
     location =/meta.json {
         alias /app/META;
     }
 
-    #We've found some php client libraries not understanding chunked response
-    chunked_transfer_encoding off;
+    # i.e. deny access to .htaccess in case someone will create it
+    location ~ /\. {
+        deny  all;
+    }
 
-    fastcgi_buffers 256 4k;
-    fastcgi_buffer_size 4k;
-
+    # Add HTTP Strict Transport Security header - required for .service.gov.uk domains
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; ";
     # serve static files directly
     location ~* ^.+.(jpg|jpeg|gif|css|png|js|ico|htm|html|xml|txt|woff|eot|ttf)$ {
         access_log        off;
@@ -44,6 +49,21 @@ server {
         expires           24h;
 
     }
+# Defaults to index.html if OPG_NGINX_INDEX isn't set
+{{   if exists "/opg/nginx/index" }}
+    set $index "{{ getv "/opg/nginx/index" }}";
+{{   end }}
+{{   if not (exists "/opg/nginx/index") }}
+    set $index "index.html";
+{{   end }}
+
+    index $index;
+
+    #We've found some php client libraries not understanding chunked response
+    chunked_transfer_encoding off;
+
+    <!--fastcgi_buffers 256 4k;-->
+    <!--fastcgi_buffer_size 4k;-->
 
     location / {
         try_files $uri $uri/ /index.php$is_args$args;
@@ -63,12 +83,6 @@ server {
 
         # hide php version
         fastcgi_hide_header "X-Powered-By";
-    }
-
-
-    # i.e. deny access to .htaccess in case someone will create it
-    location ~ /\. {
-        deny  all;
     }
 
     if ($http_x_request_id = '') {
