@@ -45,7 +45,6 @@ server {
     # serve static files directly
     location ~* ^.+.(jpg|jpeg|gif|css|png|js|ico|htm|html|xml|txt|woff|eot|ttf)$ {
         access_log        off;
-
         expires           24h;
 
     }
@@ -66,20 +65,6 @@ server {
 
     location / {
         try_files $uri $uri/ /$index$is_args$args;
-    }
-
-    location ~ \.php$ {
-        fastcgi_index   $index;
-        fastcgi_param   SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        include         fastcgi_params;
-    
-        # set X-Request-Id header for fastcqi
-        fastcgi_param   HTTP_X_REQUEST_ID  $http_x_request_id;
-    
-        fastcgi_pass    127.0.0.1:9000;
-    
-        # hide php version
-        fastcgi_hide_header "X-Powered-By";
     }
 
     if ($http_x_request_id = '') {
