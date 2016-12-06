@@ -59,10 +59,10 @@ server {
 
     index $index;
 
-    <!--fastcgi_buffers 256 4k;-->
-    <!--fastcgi_buffer_size 4k;-->
-    <!--fastcgi_busy_buffers_size 256k;-->
-    <!--fastcgi_temp_file_write_size 256k;-->
+#    fastcgi_buffers 256 4k;
+#    fastcgi_buffer_size 4k;
+#    fastcgi_busy_buffers_size 256k;
+#    fastcgi_temp_file_write_size 256k;
 
     location / {
         try_files $uri $uri/ /$index$is_args$args;
