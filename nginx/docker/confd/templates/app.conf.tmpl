@@ -1,26 +1,18 @@
 {{ if exists "/opg/nginx/server/names" }}
+server {
 {{   if exists "/opg/nginx/ssl/force/redirect" }}
-server {
     listen      80;
-    server_name {{ getv "/opg/nginx/server/names" }};
     return      307 https://$host$request_uri;
-}
-{{   end }}
-
-
-server {
-{{   if not (exists "/opg/nginx/ssl/force/redirect") }}
+{{   else }}
     listen     80 app_server;
 {{   end }}
     #Using global cert let's also listen on 443
     listen     443 ssl;
-{{   if exists "/opg/nginx/server/names" }}
     server_name {{ getv "/opg/nginx/server/names" }};
-{{   end }}
+
     rewrite_log  on;
     access_log  /var/log/app/nginx.access.json logstash_json;
     error_log   /var/log/app/nginx.error.log error;
-
 
 # Defaults to /app/public if OPG_NGINX_ROOT isn't set
 {{   if exists "/opg/nginx/root" }}
@@ -51,8 +43,7 @@ server {
 # Defaults to index.html if OPG_NGINX_INDEX isn't set
 {{   if exists "/opg/nginx/index" }}
     set $index "{{ getv "/opg/nginx/index" }}";
-{{   end }}
-{{   if not (exists "/opg/nginx/index") }}
+{{   else }}
     set $index "index.html";
 {{   end }}
 
