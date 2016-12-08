@@ -43,18 +43,13 @@ server {
     # Add HTTP Strict Transport Security header - required for .service.gov.uk domains
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; ";
     # serve static files directly
-    location ~* ^.+.(jpg|jpeg|gif|css|png|js|ico|htm|html|xml|txt|woff|eot|ttf)$ {
-        access_log        off;
 
-        expires           24h;
-
-    }
 # Defaults to index.html if OPG_NGINX_INDEX isn't set
 {{   if exists "/opg/nginx/index" }}
     set $index "{{ getv "/opg/nginx/index" }}";
 {{   end }}
 {{   if not (exists "/opg/nginx/index") }}
-    set $index "index.html";
+    set $index "index.php";
 {{   end }}
 
     index $index;
