@@ -1,0 +1,11 @@
+{
+  "title": "Dockerbeat Dashboard",
+  "hits": 0,
+  "timeRestore": false,
+  "kibanaSavedObjectMeta": {
+    "searchSourceJSON": "{\"filter\":[{\"query\":{\"query_string\":{\"analyze_wildcard\":true,\"query\":\"*\"}}}]}"
+  },
+  "panelsJSON": "[{\"col\":1,\"id\":\"Top-containers\",\"row\":5,\"size_x\":6,\"size_y\":4,\"type\":\"visualization\"},{\"col\":1,\"id\":\"Containers-CPU-Usage\",\"row\":9,\"size_x\":4,\"size_y\":3,\"type\":\"visualization\"},{\"col\":1,\"id\":\"Navigation\",\"row\":1,\"size_x\":3,\"size_y\":4,\"type\":\"visualization\"},{\"col\":4,\"id\":\"Docker-summary-metrics\",\"row\":1,\"size_x\":9,\"size_y\":4,\"type\":\"visualization\"},{\"col\":1,\"id\":\"Top-10-CPU-consumer-containers\",\"row\":12,\"size_x\":4,\"size_y\":5,\"type\":\"visualization\"},{\"col\":7,\"id\":\"Docker-server-stats\",\"row\":5,\"size_x\":6,\"size_y\":4,\"type\":\"visualization\"},{\"col\":5,\"id\":\"Top-10-memory-consumer-containers\",\"row\":12,\"size_x\":4,\"size_y\":5,\"type\":\"visualization\"},{\"col\":9,\"id\":\"Top-10-network-consumer-containers\",\"row\":12,\"size_x\":4,\"size_y\":5,\"type\":\"visualization\"},{\"col\":5,\"id\":\"Containers-memory-Usage\",\"row\":9,\"size_x\":4,\"size_y\":3,\"type\":\"visualization\"},{\"col\":9,\"id\":\"Containers-network-Usage\",\"row\":9,\"size_x\":4,\"size_y\":3,\"type\":\"visualization\"},{\"col\":1,\"id\":\"CPU-Usage-per-container\",\"row\":17,\"size_x\":4,\"size_y\":4,\"type\":\"visualization\"},{\"col\":5,\"id\":\"Memory-usage-per-container\",\"row\":17,\"size_x\":4,\"size_y\":4,\"type\":\"visualization\"},{\"id\":\"Network-receive-per-container\",\"type\":\"visualization\",\"size_x\":4,\"size_y\":4,\"col\":9,\"row\":17},{\"id\":\"Network-transmit-per-container\",\"type\":\"visualization\",\"size_x\":4,\"size_y\":4,\"col\":9,\"row\":21}]",
+  "description": "",
+  "version": 1
+}
