@@ -1,12 +1,17 @@
-CORE_CONTAINERS := base nginx php-fpm jre-8
-CHILD_CONTAINERS := golang rabbitmq wordpress elasticsearch elasticsearch-shared-data jenkins-slave jenkins kibana nginx-router fake-sqs wkhtmlpdf nginx-redirect casperjs backupninja mongodb
+CORE_CONTAINERS := base nginx php-fpm jre-8 backupninja
+CHILD_CONTAINERS := golang rabbitmq wordpress elasticsearch elasticsearch-shared-data jenkins-slave jenkins kibana nginx-router fake-sqs wkhtmlpdf nginx-redirect casperjs  mongodb
 CLEAN_CONTAINERS := $(CORE_CONTAINERS) $(CHILD_CONTAINERS)
 
 .PHONY: build push pull showinfo test $(CORE_CONTAINERS) $(CHILD_CONTAINERS) clean
 
 tagrepo = no
-currenttag := $(shell semvertag latest)
-newtag := $(shell semvertag bump patch)
+ifdef stage
+	stagearg := --stage $(stage)
+endif
+
+currenttag := $(shell semvertag latest $(stagearg))
+newtag := $(shell semvertag bump patch $(stagearg))
+
 registryUrl = registry.service.opg.digital
 oldRegistryUrl = registry.service.dsd.io
 
