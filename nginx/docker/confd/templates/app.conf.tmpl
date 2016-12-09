@@ -1,30 +1,25 @@
-{{ if exists "/opg/nginx/ssl/force/redirect" }}
+{{ if exists "/opg/nginx/server/names" }}
 server {
-    listen      80 default_server;
+{{   if exists "/opg/nginx/ssl/force/redirect" }}
+    listen      80;
     return      307 https://$host$request_uri;
-}
-{{ end }}
-
-
-server {
-{{ if not (exists "/opg/nginx/ssl/force/redirect") }}
-    listen     80 default_server;
-{{ end }}
+{{   else }}
+    listen     80;
+{{   end }}
     #Using global cert let's also listen on 443
-    listen     443 default_server ssl;
+    listen     443 ssl;
+    server_name {{ getv "/opg/nginx/server/names" }};
 
     rewrite_log  on;
     access_log  /var/log/app/nginx.access.json logstash_json;
     error_log   /var/log/app/nginx.error.log error;
 
-
 # Defaults to /app/public if OPG_NGINX_ROOT isn't set
-{{ if exists "/opg/nginx/root" }}
+{{   if exists "/opg/nginx/root" }}
     set $root "{{ getv "/opg/nginx/root" }}";
-{{ end }}
-{{ if not (exists "/opg/nginx/root") }}
+{{   else }}
     set $root "/app/public";
-{{ end }}
+{{   end }}
 
     root $root;
 
@@ -39,38 +34,28 @@ server {
 
     # Add HTTP Strict Transport Security header - required for .service.gov.uk domains
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; ";
+    # serve static files directly
+    location ~* ^.+.(jpg|jpeg|gif|css|png|js|ico|htm|html|xml|txt|woff|eot|ttf)$ {
+        access_log        off;
+        expires           24h;
 
+    }
 # Defaults to index.html if OPG_NGINX_INDEX isn't set
-{{ if exists "/opg/nginx/index" }}
+{{   if exists "/opg/nginx/index" }}
     set $index "{{ getv "/opg/nginx/index" }}";
-{{ end }}
-{{ if not (exists "/opg/nginx/index") }}
+{{   else }}
     set $index "index.html";
-{{ end }}
+{{   end }}
 
     index $index;
 
-    fastcgi_buffers 256 16k;
-    fastcgi_buffer_size 128k;
-    fastcgi_busy_buffers_size 256k;
-    fastcgi_temp_file_write_size 256k;
+#    fastcgi_buffers 256 4k;
+#    fastcgi_buffer_size 4k;
+#    fastcgi_busy_buffers_size 256k;
+#    fastcgi_temp_file_write_size 256k;
 
     location / {
         try_files $uri $uri/ /$index$is_args$args;
-    }
-
-    location ~ \.php$ {
-        fastcgi_index   $index;
-        fastcgi_param   SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        include         fastcgi_params;
-    
-        # set X-Request-Id header for fastcqi
-        fastcgi_param   HTTP_X_REQUEST_ID  $http_x_request_id;
-    
-        fastcgi_pass    127.0.0.1:9000;
-    
-        # hide php version
-        fastcgi_hide_header "X-Powered-By";
     }
 
     if ($http_x_request_id = '') {
@@ -85,3 +70,4 @@ server {
     include /etc/nginx/app.conf.d/*.conf;
 
 }
+{{ end }}

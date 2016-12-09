@@ -15,7 +15,7 @@ ADD  docker/service/php-fpm /etc/sv/php-fpm
 RUN  chmod a+x /etc/sv/php-fpm/run && \
      ln -s /etc/sv/php-fpm /etc/service/
 
-RUN  echo "<?php phpinfo(); ?>" > /app/public/index.php && \
+RUN  echo "<?php echo('hello World :)') ?>" > /app/public/index.php && \
      chown app /app/public/index.php
 
 ADD  docker/logrotate.d/app /etc/logrotate.d/app
