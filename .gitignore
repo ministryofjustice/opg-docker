@@ -6,3 +6,4 @@ id_rsa
 *.pem
 
 ansible/opg-ansible
+venv/

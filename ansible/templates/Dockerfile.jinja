@@ -1,0 +1,5 @@
+FROM {{ docker_file.registry|default('registry.service.opg.digital')}}/opguk/{{ docker_file.container | default('base') }}{{ ':' + tag | default('latest') }}
+
+{%- for step in docker_file.steps -%}
+{{ step }}
+{%- endfor -%}
