@@ -1,4 +1,4 @@
 when = {{ getv "/backupninja/mongo/when" }}
 mongouser = admin
-mongopass = {{ getv "/mongo/admin/password" }}
+mongopass = "{{ getv "/mongo/admin/password" }}"
 noprimarybackup = {{ getv "/backupninja/mongo/noprimary" }}
