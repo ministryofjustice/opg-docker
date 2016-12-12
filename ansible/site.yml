@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Checkout the opg-ansible-roles repo
+      git:
+        clone: yes
+        depth: 1
+        dest: "{{ playbook_dir }}/opg-ansible"
+        repo: "git@github.com:ministryofjustice/opg-ansible-roles.git"
+        version: "{{ opg_ansible_version | default('master') }}"
