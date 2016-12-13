@@ -1,0 +1,4 @@
+#!/bin/bash
+export HOME=/usr/share/elasticsearch
+chown -R elasticsearch:elasticsearch /usr/share/elasticsearch/data
+exec gosu elasticsearch elasticsearch
