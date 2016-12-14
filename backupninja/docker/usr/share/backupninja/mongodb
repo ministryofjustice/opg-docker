@@ -50,7 +50,7 @@ fi
 if [ "$mongouser" -a "$mongopass" ]
 then
 	info "using $mongouser for authentication"
-	AUTH="-u ''$mongouser' -p '$mongopass'"
+	AUTH="-u '$mongouser' -p '$mongopass'"
 fi
 
 if [ -n "$mongodb" ]
