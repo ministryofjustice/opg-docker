@@ -5,11 +5,11 @@ RUN groupadd -r elasticsearch && useradd -r -d /home/elasticsearch -m -g elastic
 
 RUN apt-get update && apt-get install -y curl ca-certificates --no-install-recommends && rm -rf /var/lib/apt/lists/*
 
-RUN wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+RUN wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
 
 # Define software versions
 ENV ELASTICSEARCH_VERSION 2.3.2
-ENV ELASTICSEARCH_REPO_BASE https://artifacts.elastic.co/packages/5.x/apt
+ENV ELASTICSEARCH_REPO_BASE http://packages.elastic.co/elasticsearch/2.x/debian
 ENV ELASTICSEARCH_CURATOR_VERSION 3.5.1
 ENV LICENSE_VERSION latest
 ENV WATCHER_VERSION latest
