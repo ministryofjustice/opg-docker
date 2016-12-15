@@ -5,23 +5,23 @@ CLEAN_CONTAINERS := $(CORE_CONTAINERS) $(CHILD_CONTAINERS)
 .PHONY: build push pull showinfo test $(CORE_CONTAINERS) $(CHILD_CONTAINERS) clean
 
 tagrepo = no
-ifdef stage
-	stagearg := --stage $(stage)
+ifneq ($(stage),)
+	stagearg = --stage $(stage)
 endif
 
-currenttag := $(shell semvertag latest $(stagearg)2>/dev/null)
-ifeq ($(currenttag),)
-    currenttag := 0.0.0
-    ifdef stage
-        currenttag := 0.0.0-$(stage)
+currenttag = $(shell semvertag latest $(stagearg))
+ifneq ($(findstring ERROR, $(currenttag)),)
+    currenttag = 0.0.0
+    ifneq ($(stage),)
+        currenttag = 0.0.0-$(stage)
     endif        
 endif        
 
-newtag := $(shell semvertag bump patch $(stagearg)2>/dev/null)
-ifeq ($(newtag),)
-    newtag := 0.0.1
-    ifdef stage
-        newtag := 0.0.1-$(stage)
+newtag = $(shell semvertag bump patch $(stagearg))
+ifneq ($(findstring ERROR, $(newtag)),)
+    newtag = 0.0.1
+    ifneq ($(stage),)
+        newtag = 0.0.1-$(stage)
     endif        
 endif        
 
@@ -64,6 +64,7 @@ pull:
 showinfo:
 	@echo Registry: $(registryUrl)
 	@echo Newtag: $(newtag)
+	@echo Stage: $(stagearg)
 	@echo Current Tag: $(currenttag)
 	@echo Core Container List: $(CORE_CONTAINERS)
 	@echo Container List: $(CHILD_CONTAINERS)
