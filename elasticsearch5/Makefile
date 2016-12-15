@@ -3,7 +3,7 @@
 registryUrl ?= registry.service.opg.digital
 oldRegistryUrl ?= registry.service.dsd.io
 
-image = opguk/elasticsearch
+image = opguk/elasticsearch5
 
 build:
 	docker build -t "$(registryUrl)/$(image)" .
