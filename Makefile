@@ -33,11 +33,6 @@ buildcore: $(CORE_CONTAINERS)
 buildchild: $(CHILD_CONTAINERS)
 
 build: buildcore buildchild
-ifeq ($(tagrepo),yes)
-	semvertag tag $(newtag)
-else
-	@echo -e Not tagging repo
-endif
 
 $(CORE_CONTAINERS):
 	$(MAKE) -C $@ newtag=$(newtag) registryUrl=$(registryUrl)
@@ -51,6 +46,11 @@ push:
 			docker push $(registryUrl)/opguk/$$i:$(newtag) ; \
 	done
 	#push to old registry
+ifeq ($(tagrepo),yes)
+	semvertag tag $(newtag)
+else
+	@echo -e Not tagging repo
+endif
 	for i in $(CORE_CONTAINERS) $(CHILD_CONTAINERS); do \
 			[ "$(stagearg)x" = "x" ] && docker push $(oldRegistryUrl)/opguk/$$i ; \
 			docker push $(oldRegistryUrl)/opguk/$$i:$(newtag) ; \
