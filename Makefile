@@ -51,12 +51,12 @@ $(CHILD_CONTAINERS):
 
 push:
 	for i in $(CORE_CONTAINERS) $(CHILD_CONTAINERS); do \
-			[ "$(tagrepo)" = "yes" ] && docker push $(registryUrl)/opguk/$$i ; \
+			[ "$(stagearg)x" = "x" ] && docker push $(registryUrl)/opguk/$$i ; \
 			docker push $(registryUrl)/opguk/$$i:$(newtag) ; \
 	done
 	#push to old registry
 	for i in $(CORE_CONTAINERS) $(CHILD_CONTAINERS); do \
-			[ "$(tagrepo)" = "yes" ] && docker push $(oldRegistryUrl)/opguk/$$i ; \
+			[ "$(stagearg)x" = "x" ] && docker push $(oldRegistryUrl)/opguk/$$i ; \
 			docker push $(oldRegistryUrl)/opguk/$$i:$(newtag) ; \
 	done
 
