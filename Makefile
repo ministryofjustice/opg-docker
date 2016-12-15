@@ -5,12 +5,26 @@ CLEAN_CONTAINERS := $(CORE_CONTAINERS) $(CHILD_CONTAINERS)
 .PHONY: build push pull showinfo test $(CORE_CONTAINERS) $(CHILD_CONTAINERS) clean
 
 tagrepo = no
-ifdef stage
-	stagearg := --stage $(stage)
+ifneq ($(stage),)
+	stagearg = --stage $(stage)
 endif
 
-currenttag := $(shell semvertag latest $(stagearg))
-newtag := $(shell semvertag bump patch $(stagearg))
+currenttag = $(shell semvertag latest $(stagearg))
+ifneq ($(findstring ERROR, $(currenttag)),)
+    currenttag = 0.0.0
+    ifneq ($(stage),)
+        currenttag = 0.0.0-$(stage)
+    endif        
+endif        
+
+newtag = $(shell semvertag bump patch $(stagearg))
+ifneq ($(findstring ERROR, $(newtag)),)
+    newtag = 0.0.1
+    ifneq ($(stage),)
+        newtag = 0.0.1-$(stage)
+    endif        
+endif        
+
 
 registryUrl = registry.service.opg.digital
 oldRegistryUrl = registry.service.dsd.io
@@ -33,12 +47,12 @@ $(CHILD_CONTAINERS):
 
 push:
 	for i in $(CORE_CONTAINERS) $(CHILD_CONTAINERS); do \
-			[ "$(tagrepo)" = "yes" ] && docker push $(registryUrl)/opguk/$$i ; \
+			[ "$(stagearg)x" = "x" ] && docker push $(registryUrl)/opguk/$$i ; \
 			docker push $(registryUrl)/opguk/$$i:$(newtag) ; \
 	done
 	#push to old registry
 	for i in $(CORE_CONTAINERS) $(CHILD_CONTAINERS); do \
-			[ "$(tagrepo)" = "yes" ] && docker push $(oldRegistryUrl)/opguk/$$i ; \
+			[ "$(stagearg)x" = "x" ] && docker push $(oldRegistryUrl)/opguk/$$i ; \
 			docker push $(oldRegistryUrl)/opguk/$$i:$(newtag) ; \
 	done
 
@@ -50,6 +64,7 @@ pull:
 showinfo:
 	@echo Registry: $(registryUrl)
 	@echo Newtag: $(newtag)
+	@echo Stage: $(stagearg)
 	@echo Current Tag: $(currenttag)
 	@echo Core Container List: $(CORE_CONTAINERS)
 	@echo Container List: $(CHILD_CONTAINERS)
