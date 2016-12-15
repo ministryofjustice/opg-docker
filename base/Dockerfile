@@ -10,6 +10,13 @@ ENV DEBIAN_FRONTEND noninteractive
 # Basic packages
 # Log aggregation
 ADD  docker/sources.list /etc/apt/sources.list
+RUN gpg --keyserver hkp://ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4
+RUN curl -o /usr/local/bin/gosu -SL "https://github.com/tianon/gosu/releases/download/1.2/gosu-$(dpkg --print-architecture)" \
+  && curl -o /usr/local/bin/gosu.asc -SL "https://github.com/tianon/gosu/releases/download/1.2/gosu-$(dpkg --print-architecture).asc" \
+  && gpg --verify /usr/local/bin/gosu.asc \
+  && rm /usr/local/bin/gosu.asc \
+  && chmod +x /usr/local/bin/gosu
+
 RUN  rm -f /etc/apt/sources.list.d/* && \
      apt-get update && apt-get -y upgrade && apt-get install -y git joe && \
      apt-get install -y python python-pip && \

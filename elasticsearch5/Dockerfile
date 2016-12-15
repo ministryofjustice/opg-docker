@@ -2,13 +2,6 @@ FROM registry.service.opg.digital/opguk/jre-8
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 
-# grab gosu for easy step-down from root
-#RUN gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4
-#RUN curl -o /usr/local/bin/gosu -SL "https://github.com/tianon/gosu/releases/download/1.2/gosu-$(dpkg --print-architecture)" \
-#  && curl -o /usr/local/bin/gosu.asc -SL "https://github.com/tianon/gosu/releases/download/1.2/gosu-$(dpkg --print-architecture).asc" \
-#  && gpg --verify /usr/local/bin/gosu.asc \
-#  && rm /usr/local/bin/gosu.asc \
-#  && chmod +x /usr/local/bin/gosu
 
 RUN wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
 
