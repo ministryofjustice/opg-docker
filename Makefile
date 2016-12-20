@@ -10,7 +10,7 @@ ifdef stage
 endif
 
 ifdef buildArgs
-    no-cache := --no-cache
+	no-cache := --no-cache
 endif
 
 currenttag := $(shell semvertag latest $(stagearg))
@@ -24,6 +24,7 @@ buildchild: $(CHILD_CONTAINERS)
 
 build: buildcore buildchild
 ifeq ($(tagrepo),yes)
+	@echo -e Tagging repo
 	semvertag tag $(newtag)
 else
 	@echo -e Not tagging repo
