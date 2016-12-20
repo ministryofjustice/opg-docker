@@ -6,7 +6,7 @@ oldRegistryUrl ?= registry.service.dsd.io
 image = opguk/kibana
 
 build:
-	docker build -t "$(registryUrl)/$(image)" .
+	docker build $(no-cache) -t "$(registryUrl)/$(image)" .
 	docker tag -f "$(registryUrl)/$(image)" "$(registryUrl)/$(image):$(newtag)"
 	docker tag -f "$(registryUrl)/$(image)" "$(oldRegistryUrl)/$(image)"
 	docker tag -f "$(registryUrl)/$(image)" "$(oldRegistryUrl)/$(image):$(newtag)"
