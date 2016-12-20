@@ -61,11 +61,11 @@ server {
  #    fastcgi_buffer_size 4k;
 
     location / {
-        try_files $uri $uri/ /index.php$is_args$args;
+        try_files $uri $uri/ /$index$is_args$args;
     }
 
     location ~ \.php$ {
-        fastcgi_index   index.php;
+        fastcgi_index   $index;
 
         include         fastcgi_params;
         fastcgi_param   SCRIPT_FILENAME    $document_root$fastcgi_script_name;
