@@ -21,19 +21,3 @@ discovery.zen.ping.unicast.hosts: {{range getvs "/elasticsearch/cluster/nodes/*"
 {{if exists "/elasticsearch/gateway/expected/nodes" }}gateway.expected_nodes: {{ getv "/elasticsearch/gateway/expected/nodes" }}{{end}}
 {{if exists "/elasticsearch/gateway/recover/after/time" }}gateway.recover_after_time: {{ getv "/elasticsearch/gateway/recover/after/time" }}{{end}}
 {{if exists "/elasticsearch/gateway/recover/after/nodes" }}gateway.recover_after_nodes: {{ getv "/elasticsearch/gateway/recover/after/nodes" }}{{end}}
-
-cloud:
-    aws: 
-{{if exists "/elasticsearch/cloud/aws/region"}}        region: {{ getv "/elasticsearch/cloud/aws/region" }}{{end}}
-{{if exists "/elasticsearch/cloud/aws/accesskey"}}        access_key: {{ getv "/elasticsearch/cloud/aws/accesskey" }}{{end}}
-{{if exists "/elasticsearch/cloud/aws/secretkey"}}        secret_key: {{ getv "/elasticsearch/cloud/aws/secretkey" }}{{end}}
-        protocol: https {{if exists "/elasticsearch/cloud/aws/s3/protocol" }}
-        s3:
-            protocol: {{ getv "/elasticsearch/cloud/aws/s3/protocol" }}
-{{end}}
-
-# As per CVE-2015-1427 advisory:
-script:
-  groovy:
-    sandbox:
-      enabled: false
