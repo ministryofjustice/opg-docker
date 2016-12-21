@@ -1,6 +1,6 @@
 [template]
 src = "elasticsearch.logging.tmpl"
-dest = "/tmp/log4j2.properties"
+dest = "/usr/share/elasticsearch/config/log4j2.properties"
 keys = [
     "/elasticsearch",
 ]
