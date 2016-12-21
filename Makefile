@@ -9,6 +9,10 @@ ifdef stage
 	stagearg := --stage $(stage)
 endif
 
+ifdef buildArgs
+	no-cache := --no-cache
+endif
+
 currenttag := $(shell semvertag latest $(stagearg))
 newtag := $(shell semvertag bump patch $(stagearg))
 
@@ -20,16 +24,17 @@ buildchild: $(CHILD_CONTAINERS)
 
 build: buildcore buildchild
 ifeq ($(tagrepo),yes)
+	@echo -e Tagging repo
 	semvertag tag $(newtag)
 else
 	@echo -e Not tagging repo
 endif
 
 $(CORE_CONTAINERS):
-	$(MAKE) -C $@ newtag=$(newtag) registryUrl=$(registryUrl)
+	$(MAKE) -C $@ newtag=$(newtag) registryUrl=$(registryUrl) no-cache=$(no-cache)
 
 $(CHILD_CONTAINERS):
-	$(MAKE) -C $@ newtag=$(newtag) registryUrl=$(registryUrl)
+	$(MAKE) -C $@ newtag=$(newtag) registryUrl=$(registryUrl) no-cache=$(no-cache)
 
 push:
 	for i in $(CORE_CONTAINERS) $(CHILD_CONTAINERS); do \
