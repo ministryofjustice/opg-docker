@@ -2,7 +2,7 @@ CORE_CONTAINERS := base nginx nginx2 php-fpm jre-8 backupninja
 CHILD_CONTAINERS := golang rabbitmq wordpress elasticsearch elasticsearch-shared-data jenkins-slave jenkins kibana nginx-router fake-sqs wkhtmlpdf nginx-redirect casperjs  mongodb elasticsearch5
 CLEAN_CONTAINERS := $(CORE_CONTAINERS) $(CHILD_CONTAINERS)
 
-.PHONY: build push pull showinfo test $(CORE_CONTAINERS) $(CHILD_CONTAINERS) tag clean
+.PHONY: build push pull showinfo test $(CORE_CONTAINERS) $(CHILD_CONTAINERS) clean
 
 tagrepo = no
 ifneq ($(stage),)
@@ -36,12 +36,7 @@ buildcore: $(CORE_CONTAINERS)
 buildchild: $(CHILD_CONTAINERS)
 
 build: buildcore buildchild
-ifeq ($(tagrepo),yes)
-	@echo -e Tagging repo
-	semvertag tag $(newtag)
-else
-	@echo -e Not tagging repo
-endif
+
 
 $(CORE_CONTAINERS):
 	$(MAKE) -C $@ newtag=$(newtag) registryUrl=$(registryUrl) no-cache=$(no-cache)
@@ -54,18 +49,17 @@ push:
 			[ "$(stagearg)x" = "x" ] && docker push $(registryUrl)/opguk/$$i ; \
 			docker push $(registryUrl)/opguk/$$i:$(newtag) ; \
 	done
+ifeq ($(tagrepo),yes)
+	@echo -e Tagging repo
+	semvertag tag $(newtag)
+else
+	@echo -e Not tagging repo
+endif
 	#push to old registry
 	for i in $(CORE_CONTAINERS) $(CHILD_CONTAINERS); do \
 			[ "$(stagearg)x" = "x" ] && docker push $(oldRegistryUrl)/opguk/$$i ; \
 			docker push $(oldRegistryUrl)/opguk/$$i:$(newtag) ; \
 	done
-
-tag:
-ifeq ($(tagrepo),yes)
-	semvertag tag $(newtag)
-else
-	@echo -e Not tagging repo
-endif
 
 pull:
 	for i in $(CORE_CONTAINERS) $(CHILD_CONTAINERS); do \
@@ -92,4 +86,4 @@ clean:
 		docker rmi $(registryUrl)/opguk/$$i || true ; \
 	done
 
-all: showinfo build push tag clean
+all: showinfo build push clean
