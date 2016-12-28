@@ -1,4 +1,2 @@
 #!/bin/bash
-export HOME=/opt/kibana
-chown -R kibana:kibana $HOME
-exec gosu kibana kibana
+exec gosu kibana /usr/share/kibana/bin/kibana

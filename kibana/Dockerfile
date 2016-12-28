@@ -15,9 +15,6 @@ RUN apt-get update \
   && apt-get install kibana \
   && rm -rf /var/lib/apt/lists/*
 
-ENV PATH /opt/kibana/bin:$PATH
-ENV HOME /opt/kibana
-
 ENV PORT 5601
 ENV HOST 0.0.0.0
 ENV ELASTICSEARCH elasticsearch
