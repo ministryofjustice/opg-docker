@@ -1,18 +1,12 @@
 FROM registry.service.opg.digital/opguk/jre-8
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
-RUN groupadd -r elasticsearch && useradd -r -d /home/elasticsearch -m -g elasticsearch elasticsearch
 
-RUN apt-get update && apt-get install -y curl ca-certificates --no-install-recommends && rm -rf /var/lib/apt/lists/*
 
-RUN wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+RUN wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
 
 # Define software versions
-ENV ELASTICSEARCH_VERSION 2.3.2
-ENV ELASTICSEARCH_REPO_BASE http://packages.elastic.co/elasticsearch/2.x/debian
-ENV ELASTICSEARCH_CURATOR_VERSION 3.5.1
-ENV LICENSE_VERSION latest
-ENV WATCHER_VERSION latest
+ENV ELASTICSEARCH_REPO_BASE https://artifacts.elastic.co/packages/5.x/apt
 
 # Define this confd variable here so we can use it early
 ENV ELASTICSEARCH_PATH_REPO /usr/share/elasticsearch/repo
@@ -20,13 +14,9 @@ ENV ELASTICSEARCH_PATH_REPO /usr/share/elasticsearch/repo
 RUN echo "deb $ELASTICSEARCH_REPO_BASE stable main" > /etc/apt/sources.list.d/elasticsearch.list
 
 RUN apt-get update \
-  && apt-get install elasticsearch=$ELASTICSEARCH_VERSION \
-  && pip install elasticsearch-curator==$ELASTICSEARCH_CURATOR_VERSION \
+  && apt-get install elasticsearch \
+  && pip install elasticsearch-curator \
   && rm -rf /var/lib/apt/lists/*
-
-RUN /usr/share/elasticsearch/bin/plugin install cloud-aws
-RUN /usr/share/elasticsearch/bin/plugin install elasticsearch/license/$LICENSE_VERSION
-RUN /usr/share/elasticsearch/bin/plugin install elasticsearch/watcher/$WATCHER_VERSION
 
 RUN mkdir -p /usr/share/elasticsearch/config
 
@@ -44,9 +34,8 @@ ENV ELASTICSEARCH_NUMBER_OF_REPLICAS 0
 ENV ELASTICSEARCH_NETWORK_BIND_HOST 0.0.0.0
 ENV ELASTICSEARCH_SCRIPT_DISABLE_DYNAMIC true
 ENV ELASTICSEARCH_PATH_DATA /usr/share/elasticsearch/data
-ENV ELASTICSEARCH_DISCOVERY_ZEN_PING_MULTICASE_ENABLED false
 ENV ELASTICSEARCH_DISCOVERY_ZEN_MINIMUM_MASTER_NODES 1
-ENV ELASTICSEARCH_CLUSTER_NAME opgcore
+ENV ELASTICSEARCH_CLUSTER_NAME opg
 #ENV ELASTICSEARCH_CLUSTER_NODES_ONE elasticsearch-01
 ENV ELASTICSEARCH_NODE_NAME elasticsearch-01
 ENV ELASTICSEARCH_INDICES_FIELDDATA_CACHE_SIZE 40%

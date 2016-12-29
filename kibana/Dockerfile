@@ -1,34 +1,19 @@
 FROM registry.service.opg.digital/opguk/base
 
-
 # add our user and group first to make sure their IDs get assigned consistently
 RUN groupadd -r kibana && useradd -r -g kibana kibana
 
 RUN apt-get update && apt-get install -y ca-certificates curl --no-install-recommends && rm -rf /var/lib/apt/lists/*
 
-# grab gosu for easy step-down from root
-ENV GOSU_VERSION=1.10
-RUN gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4
-RUN arch="$(dpkg --print-architecture)" \
-	&& set -x \
-	&& curl -o /usr/local/bin/gosu -SL "https://github.com/tianon/gosu/releases/download/${GOSU_VERSION}/gosu-$arch" \
-	&& curl -o /usr/local/bin/gosu.asc -SL "https://github.com/tianon/gosu/releases/download/${GOSU_VERSION}/gosu-$arch.asc" \
-	&& gpg --verify /usr/local/bin/gosu.asc \
-	&& rm /usr/local/bin/gosu.asc \
-	&& chmod +x /usr/local/bin/gosu
+RUN wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
 
-ENV KIBANA_VERSION 4.5.1
-ENV KIBANA_SHA1 355c631b77c529d3dea304d7f084e658f5cc3123
+# Define software versions
+ENV ELASTICSEARCH_REPO_BASE https://artifacts.elastic.co/packages/5.x/apt
+RUN echo "deb $ELASTICSEARCH_REPO_BASE stable main" > /etc/apt/sources.list.d/elasticsearch.list
 
-RUN set -x \
-	&& curl -fSL "https://download.elastic.co/kibana/kibana/kibana-${KIBANA_VERSION}-linux-x64.tar.gz" -o kibana.tar.gz \
-	&& echo "${KIBANA_SHA1}  kibana.tar.gz" | sha1sum -c - \
-	&& mkdir -p /opt/kibana \
-	&& tar -xz --strip-components=1 -C /opt/kibana -f kibana.tar.gz \
-	&& rm kibana.tar.gz
-
-ENV PATH /opt/kibana/bin:$PATH
-ENV HOME /opt/kibana
+RUN apt-get update \
+  && apt-get install kibana \
+  && rm -rf /var/lib/apt/lists/*
 
 ENV PORT 5601
 ENV HOST 0.0.0.0

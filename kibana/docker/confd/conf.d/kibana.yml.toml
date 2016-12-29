@@ -1,6 +1,6 @@
 [template]
 src = "kibana.yml.tmpl"
-dest = "/opt/kibana/config/kibana.yml"
+dest = "/etc/kibana/kibana.yml"
 keys = [
     "/port",
     "/host",
