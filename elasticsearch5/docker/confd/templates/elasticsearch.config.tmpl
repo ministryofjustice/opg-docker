@@ -13,7 +13,18 @@ discovery.zen.ping.unicast.hosts: {{range getvs "/elasticsearch/cluster/nodes/*"
 {{if exists "/elasticsearch/cluster/name" }}cluster.name: {{ getv "/elasticsearch/cluster/name" }}{{end}}
 
 {{if exists "/elasticsearch/node/name" }}node.name: {{ getv "/elasticsearch/node/name" }}{{end}}
-
+{{if exists "/elasticsearch/node/type" }}
+{{$nodetype := getv "/elasticsearch/node/type"}}
+{{if eq $nodetype "coord" }}
+node.master: false
+node.data: false
+node.ingest: false
+{{  end}}
+{{  if eq $nodetype "ingest" }}
+node.master: false
+node.data: false
+{{  end}}
+{{ end }}
 {{if exists "/elasticsearch/indices/fielddata/cache/size" }}indices.fielddata.cache.size: {{ getv "/elasticsearch/indices/fielddata/cache/size" }}{{end}}
 
 {{if exists "/elasticsearch/gateway/expected/nodes" }}gateway.expected_nodes: {{ getv "/elasticsearch/gateway/expected/nodes" }}{{end}}
