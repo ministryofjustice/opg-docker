@@ -1,4 +1,4 @@
-CORE_CONTAINERS := base nginx nginx2 php-fpm jre-8 backupninja
+CORE_CONTAINERS := base nginx nginx2 php-fpm php-fpm2 jre-8 backupninja
 CHILD_CONTAINERS := golang rabbitmq wordpress elasticsearch elasticsearch-shared-data jenkins-slave jenkins kibana nginx-router fake-sqs wkhtmlpdf nginx-redirect casperjs  mongodb elasticsearch5
 CLEAN_CONTAINERS := $(CORE_CONTAINERS) $(CHILD_CONTAINERS)
 

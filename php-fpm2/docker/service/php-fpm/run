@@ -1,0 +1,4 @@
+#!/bin/sh
+
+#php-fpm is configured to downgrade permissions to user app
+exec /usr/sbin/php5-fpm --fpm-config /etc/php5/fpm/pool.d/app.conf

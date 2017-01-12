@@ -1,7 +1,7 @@
 FROM registry.service.opg.digital/opguk/jre-8
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
-
+RUN groupadd -g 3999 elasticsearch && useradd -m -u 3999 -g 3999 elasticsearch
 
 RUN wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
 
@@ -36,8 +36,8 @@ ENV ELASTICSEARCH_SCRIPT_DISABLE_DYNAMIC true
 ENV ELASTICSEARCH_PATH_DATA /usr/share/elasticsearch/data
 ENV ELASTICSEARCH_DISCOVERY_ZEN_MINIMUM_MASTER_NODES 1
 ENV ELASTICSEARCH_CLUSTER_NAME opg
-#ENV ELASTICSEARCH_CLUSTER_NODES_ONE elasticsearch-01
-ENV ELASTICSEARCH_NODE_NAME elasticsearch-01
+ENV ELASTICSEARCH_CLUSTER_NODES_ONE elasticsearch
+ENV ELASTICSEARCH_NODE_NAME elasticsearch
 ENV ELASTICSEARCH_INDICES_FIELDDATA_CACHE_SIZE 40%
 ENV ELASTICSEARCH_GATEWAY_EXPECTED_NODES 1
 ENV ELASTICSEARCH_GATEWAY_RECOVER_AFTER_TIME 5m
