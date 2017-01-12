@@ -3,7 +3,11 @@ server {
 {{   if exists "/opg/nginx/ssl/force/redirect" }}
     listen      80;
     return      307 https://$host$request_uri;
+    server_name {{ getv "/opg/nginx/server/names" }};
+}
 {{   end }}
+
+server {
     #Using global cert let's also listen on 443
     listen     443 ssl http2;
     server_name {{ getv "/opg/nginx/server/names" }};
