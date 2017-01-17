@@ -1,0 +1,21 @@
+{
+  "title": "Docker container info",
+  "hits": 0,
+  "description": "",
+  "sort": [
+    "@timestamp",
+    "desc"
+  ],
+  "columns": [
+    "beat.name",
+    "containerName",
+    "container.image",
+    "container.id",
+    "container.command",
+    "container.ports"
+  ],
+  "version": 1,
+  "kibanaSavedObjectMeta": {
+    "searchSourceJSON": "{\n  \"index\": \"dockbeat-*\",\n  \"highlight\": {\n    \"pre_tags\": [\n      \"@kibana-highlighted-field@\"\n    ],\n    \"post_tags\": [\n      \"@/kibana-highlighted-field@\"\n    ],\n    \"fields\": {\n      \"*\": {}\n    },\n    \"fragment_size\": 2147483647\n  },\n  \"filter\": [],\n  \"query\": {\n    \"query_string\": {\n      \"query\": \"type: container\",\n      \"analyze_wildcard\": true\n    }\n  }\n}"
+  }
+}

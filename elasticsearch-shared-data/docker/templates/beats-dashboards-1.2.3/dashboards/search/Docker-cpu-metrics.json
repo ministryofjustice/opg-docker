@@ -1,0 +1,24 @@
+{
+  "title": "Docker cpu metrics",
+  "hits": 0,
+  "description": "",
+  "sort": [
+    "@timestamp",
+    "desc"
+  ],
+  "columns": [
+    "beat.name",
+    "containerName",
+    "cpu.totalUsage",
+    "cpu.usageInKernelmode",
+    "cpu.usageInUsermode",
+    "cpu.percpuUsage.cpu0",
+    "cpu.percpuUsage.cpu1",
+    "cpu.percpuUsage.cpu2",
+    "cpu.percpuUsage.cpu3"
+  ],
+  "version": 1,
+  "kibanaSavedObjectMeta": {
+    "searchSourceJSON": "{\n  \"index\": \"dockbeat-*\",\n  \"highlight\": {\n    \"pre_tags\": [\n      \"@kibana-highlighted-field@\"\n    ],\n    \"post_tags\": [\n      \"@/kibana-highlighted-field@\"\n    ],\n    \"fields\": {\n      \"*\": {}\n    },\n    \"fragment_size\": 2147483647\n  },\n  \"filter\": [],\n  \"query\": {\n    \"query_string\": {\n      \"query\": \"type: cpu\",\n      \"analyze_wildcard\": true\n    }\n  }\n}"
+  }
+}

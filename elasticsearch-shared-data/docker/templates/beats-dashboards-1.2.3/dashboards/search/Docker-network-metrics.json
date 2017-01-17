@@ -1,0 +1,26 @@
+{
+  "title": "Docker network metrics",
+  "hits": 0,
+  "description": "",
+  "sort": [
+    "@timestamp",
+    "desc"
+  ],
+  "columns": [
+    "beat.name",
+    "containerName",
+    "net.name",
+    "net.rxBytes_ps",
+    "net.rxDropped_ps",
+    "net.rxErrors_ps",
+    "net.rxPackets_ps",
+    "net.txBytes_ps",
+    "net.txDropped_ps",
+    "net.txErrors_ps",
+    "net.txPackets_ps"
+  ],
+  "version": 1,
+  "kibanaSavedObjectMeta": {
+    "searchSourceJSON": "{\n  \"index\": \"dockbeat-*\",\n  \"highlight\": {\n    \"pre_tags\": [\n      \"@kibana-highlighted-field@\"\n    ],\n    \"post_tags\": [\n      \"@/kibana-highlighted-field@\"\n    ],\n    \"fields\": {\n      \"*\": {}\n    },\n    \"fragment_size\": 2147483647\n  },\n  \"filter\": [],\n  \"query\": {\n    \"query_string\": {\n      \"query\": \"type: net\",\n      \"analyze_wildcard\": true\n    }\n  }\n}"
+  }
+}
