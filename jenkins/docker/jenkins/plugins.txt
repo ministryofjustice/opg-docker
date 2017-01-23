@@ -21,6 +21,7 @@ durable-task
 envinject:1.91.1
 extended-choice-parameter
 extensible-choice-parameter
+ghprb
 git
 git-client
 git-server
