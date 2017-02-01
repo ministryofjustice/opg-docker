@@ -17,7 +17,7 @@ RUN  chmod a+x /etc/sv/nginx/run && \
      ln -s /etc/sv/nginx /etc/service/
 
 RUN  mkdir -p /app/public /etc/nginx/app.conf.d && \
-     echo "Hello World from opguk/nginx" > /app/public/index.html
+     echo "Hello World from opguk/nginx with http2" > /app/public/index.html
 
 EXPOSE 80
 EXPOSE 443

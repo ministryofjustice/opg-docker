@@ -23,6 +23,7 @@ cd nginx-1.9.5
   --with-http_gzip_static_module \
   --with-http_stub_status_module \
   --with-http_ssl_module \
+  --with-http_v2_module \
   --with-pcre-jit \
   --with-ipv6 \
   --add-module=../nginx-x-rid-header --with-ld-opt=-lossp-uuid --with-cc-opt=-I/usr/include/ossp

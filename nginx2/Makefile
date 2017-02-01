@@ -3,13 +3,20 @@
 registryUrl ?= registry.service.opg.digital
 oldRegistryUrl ?= registry.service.dsd.io
 
-image = opguk/nginx
+image = opguk/nginx2
 
 build:
 	docker build -t "$(registryUrl)/$(image)" .
-	docker tag -f "$(registryUrl)/$(image)" "$(registryUrl)/$(image):$(newtag)"
-	docker tag -f "$(registryUrl)/$(image)" "$(oldRegistryUrl)/$(image)"
-	docker tag -f "$(registryUrl)/$(image)" "$(oldRegistryUrl)/$(image):$(newtag)"
+	docker tag  "$(registryUrl)/$(image)" "$(registryUrl)/$(image):$(newtag)"
+	docker tag  "$(registryUrl)/$(image)" "$(oldRegistryUrl)/$(image)"
+	docker tag  "$(registryUrl)/$(image)" "$(oldRegistryUrl)/$(image):$(newtag)"
+
+push:
+	docker push  "$(registryUrl)/$(image)"
+	docker push "$(registryUrl)/$(image):$(newtag)"
+	docker push  "$(oldRegistryUrl)/$(image)"
+	docker push  "$(oldRegistryUrl)/$(image):$(newtag)"
+
 
 clean:
 	@eval `docker-machine env default` ||:

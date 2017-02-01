@@ -1,7 +1,7 @@
 FROM registry.service.opg.digital/opguk/jre-8
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
-
+RUN groupadd -g 3999 elasticsearch && useradd -m -u 3999 -g 3999 elasticsearch
 
 RUN wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
 
@@ -36,8 +36,8 @@ ENV ELASTICSEARCH_SCRIPT_DISABLE_DYNAMIC true
 ENV ELASTICSEARCH_PATH_DATA /usr/share/elasticsearch/data
 ENV ELASTICSEARCH_DISCOVERY_ZEN_MINIMUM_MASTER_NODES 1
 ENV ELASTICSEARCH_CLUSTER_NAME opg
-#ENV ELASTICSEARCH_CLUSTER_NODES_ONE elasticsearch-01
-ENV ELASTICSEARCH_NODE_NAME elasticsearch-01
+ENV ELASTICSEARCH_CLUSTER_NODES_ONE elasticsearch
+ENV ELASTICSEARCH_NODE_NAME elasticsearch
 ENV ELASTICSEARCH_INDICES_FIELDDATA_CACHE_SIZE 40%
 ENV ELASTICSEARCH_GATEWAY_EXPECTED_NODES 1
 ENV ELASTICSEARCH_GATEWAY_RECOVER_AFTER_TIME 5m
@@ -62,7 +62,6 @@ RUN chgrp elasticsearch $ELASTICSEARCH_PATH_REPO
 
 ADD docker/confd /etc/confd
 ADD docker/service/elasticsearch /etc/sv/elasticsearch
-ADD docker/opt /opt
 RUN mkdir -p /scripts/elasticsearch $HOME/config/scripts $HOME/logs
 ADD docker/scripts /scripts/elasticsearch
 ADD docker/my_init.d /etc/my_init.d
@@ -70,7 +69,6 @@ ADD docker/my_init.d /etc/my_init.d
 RUN chmod a+x /etc/my_init.d/*
 RUN chmod -R a+x /etc/sv/elasticsearch/run
 RUN chmod -R a+x /scripts/elasticsearch
-RUN chmod -R a+x /opt
 
 RUN  ln -s /etc/sv/elasticsearch /etc/service/
 

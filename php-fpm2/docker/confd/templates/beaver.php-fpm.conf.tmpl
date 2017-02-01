@@ -1,0 +1,17 @@
+[/var/log/app/php-fpm-master.log]
+format: json
+type: php-fpm
+tags: php-fpm, {{ getv "/opg/service" }}, master
+delimiter: \n
+
+[/var/log/app/php-fpm-error.log]
+format: json
+type: php-fpm
+tags: php-fpm, {{ getv "/opg/service" }}, error
+delimiter: \n
+
+[/var/log/app/php-fpm-slow.log]
+format: json
+type: php-fpm
+tags: php-fpm, {{ getv "/opg/service" }}, slow
+delimiter: \n
