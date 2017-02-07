@@ -75,5 +75,5 @@ RUN mkdir -p /usr/share/jenkins/ref/{users/opgops, .docker} && \
     
 COPY docker/etc/confd /etc/confd
 COPY docker/etc/ssh /etc/ssh
-
+VOLUME $JENKINS_HOME
 EXPOSE 22

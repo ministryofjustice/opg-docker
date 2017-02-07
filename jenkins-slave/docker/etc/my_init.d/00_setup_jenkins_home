@@ -1,0 +1,13 @@
+#!/bin/sh
+
+NEW_HOME_DIR=/srv/jenkins/$(hostname)
+#create home dir on nfs mount
+mkdir ${NEW_HOME_DIR}
+
+#change user ome dir
+usermod -d ${NEW_HOME_DIR} -m app
+export JENKINS_HOME=${NEW_HOME_DIR}
+
+
+
+
