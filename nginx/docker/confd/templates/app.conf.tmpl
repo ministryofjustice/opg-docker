@@ -14,6 +14,11 @@ server {
     access_log  /var/log/app/nginx.access.json logstash_json;
     error_log   /var/log/app/nginx.error.log error;
 
+    {{ if exists "/opg/nginx/clientmaxbodysize" }}
+    client_max_body_size {{ getv "/opg/nginx/clientmaxbodysize" }};
+    {{ end }}
+
+
 # Defaults to /app/public if OPG_NGINX_ROOT isn't set
 {{   if exists "/opg/nginx/root" }}
     set $root "{{ getv "/opg/nginx/root" }}";
