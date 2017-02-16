@@ -32,9 +32,12 @@ node.data: false
 {{if exists "/elasticsearch/gateway/recover/after/nodes" }}gateway.recover_after_nodes: {{ getv "/elasticsearch/gateway/recover/after/nodes" }}{{end}}
 
 
-xpack.ssl.key:                     /usr/share/elasticsearch/config/key.pem
-xpack.ssl.certificate:             /usr/share/elasticsearch/config/cert.pem
-{{if exists "/elasticsearch/usessl" }}
+xpack.ssl.key:           /usr/share/elasticsearch/config/key.pem
+xpack.ssl.certificate:   /usr/share/elasticsearch/config/cert.pem
+{{ if eq "TRUE" (toUpper (getv "/elasticsearch/usessl")) }}
 xpack.security.transport.ssl.enabled: true
 xpack.security.http.ssl.enabled: true
+{{ else }}
+xpack.security.transport.ssl.enabled: false
+xpack.security.http.ssl.enabled: false
 {{end}}
