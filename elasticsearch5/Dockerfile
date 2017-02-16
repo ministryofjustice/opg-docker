@@ -76,3 +76,5 @@ RUN  ln -s /etc/sv/elasticsearch /etc/service/
 RUN ln -sf /dev/stdout /var/log/elastic-scripts.log
 
 ENV OPG_SERVICE elasticsearch
+
+RUN /usr/share/elasticsearch/bin/elasticsearch-plugin install x-pack
