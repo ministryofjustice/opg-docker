@@ -1,0 +1,33 @@
+#!/bin/sh
+es_user=elasticsearch
+es_configpath=/usr/share/elasticsearch/config
+
+# Check elasticsearch user exists
+if id $es_user >/dev/null 2>&1; then
+    echo "$es_user user exists"
+else
+    echo "Error: $es_user user does not exist"
+    exit 1
+fi
+
+if [ -s $es_configpath/ssl.crt ] || [ -s $es_configpath/cert.pem ] || [ -s $es_configpath/key.pem ] || [ -n "${SKIP_SSL_GENERATE}" ]; then
+    echo "Skipping SSL certificate generation"
+else
+    echo "Generating self-signed certificate"
+
+    mkdir -p $es_configpath
+    cd $es_configpath
+
+    # Generating signing SSL private key
+    openssl genrsa -des3 -passout pass:x -out key.pem 2048
+
+    # Removing passphrase from private key
+    cp key.pem key.pem.orig
+    openssl rsa -passin pass:x -in key.pem.orig -out key.pem
+
+    # Generating certificate signing request
+    openssl req -new -key key.pem -out cert.csr -subj "/C=GB/ST=GB/L=London/O=OPG/OU=Digital/CN=default"
+
+    # Generating self-signed certificate
+    openssl x509 -req -days 3650 -in cert.csr -signkey key.pem -out cert.pem
+fi
