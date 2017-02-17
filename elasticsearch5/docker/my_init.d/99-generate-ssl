@@ -1,6 +1,7 @@
 #!/bin/sh
 es_user=elasticsearch
 es_configpath=/usr/share/elasticsearch/config
+es_hostname=$ELASTICSEARCH_NODE_NAME
 
 # Check elasticsearch user exists
 if id $es_user >/dev/null 2>&1; then
@@ -26,7 +27,7 @@ else
     openssl rsa -passin pass:x -in key.pem.orig -out key.pem
 
     # Generating certificate signing request
-    openssl req -new -key key.pem -out cert.csr -subj "/C=GB/ST=GB/L=London/O=OPG/OU=Digital/CN=default"
+    openssl req -new -key key.pem -out cert.csr -subj "/C=GB/ST=GB/L=London/O=OPG/OU=Digital/CN=$es_hostname"
 
     # Generating self-signed certificate
     openssl x509 -req -days 3650 -in cert.csr -signkey key.pem -out cert.pem
