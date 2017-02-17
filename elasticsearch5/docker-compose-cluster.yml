@@ -1,0 +1,42 @@
+version: '2'
+
+services:
+  elasticsearch01:
+    build: elasticsearch5
+    mem_limit: 1000000000
+    links:
+      - elasticsearch02:elasticsearch-02
+    ports:
+      - 9201:9200
+    environment:
+      ELASTICSEARCH_NUMBER_OF_REPLICAS: 2
+      ELASTICSEARCH_NODE_NAME: elasticsearch-01
+      ELASTICSEARCH_CLUSTER_NODES_ONE: elasticsearch-01
+      ELASTICSEARCH_CLUSTER_NODES_TWO: elasticsearch-02
+      ELASTICSEARCH_CLUSTER_NODES_THREE: elasticsearch-03
+
+  elasticsearch02:
+    build: elasticsearch5
+    mem_limit: 1000000000
+    links:
+      - elasticsearch03:elasticsearch-03
+    ports:
+      - 9202:9200
+    environment:
+      ELASTICSEARCH_NUMBER_OF_REPLICAS: 2
+      ELASTICSEARCH_NODE_NAME: elasticsearch-02
+      ELASTICSEARCH_CLUSTER_NODES_ONE: elasticsearch-01
+      ELASTICSEARCH_CLUSTER_NODES_TWO: elasticsearch-02
+      ELASTICSEARCH_CLUSTER_NODES_THREE: elasticsearch-03
+
+  elasticsearch03:
+    build: elasticsearch5
+    mem_limit: 1000000000
+    ports:
+      - 9203:9200
+    environment:
+      ELASTICSEARCH_NUMBER_OF_REPLICAS: 2
+      ELASTICSEARCH_NODE_NAME: elasticsearch-03
+      ELASTICSEARCH_CLUSTER_NODES_ONE: elasticsearch-01
+      ELASTICSEARCH_CLUSTER_NODES_TWO: elasticsearch-02
+      ELASTICSEARCH_CLUSTER_NODES_THREE: elasticsearch-03
