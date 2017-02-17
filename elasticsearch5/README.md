@@ -1,8 +1,6 @@
-OPG elasticsearch docker image
-==============================
+# OPG elasticsearch docker image
 
-Dockerfile Environment Variables
---------------------------------
+## Dockerfile Environment Variables
 
 ### Software versions (used during build only)
 
@@ -16,8 +14,7 @@ Dockerfile Environment Variables
 
 ### Elasticsearch Settings (used by confd during startup)
 
-The following variables are used in the configuration of `elasticsearch.yml` during container startup and their
-equivalent elasticsearch configuration variable is show alongside:
+The following variables are used in the configuration of `elasticsearch.yml` during container startup and their equivalent elasticsearch configuration variable is show alongside:
 
 ```
 * ELASTICSEARCH_PATH_REPO                             (path.repo)
@@ -39,13 +36,14 @@ equivalent elasticsearch configuration variable is show alongside:
 * ELASTICSEARCH_CLOUD_AWS_S3_PROTOCOL                 (cloud.aws.s3.protocol)
 * ELASTICSEARCH_CLOUD_AWS_ACCESS_KEY                  (cloud.aws.access_key)
 * ELASTICSEARCH_CLOUD_AWS_SECRET_KEY                  (cloud.aws.secret_key)
+* ELASTICSEARCH_USESSL                                (xpack.security.transport.ssl.enabled, xpack.security.http.ssl.enabled)
 ```
 
 To allow AWS access/secret keys to be used (instead of IAM roles) for access to S3 storage for snapshots, the variables have been defined but left unset so that IAM is used in preference. Setting values for the key variables will override IAM and force the use of these keys when authenticating.
 
-When using the `ELASTICSEARCH_CLUSTER_NODES_` variable(s) the suffix after this name is arbitrary. Each variable starting with this
-name will be used as a key in the template used to create the elasticsearch.yml configuration file to populate the list of nodes
-in the cluster. For example:
+Elasticsearch SSL communication can be used. ELASTICSEARCH_USESSL defaults to `TRUE`.
+
+When using the `ELASTICSEARCH_CLUSTER_NODES_` variable(s) the suffix after this name is arbitrary. Each variable starting with this name will be used as a key in the template used to create the elasticsearch.yml configuration file to populate the list of nodes in the cluster. For example:
 
 ```
 ELASTICSEARCH_CLUSTER_NODES_ONE elastic-01
@@ -60,11 +58,9 @@ discovery.zen.ping.unicast.hosts:
 - elastic-01
 - elastic-02
 - elastic-03
-````
+```
 
-If this is a single node cluster comment out the `ELASTICSEARCH_CLUSTER_NODES_` variables as they are not required and will
-automatically be left out of the configuration file (otherwise during startup it will generate transport.netty transport
-layer exception messages from java).
+If this is a single node cluster comment out the `ELASTICSEARCH_CLUSTER_NODES_` variables as they are not required and will automatically be left out of the configuration file (otherwise during startup it will generate transport.netty transport layer exception messages from java).
 
 ### Elasticsearch Script Variables (used by scripts)
 
@@ -79,8 +75,7 @@ The following variables are used by scripts included in the container (stored in
 * ELASTICSEARCH_SNAPSHOTS_RETAIN_DAYS                 (How many days to keep snapshots)
 ```
 
-Sample docker-compose entries
------------------------------
+## Sample docker-compose entries
 
 ### Elasticsearch (single node, no replicas)
 
@@ -182,32 +177,31 @@ Assuming a running elasticsearch container has been started as above, to define 
        "location": "my_snaps"
     }
  }'
- ```
+```
 
-Curator
--------
+## Curator
+
 Using the sample compose entries above and the example to run curator above -
 
 To get help on the curator command:
 
-` curator --help`
+`curator --help`
 
 To list all current indices:
 
-` curator --host elasticsearch show indices --all-indices`
+`curator --host elasticsearch show indices --all-indices`
 
 To do a dry run housekeep of marvel indices older than 30 days:
 
-` curator --dry-run --host elasticsearch delete indices --time-unit days --older-than 30 --timestring '%Y.%m.%d' --prefix '.marvel'`
+`curator --dry-run --host elasticsearch delete indices --time-unit days --older-than 30 --timestring '%Y.%m.%d' --prefix '.marvel'`
 
 To delete all indices on the master node only:
 
-` curator --master-only --host elasticsearch delete indices --all-indices`
+`curator --master-only --host elasticsearch delete indices --all-indices`
 
-Snapshots
----------
+## Snapshots
 
-#### Taking Snapshots
+### Taking Snapshots
 
 There is a script included within the container called `/scripts/elasticsearch/snapshot_elastic.sh`, which will use variables defined in the Dockerfile to create a snapshot repository, take a snapshot of all indices and remove previous snapshots older than a certain number of days. The script also uses sensible defaults if those variables are not set.
 
@@ -237,13 +231,13 @@ Assuming the use of the `elasticsnapshot` service used above to demonstrate snap
  #
  # docker-compose -f <docker-compose-file> run elasticsnapshot \
  curl -XPOST http://elasticsearch:9200/_all/_close?wait_for_completion=true?ignore_unavailable=true
- ```
+```
 
 ### Sample Restore
 
 The following is a console log session from an actual restore of the monitoring stack Elasticsearch `logstash` indices from production snapshots using the latest snapshot name at the time of restore (`curator-20151211010005`). The example shows selected indices being restored (default is `all` so this example shows how to restore a subset, which is a more likely scenario). The indices restored in this example are `logstash-2015.06.14,logstash-2015.10.14,logstash-2015.12.11`.
 
-The example uses a fresh docker container started in order to define a snapshot repo that points to the actual (live) repository in the S3 bucket, which can then be used to restore from. In this example the restore repository is called `testing`. It also uses a fresh container on the `monitoring-01` host as it has IAM rights to be able to read from the snapshot (S3) bucket so any alternative host would need similar access.  
+The example uses a fresh docker container started in order to define a snapshot repo that points to the actual (live) repository in the S3 bucket, which can then be used to restore from. In this example the restore repository is called `testing`. It also uses a fresh container on the `monitoring-01` host as it has IAM rights to be able to read from the snapshot (S3) bucket so any alternative host would need similar access.
 
 To avoid TCP port clash with the monitoring stack, port 9200 is mapped to host port 19200 to allow SSH port forwarding to allow access to the Marvel dashboard to prove document counts, dates, etc once restored. Spinning up a fresh container also proves that in the event the live instance is hosed completely that data can be pulled from snapshots to a brand new one.
 
@@ -351,9 +345,8 @@ root@ce04387a7992:~# exit
 
 For more information on configuring, taking, restoring from and deleting snapshots:
 
-https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-snapshots.html
+<https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-snapshots.html>
 
 To snapshot to AWS (S3) using the AWS Cloud Plugin:
 
-https://github.com/elastic/elasticsearch-cloud-aws
-
+<https://github.com/elastic/elasticsearch-cloud-aws>
