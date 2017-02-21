@@ -1,0 +1,10 @@
+version: '2'
+
+services:
+  base:
+    build: ../base
+    links:
+      - ca
+
+  ca:
+    build: .
