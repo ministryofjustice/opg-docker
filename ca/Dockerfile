@@ -1,18 +1,13 @@
-FROM registry.service.opg.digital/opguk/base
-
-RUN wget -qO /usr/local/sbin/cfssl https://pkg.cfssl.org/R1.2/cfssl_linux-amd64 \
-    && chmod +x  /usr/local/sbin/cfssl \
-    && sha256sum /usr/local/sbin/cfssl | awk '$1!="eb34ab2179e0b67c29fd55f52422a94fe751527b06a403a79325fed7cf0145bd" {exit 1}'
-
-RUN wget -qO /usr/local/sbin/cfssljson https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64 \
-    && chmod +x  /usr/local/sbin/cfssljson \
-    && sha256sum /usr/local/sbin/cfssljson | awk '$1!="1c9e628c3b86c3f2f8af56415d474c9ed4c8f9246630bd21c3418dbe5bf6401e" {exit 1}'
+#FROM registry.service.opg.digital/opguk/base
+# @TODO temporarily build off our docker-compose base.
+FROM ca_base
 
 RUN mkdir -p /data/cfssl
 
 
 ADD  docker/confd /etc/confd
+ADD  docker/my_init.d  /etc/my_init.d
+RUN  chmod a+x /etc/my_init.d/*
 
-
-ENV OPG_CA_CLIENT_API_KEY 123456
-ENV OPG_CA_SERVER_API_KEY 987654
+ENV OPG_CA_CLIENTAPIKEY 0123456789ABCDEF0123456789ABCDEF
+ENV OPG_CA_SERVERAPIKEY 0123456789ABCDEF0123456789ABCDEF

@@ -4,7 +4,7 @@ services:
   base:
     build: ../base
     links:
-      - ca
+      - caserver
 
-  ca:
+  caserver:
     build: .

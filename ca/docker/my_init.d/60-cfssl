@@ -1,0 +1,5 @@
+#!/bin/sh
+set -x
+CONF_DIR=/data/cfssl
+NODE_ADDR=$(hostname -I)
+cfssl serve -address ${NODE_ADDR} -ca ${CONF_DIR}/ca.pem -ca-key ${CONF_DIR}/ca-key.pem -config ${CONF_DIR}/ca_config.json

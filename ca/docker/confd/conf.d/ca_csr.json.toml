@@ -1,0 +1,7 @@
+[template]
+src = "ca_csr.json.tmpl"
+dest = "/data/cfssl/ca_csr.json"
+keys = [
+    "/opg/ca/client_api_key",
+    "/opg/ca/server_api_key",
+]
