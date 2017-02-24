@@ -8,6 +8,3 @@ RUN mkdir -p /data/cfssl
 ADD  docker/confd /etc/confd
 ADD  docker/my_init.d  /etc/my_init.d
 RUN  chmod a+x /etc/my_init.d/*
-
-ENV OPG_CA_CLIENTAPIKEY 0123456789ABCDEF0123456789ABCDEF
-ENV OPG_CA_SERVERAPIKEY 0123456789ABCDEF0123456789ABCDEF

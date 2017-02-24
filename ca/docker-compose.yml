@@ -5,8 +5,13 @@ services:
     build: ../base
     links:
       - caserver
+    environment:
+      - OPG_BASE_CAKEY=0123456789ABCDEF0123456789ABCDEF
 
   caserver:
     build: .
     volumes:
       - ./exampledata:/data/cfssl
+    environment:
+      - OPG_CA_CLIENTAPIKEY=0123456789ABCDEF0123456789ABCDEF
+      - OPG_CA_SERVERAPIKEY=0023456789ABCDEF0123456789ABCDEF

@@ -1,7 +1,5 @@
 [template]
-src = "cert_config.json.tmpl"
-dest = "/etc/ssl/private/cert_config.json"
+src = "cert_csr.json.tmpl"
+dest = "/etc/ssl/private/cert_csr.json"
 keys = [
-"/opg/ca/client_api_key",
-"/opg/ca/server_api_key",
 ]

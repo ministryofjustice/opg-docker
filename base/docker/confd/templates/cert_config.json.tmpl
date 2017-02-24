@@ -9,7 +9,7 @@
   },
   "auth_keys": {
     "key1": {
-      "key": "0123456789ABCDEF0123456789ABCDEF",
+      "key": "{{if exists "/opg/base/cakey" }}{{getv "/opg/base/cakey"}}{{end}}",
       "type": "standard"
     }
   },

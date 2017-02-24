@@ -32,7 +32,7 @@
             "type": "standard"
         },
         "server": {
-            "key": "0123456789ABCDEF0123456789ABCDEF",
+            "key": "0023456789ABCDEF0123456789ABCDEF",
             "type": "standard"
         }
     }

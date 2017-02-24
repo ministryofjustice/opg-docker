@@ -2,7 +2,7 @@
 # generate self signed ssl cert only if all cert files are empty or nonexistent
 
 CONF_DIR=/etc/ssl/private
-CFSSL_COMMAND="cfssl gencert -config=cert_config.json -profile=server cert_csr.json"
+CFSSL_COMMAND="cfssl gencert -config=cert_config.json -profile=client cert_csr.json"
 KEY_BASENAME="server"
 
 # Exit if env var set.
