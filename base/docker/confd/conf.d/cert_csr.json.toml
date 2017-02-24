@@ -2,4 +2,7 @@
 src = "cert_csr.json.tmpl"
 dest = "/etc/ssl/private/cert_csr.json"
 keys = [
+  "/opg/base/csr/cn",
+  "/opg/base/csr/hosts",
+  "/hostname",
 ]

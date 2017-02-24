@@ -1,13 +1,25 @@
 {
+    
     "CN": "caserver",
+    
+
     "key": {
         "algo": "rsa",
         "size": 2048
     },
+
     "hosts": [
-        "caserver.domain",
-        "caserver"
+    
+    
+      "ca.alt.a",
+    
+      "ca.alt.b",
+    
+      "ca.alt.c",
+    
+    "0720f331315d"
     ],
+
     "names": [
         {
             "C": "UK",

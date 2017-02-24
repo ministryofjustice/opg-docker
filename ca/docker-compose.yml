@@ -7,6 +7,9 @@ services:
       - caserver
     environment:
       - OPG_BASE_CAKEY=0123456789ABCDEF0123456789ABCDEF
+      - OPG_BASE_CSR_CN=client
+      - OPG_BASE_CSR_HOSTS=client.alt.a,client.alt.b
+
 
   caserver:
     build: .
@@ -15,3 +18,5 @@ services:
     environment:
       - OPG_CA_CLIENTAPIKEY=0123456789ABCDEF0123456789ABCDEF
       - OPG_CA_SERVERAPIKEY=0023456789ABCDEF0123456789ABCDEF
+      - OPG_CA_CSR_CN=caserver
+      - OPG_CA_CSR_HOSTS=ca.alt.a,ca.alt.b,ca.alt.c

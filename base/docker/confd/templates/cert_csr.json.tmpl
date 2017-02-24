@@ -1,13 +1,23 @@
 {
-    "CN": "ca01",
+    {{if exists "/opg/base/csr/cn"}}
+    "CN": "{{ getv "/opg/base/csr/cn" }}",
+    {{end}}
+
     "key": {
         "algo": "rsa",
         "size": 2048
     },
+
     "hosts": [
-        "ca01.domain",
-        "ca01"
+    {{if exists "/opg/base/csr/hosts" }}
+      {{ $hosts := split (getv "/opg/base/csr/hosts") "," }}
+      {{range $hosts}}
+        "{{.}}",
+      {{end}}
+    {{end}}
+      "{{ getv "/hostname" }}"
     ],
+    
     "names": [
         {
             "C": "UK",

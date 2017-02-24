@@ -40,7 +40,7 @@ do
 done
 
 
-if [[ $n -eq $RETRY_NO ]]; then
+if [ $n -eq $RETRY_NO ]; then
   echo "CFSSL generation failed."
   # @TODO we could error here once the CA is available everywhere.
 else
