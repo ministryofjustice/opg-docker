@@ -1,0 +1,49 @@
+#!/bin/bash
+# generate self signed ssl cert only if all cert files are empty or nonexistent
+
+CONF_DIR=/etc/ssl/private
+CFSSL_COMMAND="cfssl gencert -config=cert_config.json -profile=server cert_csr.json"
+KEY_BASENAME="server"
+
+# Exit if env var set.
+if [ -n "${SKIP_SSL_GENERATE}" ]; then
+echo "Skipping CFSSL certificate generation due to SKIP_SSL_GENERATE."
+exit 0
+fi
+
+# Exit if files we expect exist
+if [ -s "$CONF_DIR/cert_config.json" ] && \
+   [ -s "$CONF_DIR/cert_csr.json" ] && \
+   [ -s "$CONF_DIR/server-key.pem" ] && \
+   [ -s "$CONF_DIR/server.pem" ] && \
+   [ -s "$CONF_DIR/server.csr" ] \
+;then
+  echo "All files found. Skipping CFSSL certificate generation."
+  exit 0
+fi
+
+# Generating signed SSL cert and key from CA server
+echo "Generating CFSSL self-signed certificate"
+mkdir -p $CONF_DIR
+cd $CONF_DIR
+
+# Retryable because of connection to CA server.
+n=0
+RETRY_NO=5
+SLEEP_TIME=2
+until [ $n -ge $RETRY_NO ]
+do
+  CERTS=`$CFSSL_COMMAND` && break
+  echo "Error. Sleeping for ${SLEEP_TIME}s and trying again"
+  n=$[$n+1]
+  sleep $SLEEP_TIME
+done
+
+
+if [[ $n -eq $RETRY_NO ]]; then
+  echo "CFSSL generation failed."
+  # @TODO we could error here once the CA is available everywhere.
+else
+  echo $CERTS | cfssljson -bare $KEY_BASENAME
+  echo "CFSSL generation succeeded."
+fi
