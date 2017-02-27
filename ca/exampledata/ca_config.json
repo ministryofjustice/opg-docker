@@ -7,7 +7,7 @@
             "client": {
                 "auth_key": "client",
                 "expiry": "8760h",
-                "name_whitelist": "..*\\.qa.internal\\b|.*\\.alta.com\\b|.*\\.altb.com\\b|.*\\.dev.lpa.opg.digital\\b",
+                "name_whitelist": "^[\\w-]+\\.qa.internal\\b|^[\\w-]+\\.alta.com\\b|^[\\w-]+\\.altb.com\\b|^[\\w-]+\\.dev.lpa.opg.digital\\b",
                 "usages": [
                     "signing",
                     "key encipherment",

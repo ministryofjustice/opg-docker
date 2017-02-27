@@ -9,6 +9,9 @@ services:
       - OPG_BASE_CAKEY=0123456789ABCDEF0123456789ABCDEF
       - OPG_BASE_CSR_CN=front-qa.dev.lpa.opg.digital
       - OPG_BASE_CSR_HOSTS=client.alta.com,client.altb.com
+      # Failure set for testing
+      #- OPG_BASE_CSR_HOSTS=fron@t-qa.dev.lpa.opg.digital
+      #- OPG_BASE_CSR_HOSTS=front-qa.qa.lpa.opg.digital0
       - OPG_BASE_DOMAIN=dev.lpa.opg.digital
 
   base:
@@ -28,7 +31,8 @@ services:
     environment:
       - OPG_CA_CLIENTAPIKEY=0123456789ABCDEF0123456789ABCDEF
       # Re-escaped \ for regex use use inside json.
-      - OPG_CA_CLIENTNAMEWHITELIST=.*\\.qa.internal\\b|.*\\.alta.com\\b|.*\\.altb.com\\b|.*\\.dev.lpa.opg.digital\\b
+      # Start of word - letters/numbers/dash multiple time - escaped dot - textual domain - end of word 
+      - OPG_CA_CLIENTNAMEWHITELIST=^[\\w-]+\\.qa.internal\\b|^[\\w-]+\\.alta.com\\b|^[\\w-]+\\.altb.com\\b|^[\\w-]+\\.dev.lpa.opg.digital\\b
       - OPG_CA_SERVERAPIKEY=0023456789ABCDEF0123456789ABCDEF
       - OPG_CA_CSR_CN=caserver.qa.internal
       - OPG_CA_CSR_HOSTS=ca.alt.a,ca.alt.b,ca.alt.c

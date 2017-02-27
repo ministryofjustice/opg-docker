@@ -7,7 +7,7 @@
             "client": {
                 "auth_key": "client",
                 "expiry": "8760h",
-                "name_whitelist": ".{{ getv "/opg/ca/clientnamewhitelist" }}",
+                "name_whitelist": "{{ getv "/opg/ca/clientnamewhitelist" }}",
                 "usages": [
                     "signing",
                     "key encipherment",
