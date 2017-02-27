@@ -2,5 +2,5 @@
 src = "cert_config.json.tmpl"
 dest = "/etc/ssl/private/cert_config.json"
 keys = [
-  "/opg/base/cakey",
+  "/opg/base/ca/key",
 ]
