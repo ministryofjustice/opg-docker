@@ -1,9 +1,15 @@
 #!/bin/bash
 # generate self signed ssl cert only if all cert files are empty or nonexistent
 
+if [[ -z $OPG_BASE_CA_PROFILE ]]; then
+  # client is a safe default that with authorisation code will create a client side cert.
+  PROFILE=client
+else
+  PROFILE=$OPG_BASE_CA_PROFILE
+fi
+
 CONF_DIR=/etc/ssl/private
-CFSSL_COMMAND="cfssl gencert -config=cert_config.json -profile=client cert_csr.json"
-KEY_BASENAME="server"
+CFSSL_COMMAND="cfssl gencert -config=cert_config.json -profile=$PROFILE cert_csr.json"
 
 # Exit if env var set.
 if [ -n "${SKIP_SSL_GENERATE}" ]; then
@@ -14,9 +20,9 @@ fi
 # Exit if files we expect exist
 if [ -s "$CONF_DIR/cert_config.json" ] && \
    [ -s "$CONF_DIR/cert_csr.json" ] && \
-   [ -s "$CONF_DIR/server-key.pem" ] && \
-   [ -s "$CONF_DIR/server.pem" ] && \
-   [ -s "$CONF_DIR/server.csr" ] \
+   [ -s "$CONF_DIR/$PROFILE-key.pem" ] && \
+   [ -s "$CONF_DIR/$PROFILE.pem" ] && \
+   [ -s "$CONF_DIR/$PROFILE.csr" ] \
 ;then
   echo "All files found. Skipping CFSSL certificate generation."
   exit 0
@@ -44,6 +50,6 @@ if [ $n -eq $RETRY_NO ]; then
   echo "CFSSL generation failed."
   # @TODO we could error here once the CA is available everywhere.
 else
-  echo $CERTS | cfssljson -bare $KEY_BASENAME
+  echo $CERTS | cfssljson -bare $PROFILE
   echo "CFSSL generation succeeded."
 fi
