@@ -1,15 +1,25 @@
 version: '2'
 
 services:
+  world:
+    build: ../base
+    links:
+      - caserver
+    environment:
+      - OPG_BASE_CAKEY=0123456789ABCDEF0123456789ABCDEF
+      - OPG_BASE_CSR_CN=front-qa.dev.lpa.opg.digital
+      - OPG_BASE_CSR_HOSTS=client.alta.com,client.altb.com
+      - OPG_BASE_DOMAIN=dev.lpa.opg.digital
+
   base:
     build: ../base
     links:
       - caserver
     environment:
       - OPG_BASE_CAKEY=0123456789ABCDEF0123456789ABCDEF
-      - OPG_BASE_CSR_CN=client
-      - OPG_BASE_CSR_HOSTS=client.alt.a,client.alt.b
-
+      - OPG_BASE_CSR_CN=front.qa.internal
+      - OPG_BASE_CSR_HOSTS=client.alta.com,client.altb.com
+      - OPG_BASE_DOMAIN=qa.internal
 
   caserver:
     build: .
@@ -17,6 +27,10 @@ services:
       - ./exampledata:/data/cfssl
     environment:
       - OPG_CA_CLIENTAPIKEY=0123456789ABCDEF0123456789ABCDEF
+      # Re-escaped \ for regex use use inside json.
+      - OPG_CA_CLIENTNAMEWHITELIST=.*\\.qa.internal\\b|.*\\.alta.com\\b|.*\\.altb.com\\b|.*\\.dev.lpa.opg.digital\\b
       - OPG_CA_SERVERAPIKEY=0023456789ABCDEF0123456789ABCDEF
-      - OPG_CA_CSR_CN=caserver
+      - OPG_CA_CSR_CN=caserver.qa.internal
       - OPG_CA_CSR_HOSTS=ca.alt.a,ca.alt.b,ca.alt.c
+      - OPG_CA_DOMAIN=qa.internal
+      - OPG_BASE_DOMAIN=qa.internal

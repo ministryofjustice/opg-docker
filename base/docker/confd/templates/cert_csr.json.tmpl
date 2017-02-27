@@ -15,9 +15,9 @@
         "{{.}}",
       {{end}}
     {{end}}
-      "{{ getv "/hostname" }}"
+      "{{ getv "/hostname" }}.{{ getv "/opg/base/domain" }}"
     ],
-    
+
     "names": [
         {
             "C": "UK",

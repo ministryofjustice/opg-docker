@@ -1,6 +1,6 @@
 {
     
-    "CN": "caserver",
+    "CN": "caserver.qa.internal",
     
 
     "key": {
@@ -10,14 +10,7 @@
 
     "hosts": [
     
-    
-      "ca.alt.a",
-    
-      "ca.alt.b",
-    
-      "ca.alt.c",
-    
-    "0720f331315d"
+      "e67f4b4f5257.qa.internal"
     ],
 
     "names": [

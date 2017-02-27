@@ -9,11 +9,13 @@
     },
 
     "hosts": [
-    {{ $hosts := split (getv "/opg/ca/csr/hosts") "," }}
-    {{range $hosts}}
-      "{{.}}",
+    {{if exists "/opg/ca/csr/host" }}
+      {{ $hosts := split (getv "/opg/ca/csr/hosts") "," }}
+      {{range $hosts}}
+        "{{.}}",
+      {{end}}
     {{end}}
-    "{{ getv "/hostname" }}"
+      "{{ getv "/hostname" }}.{{ getv "/opg/ca/domain" }}"
     ],
 
     "names": [

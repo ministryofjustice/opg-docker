@@ -4,5 +4,6 @@ dest = "/data/cfssl/ca_csr.json"
 keys = [
   "/opg/ca/csr/cn",
   "/opg/ca/csr/hosts",
+  "/opg/ca/domain",
   "/hostname",
 ]
