@@ -89,9 +89,9 @@ You can define zero or more custom metrics this way.
 
 ## CFSSL
 
-CFSSL binaries are installed. On startup the container will run two scripts.
+CFSSL binaries are installed. On startup the container will run these scripts.
 
-1. 90-cfssl-gencert: Generate it's own certification and try to remote sign it with the CA.
+1. 90-cfssl-gencert: Generate container's own certificate and try to remote sign it with the CA.
 2. 91-cfssl-cacert: Download and install the CA public cert from the CA.
 
 It can be controlled via the following variables.
