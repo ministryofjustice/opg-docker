@@ -20,9 +20,9 @@ fi
 # Exit if files we expect exist
 if [ -s "$CONF_DIR/cert_config.json" ] && \
    [ -s "$CONF_DIR/cert_csr.json" ] && \
-   [ -s "$CONF_DIR/$PROFILE-key.pem" ] && \
-   [ -s "$CONF_DIR/$PROFILE.pem" ] && \
-   [ -s "$CONF_DIR/$PROFILE.csr" ] \
+   [ -s "$CONF_DIR/${PROFILE}-key.pem" ] && \
+   [ -s "$CONF_DIR/${PROFILE}.pem" ] && \
+   [ -s "$CONF_DIR/${PROFILE}.csr" ] \
 ;then
   echo "All files found. Skipping CFSSL certificate generation."
   exit 0
