@@ -1,6 +1,4 @@
-#FROM registry.service.opg.digital/opguk/base:0.0.21-dev
-
-FROM ca_base
+FROM registry.service.opg.digital/opguk/base
 
 RUN mkdir -p /data/cfssl
 ADD  docker/confd /etc/confd
