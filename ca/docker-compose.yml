@@ -7,12 +7,11 @@ services:
       - caserver
     environment:
       - OPG_BASE_CA_KEY=0023456789ABCDEF0123456789ABCDEF
-      - OPG_BASE_CA_PROFILE=server
       - OPG_BASE_CSR_CN=front-qa.dev.lpa.opg.digital
       - OPG_BASE_CSR_HOSTS=client.alta.com,client.altb.com
       # Failure set for testing
       #- OPG_BASE_CSR_HOSTS=fron@t-qa.dev.lpa.opg.digital
-      #- OPG_BASE_CSR_HOSTS=front-qa.qa.lpa.opg.digital0
+      #- OPG_BASE_CSR_HOSTS=front-qa.qa.lpa.opg.digital
       - OPG_BASE_DOMAIN=dev.lpa.opg.digital
 
   base:
@@ -21,7 +20,6 @@ services:
       - caserver
     environment:
       - OPG_BASE_CA_KEY=0023456789ABCDEF0123456789ABCDEF
-      - OPG_BASE_CA_PROFILE=server
       - OPG_BASE_CSR_CN=front.qa.internal
       - OPG_BASE_CSR_HOSTS=client.alta.com,client.altb.com
       - OPG_BASE_DOMAIN=qa.internal

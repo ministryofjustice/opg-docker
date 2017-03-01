@@ -2,8 +2,8 @@
 # generate self signed ssl cert only if all cert files are empty or nonexistent
 
 if [[ -z $OPG_BASE_CA_PROFILE ]]; then
-  # client is a safe default that with authorisation code will create a client side cert.
-  PROFILE=client
+  # Default to our most popular certificate type.
+  PROFILE=server
 else
   PROFILE=$OPG_BASE_CA_PROFILE
 fi
