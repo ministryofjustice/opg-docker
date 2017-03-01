@@ -11,8 +11,6 @@ fi
 CONF_DIR=/etc/ssl/private
 CFSSL_COMMAND="cfssl gencert -config=cert_config.json -profile=$PROFILE cert_csr.json"
 
-# Exit if env var set.
-
 if [ "${SKIP_SSL_GENERATE^^}" == "TRUE" ]; then
 echo "Skipping CFSSL certificate generation due to SKIP_SSL_GENERATE."
 exit 0

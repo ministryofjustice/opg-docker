@@ -7,6 +7,11 @@ CFSS_CONFIG_DIR=/etc/ssl/private
 CFSSL_COMMAND="cfssl info -config cert_config.json"
 
 
+if [ "${SKIP_INSTALL_CA_CERT^^}" == "TRUE" ]; then
+echo "Skipping CFSSL installation of CA certificate due to SKIP_INSTALL_CA_CERT."
+exit 0
+fi
+
 # Get CA cert
 # Retryable because of connection to CA server.
 cd $CFSS_CONFIG_DIR

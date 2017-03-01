@@ -1,6 +1,5 @@
 #!/bin/bash
 # generate self signed ssl cert only if all cert files are empty or nonexistent
-printenv
 if [ -s /etc/ssl/ssl.crt ] || [ -s /etc/ssl/cert.pem ] || [ -s /etc/ssl/key.pem ] || [ "${SKIP_SSL_GENERATE^^}" == "TRUE" ]; then
 echo "Skipping SSL certificate generation"
 else

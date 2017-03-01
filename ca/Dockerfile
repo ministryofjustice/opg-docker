@@ -9,4 +9,5 @@ ADD  docker/service/cfssl /etc/service/cfssl
 RUN  chmod a+x /etc/service/cfssl/run
 
 
-ENV SKIP_SSL_GENERATE=truE
+ENV SKIP_SSL_GENERATE=true
+ENV SKIP_INSTALL_CA_CERT=true
