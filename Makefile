@@ -1,5 +1,5 @@
 CORE_CONTAINERS := base nginx nginx2 php-fpm php-fpm2 jre-8 backupninja
-CHILD_CONTAINERS := golang rabbitmq wordpress elasticsearch elasticsearch-shared-data jenkins-slave jenkins kibana nginx-router fake-sqs wkhtmlpdf nginx-redirect casperjs  mongodb elasticsearch5
+CHILD_CONTAINERS := golang rabbitmq wordpress elasticsearch elasticsearch-shared-data jenkins-slave jenkins kibana nginx-router fake-sqs wkhtmlpdf nginx-redirect casperjs  mongodb elasticsearch5 ca
 CLEAN_CONTAINERS := $(CORE_CONTAINERS) $(CHILD_CONTAINERS)
 
 .PHONY: build push pull showinfo test $(CORE_CONTAINERS) $(CHILD_CONTAINERS) clean
@@ -18,16 +18,16 @@ ifneq ($(findstring ERROR, $(currenttag)),)
     currenttag = 0.0.0
     ifneq ($(stage),)
         currenttag = 0.0.0-$(stage)
-    endif        
-endif        
+    endif
+endif
 
 newtag = $(shell semvertag bump patch $(stagearg))
 ifneq ($(findstring ERROR, $(newtag)),)
     newtag = 0.0.1
     ifneq ($(stage),)
         newtag = 0.0.1-$(stage)
-    endif        
-endif        
+    endif
+endif
 
 registryUrl = registry.service.opg.digital
 oldRegistryUrl = registry.service.dsd.io
