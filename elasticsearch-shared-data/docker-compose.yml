@@ -12,7 +12,7 @@ kibana:
     - elasticsearch
 
 elasticsearch:
-  image: registry.service.opg.digital/opguk/elasticsearch:latest
+  image: registry.service.opg.digital/opguk/elasticsearch5:latest
   ports:
     - 9200:9200
     - 9300:9300
