@@ -27,6 +27,7 @@ if os.getenv('SHARED_DATA_BASE') and os.getenv('SHARED_DATA_PATHS'):
 else:
     print "Beats installation not initialised, skipping"
 
+
 def log_message(message, message_type="info"):
     output = {
         "type": "log",
