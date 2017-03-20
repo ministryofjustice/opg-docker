@@ -1,7 +1,5 @@
 FROM registry.service.opg.digital/opguk/base
 
-RUN apt-get update && apt-get install -y unzip && rm -rf /var/lib/apt/lists/*
-
 ENV JAVA_MAJOR_VERSION=8
 ENV JAVA_UPDATE_VERSION=77
 ENV JAVA_BUILD_NUMER=03
