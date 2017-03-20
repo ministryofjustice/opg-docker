@@ -11,6 +11,7 @@ RUN cd /tmp && \
    unzip beats-dashboards-${BEATS_DASHBOARD_VERSION}.zip && \
    cd beats-dashboards-${BEATS_DASHBOARD_VERSION} && \
    cp -r metricbeat/* /tmp/elasticsearchshareddata/beats && \
+   cp -r filebeat/* /tmp/elasticsearchshareddata/beats && \
    rm -rf /tmp/beats-dashboards-*
 
 RUN  chmod -R 644 /tmp/elasticsearchshareddata
