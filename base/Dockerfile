@@ -21,6 +21,7 @@ RUN  rm -f /etc/apt/sources.list.d/* && \
      apt-get update && apt-get -y upgrade && apt-get install -y git joe && \
      apt-get install -y python python-pip && \
      apt-get install -y wget dnsmasq && \
+     apt-get install -y unzip zip && \
      apt-get clean && apt-get autoremove && \
      rm -rf /var/lib/cache/* /var/lib/log/* /tmp/* /var/tmp/*
 

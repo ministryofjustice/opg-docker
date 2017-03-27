@@ -1,20 +1,20 @@
 {
+  "title": "Errors",
+  "hits": 0,
+  "description": "",
   "sort": [
-    "@timestamp", 
+    "@timestamp",
     "desc"
-  ], 
-  "hits": 0, 
-  "description": "", 
-  "title": "Errors", 
-  "version": 1, 
+  ],
+  "columns": [
+    "type",
+    "method",
+    "path",
+    "responsetime",
+    "status"
+  ],
+  "version": 1,
   "kibanaSavedObjectMeta": {
     "searchSourceJSON": "{\"index\":\"packetbeat-*\",\"highlight\":{\"pre_tags\":[\"@kibana-highlighted-field@\"],\"post_tags\":[\"@/kibana-highlighted-field@\"],\"fields\":{\"*\":{}}},\"filter\":[{\"meta\":{\"index\":\"packetbeat-*\",\"negate\":true,\"key\":\"status\",\"value\":\"OK\",\"disabled\":false},\"query\":{\"match\":{\"status\":{\"query\":\"OK\",\"type\":\"phrase\"}}}}],\"query\":{\"query_string\":{\"query\":\"*\",\"analyze_wildcard\":true}}}"
-  }, 
-  "columns": [
-    "type", 
-    "method", 
-    "path", 
-    "responsetime", 
-    "status"
-  ]
+  }
 }
