@@ -1,12 +1,13 @@
 #!/bin/bash
+NGINX_VERSION="1.11.13"
 useradd -r nginx
 mkdir -p /var/lib/nginx && chown nginx:nginx /var/lib/nginx
 mkdir -p /var/log/nginx && chown nginx:nginx /var/log/nginx
 cd  /tmp
 git clone https://github.com/newobj/nginx-x-rid-header.git
-wget http://nginx.org/download/nginx-1.9.5.tar.gz
-tar -xzf nginx-1.9.5.tar.gz
-cd nginx-1.9.5
+wget http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz
+tar -xzf nginx-${NGINX_VERSION}.tar.gz
+cd nginx-${NGINX_VERSION}
 ./configure \
   --user=nginx \
   --group=nginx \
