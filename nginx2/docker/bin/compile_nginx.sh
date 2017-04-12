@@ -4,7 +4,6 @@ useradd -r nginx
 mkdir -p /var/lib/nginx && chown nginx:nginx /var/lib/nginx
 mkdir -p /var/log/nginx && chown nginx:nginx /var/log/nginx
 cd  /tmp
-git clone https://github.com/newobj/nginx-x-rid-header.git
 wget http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz
 tar -xzf nginx-${NGINX_VERSION}.tar.gz
 cd nginx-${NGINX_VERSION}
@@ -25,8 +24,6 @@ cd nginx-${NGINX_VERSION}
   --with-http_stub_status_module \
   --with-http_ssl_module \
   --with-http_v2_module \
-  --with-pcre-jit \
-  --with-ipv6 \
-  --add-module=../nginx-x-rid-header --with-ld-opt=-lossp-uuid --with-cc-opt=-I/usr/include/ossp
+  --with-pcre-jit
 make
 make install
