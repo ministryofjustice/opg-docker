@@ -24,7 +24,6 @@ cd nginx-${NGINX_VERSION}
   --with-http_stub_status_module \
   --with-http_ssl_module \
   --with-http_v2_module \
-  --with-pcre-jit \
-  --with-ipv6
+  --with-pcre-jit
 make
 make install
