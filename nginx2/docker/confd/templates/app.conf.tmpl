@@ -1,6 +1,6 @@
 {{ if exists "/opg/nginx/server/names" }}
-server {
 {{   if exists "/opg/nginx/ssl/force/redirect" }}
+server {
     listen      80;
     return      307 https://$host$request_uri;
     server_name {{ getv "/opg/nginx/server/names" }};
