@@ -1,9 +1,10 @@
 FROM registry.service.opg.digital/opguk/nginx
 
+ARG PHP_PACKAGES=php5-fpm php5-cli php5-xdebug php5-xhprof php5-mcrypt php5-imagick php5-mongo mongodb-clients php5-curl php5-xsl postgresql-client php5-pgsql
+
 RUN  apt-get update && apt-get -y upgrade && \
-     apt-get install -y php5-fpm php5-cli && \
-     apt-get install -y php5-xdebug php5-xhprof php5-mcrypt && \
-     apt-get clean && apt-get autoremove && \
+     apt-get install -y --no-install-recommends ${PHP_PACKAGES} \ && \
+     apt-get autoremove && \
      rm -rf /var/lib/cache/* /var/lib/log/* /tmp/* /var/tmp/*
 
 RUN  rm -f /etc/php5/fpm/php-fpm.conf /etc/php5/fpm/pool.d/www.conf /etc/cron.d/php5 && \
