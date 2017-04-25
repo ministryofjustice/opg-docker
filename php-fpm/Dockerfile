@@ -1,9 +1,9 @@
 FROM registry.service.opg.digital/opguk/nginx
 
-ARG PHP_PACKAGES=php5-fpm php5-cli php5-xdebug php5-xhprof php5-mcrypt php5-imagick php5-mongo mongodb-clients php5-curl php5-xsl postgresql-client php5-pgsql
+ARG PHP_PACKAGES="php5-fpm php5-cli php5-xdebug php5-xhprof php5-imagick php5-mongo mongodb-clients php5-curl php5-xsl postgresql-client php5-pgsql"
 
-RUN  apt-get update && apt-get -y upgrade && \
-     apt-get install -y --no-install-recommends ${PHP_PACKAGES} \ && \
+RUN  apt-get update && \
+     apt-get install -y --no-install-recommends $PHP_PACKAGES && \
      apt-get autoremove && \
      rm -rf /var/lib/cache/* /var/lib/log/* /tmp/* /var/tmp/*
 
@@ -41,8 +41,7 @@ ADD  https://raw.githubusercontent.com/ministryofjustice/php-fpm-stats-collector
 RUN  chmod a+x /usr/local/bin/php-fpm-stats-collector.py
 
 ADD  docker/service/php-fpm-stats /etc/sv/php-fpm-stats
-RUN  chmod a+x /etc/sv/php-fpm-stats/run
-RUN  ln -s /etc/sv/php-fpm-stats /etc/service/
+RUN  chmod a+x /etc/sv/php-fpm-stats/run && ln -s /etc/sv/php-fpm-stats /etc/service/
 
 ENV  OPG_PHP_POOL_CHILDREN_MAX 4
 ENV  OPG_PHP_POOL_REQUESTS_MAX 0
