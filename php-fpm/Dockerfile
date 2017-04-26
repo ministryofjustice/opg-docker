@@ -36,9 +36,9 @@ RUN  rm /etc/php5/mods-available/xdebug.ini
 
 ADD  docker/nginx /etc/nginx
 
-RUN  pip install schedule statsd requests
-ADD  https://raw.githubusercontent.com/ministryofjustice/php-fpm-stats-collector/master/php-fpm-stats-collector.py /usr/local/bin/
-RUN  chmod a+x /usr/local/bin/php-fpm-stats-collector.py
+RUN  pip install schedule statsd requests && \
+     curl -s https://raw.githubusercontent.com/ministryofjustice/php-fpm-stats-collector/master/php-fpm-stats-collector.py > /usr/local/bin/php-fpm-stats-collector.py && \
+     chmod a+x /usr/local/bin/php-fpm-stats-collector.py
 
 ADD  docker/service/php-fpm-stats /etc/sv/php-fpm-stats
 RUN  chmod a+x /etc/sv/php-fpm-stats/run && ln -s /etc/sv/php-fpm-stats /etc/service/
