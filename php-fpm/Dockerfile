@@ -1,9 +1,10 @@
 FROM registry.service.opg.digital/opguk/nginx
 
-RUN  apt-get update && apt-get -y upgrade && \
-     apt-get install -y php5-fpm php5-cli && \
-     apt-get install -y php5-xdebug php5-xhprof php5-mcrypt && \
-     apt-get clean && apt-get autoremove && \
+ARG PHP_PACKAGES="php5-fpm php5-cli php5-xdebug php5-xhprof php5-imagick php5-mongo mongodb-clients php5-curl php5-xsl postgresql-client php5-pgsql php5-mcrypt"
+
+RUN  apt-get update && \
+     apt-get install -y --no-install-recommends $PHP_PACKAGES && \
+     apt-get autoremove && \
      rm -rf /var/lib/cache/* /var/lib/log/* /tmp/* /var/tmp/*
 
 RUN  rm -f /etc/php5/fpm/php-fpm.conf /etc/php5/fpm/pool.d/www.conf /etc/cron.d/php5 && \
@@ -35,13 +36,12 @@ RUN  rm /etc/php5/mods-available/xdebug.ini
 
 ADD  docker/nginx /etc/nginx
 
-RUN  pip install schedule statsd requests
-ADD  https://raw.githubusercontent.com/ministryofjustice/php-fpm-stats-collector/master/php-fpm-stats-collector.py /usr/local/bin/
-RUN  chmod a+x /usr/local/bin/php-fpm-stats-collector.py
+RUN  pip install schedule statsd requests && \
+     curl -s https://raw.githubusercontent.com/ministryofjustice/php-fpm-stats-collector/master/php-fpm-stats-collector.py > /usr/local/bin/php-fpm-stats-collector.py && \
+     chmod a+x /usr/local/bin/php-fpm-stats-collector.py
 
 ADD  docker/service/php-fpm-stats /etc/sv/php-fpm-stats
-RUN  chmod a+x /etc/sv/php-fpm-stats/run
-RUN  ln -s /etc/sv/php-fpm-stats /etc/service/
+RUN  chmod a+x /etc/sv/php-fpm-stats/run && ln -s /etc/sv/php-fpm-stats /etc/service/
 
 ENV  OPG_PHP_POOL_CHILDREN_MAX 4
 ENV  OPG_PHP_POOL_REQUESTS_MAX 0
