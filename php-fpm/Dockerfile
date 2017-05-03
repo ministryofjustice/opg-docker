@@ -45,6 +45,7 @@ RUN  chmod a+x /etc/sv/php-fpm-stats/run && ln -s /etc/sv/php-fpm-stats /etc/ser
 
 ENV  OPG_PHP_POOL_CHILDREN_MAX 4
 ENV  OPG_PHP_POOL_REQUESTS_MAX 0
+ENV  OPG_PHP_POOL_REQUEST_TERMINATE_TIMEOUT 60
 
 ENV  OPG_SERVICE php-fpm
 
