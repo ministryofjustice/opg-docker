@@ -1,21 +1,20 @@
 FROM registry.service.opg.digital/opguk/jre-8
 
-### This section is from https://github.com/jenkinsci/docker/blob/master/Dockerfile ###
-RUN apt-get update && apt-get install -y git curl && rm -rf /var/lib/apt/lists/*
+### This section is from https://github.com/jenkinsci/docker/blob/master/Dockerfile with some changes ###
 
 ENV JENKINS_HOME /var/jenkins_home
 ENV JENKINS_SLAVE_AGENT_PORT 50000
 
-ARG user=jenkins
-ARG group=jenkins
+ARG user=app
+ARG group=app
 ARG uid=1000
 ARG gid=1000
 
 # Jenkins is run with user `jenkins`, uid = 1000
 # If you bind mount a volume from the host or a data container,
 # ensure you use the same uid
-RUN groupadd -g ${gid} ${group} \
-    && useradd -d "$JENKINS_HOME" -u ${uid} -g ${gid} -m -s /bin/bash ${user}
+RUN groupmod -g ${gid} -n ${group} app \
+    && usermod -d "$JENKINS_HOME" -u ${uid} -g ${gid} -m -s /bin/bash -l ${user} app
 
 # Jenkins home directory is a volume, so configuration and build history
 # can be persisted and survive image upgrades
