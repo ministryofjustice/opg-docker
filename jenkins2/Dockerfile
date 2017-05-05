@@ -71,3 +71,6 @@ COPY plugins.sh /usr/local/bin/plugins.sh
 COPY install-plugins.sh /usr/local/bin/install-plugins.sh
 
 ### END ###
+
+# Required minimum plugins
+RUN /usr/local/bin/install-plugins.sh ansicolor:0.5.0 github-oauth:0.27
