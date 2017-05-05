@@ -9,6 +9,7 @@ set -o pipefail
 
 REF_DIR=${REF:-/usr/share/jenkins/ref/plugins}
 FAILED="$REF_DIR/failed-plugins.txt"
+PATH=${PATH}:/usr/share/binfmts
 
 . /usr/local/bin/jenkins-support
 

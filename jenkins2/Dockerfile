@@ -72,5 +72,10 @@ COPY install-plugins.sh /usr/local/bin/install-plugins.sh
 
 ### END ###
 
+# Install linked libraries for jar binary.
+USER root
+RUN apt-get update && apt-get install libx11-6 -y && rm -rf /var/lib/apt/lists/*
+USER ${user}
+
 # Required minimum plugins
 RUN /usr/local/bin/install-plugins.sh ansicolor:0.5.0 github-oauth:0.27
