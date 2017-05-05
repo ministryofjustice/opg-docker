@@ -1,0 +1,9 @@
+jenkins2:
+  build: .
+  environment:
+    JAVA_OPTS: "-Djava.awt.headless=true -Djenkins.install.runSetupWizard=false"
+  ports:
+    - "50000:50000"
+    - "8080:8080"
+  volumes:
+    - ./example_home:/var/jenkins_home
