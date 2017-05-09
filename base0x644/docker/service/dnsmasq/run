@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# let's call dnsmasq but clean all env variables
+exec -c  /usr/sbin/dnsmasq -u root -k
