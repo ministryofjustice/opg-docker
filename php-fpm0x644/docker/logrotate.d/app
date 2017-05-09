@@ -1,0 +1,12 @@
+# From opg-docker/php-fpm/Dockerfile
+#
+/var/log/app/*.log /var/log/app/*.json {
+        daily
+        copytruncate
+        compress
+        dateext
+        missingok
+        rotate 2
+        notifempty
+        create 0644 app app
+}
