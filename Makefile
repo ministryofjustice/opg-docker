@@ -1,8 +1,9 @@
-CORE_CONTAINERS := base base0x644 nginx nginx2 php-fpm php-fpm2 jre-8 backupninja
-CHILD_CONTAINERS := phpunit golang rabbitmq wordpress elasticsearch elasticsearch-shared-data jenkins-slave jenkins kibana nginx-router fake-sqs wkhtmlpdf nginx-redirect casperjs  mongodb elasticsearch5 nginx0x644
-CLEAN_CONTAINERS := $(CORE_CONTAINERS) $(CHILD_CONTAINERS)
+CORE_CONTAINERS := base nginx nginx2 php-fpm php-fpm2 jre-8 backupninja
+CHILD_CONTAINERS := phpunit golang rabbitmq wordpress elasticsearch elasticsearch-shared-data jenkins-slave jenkins kibana nginx-router fake-sqs wkhtmlpdf nginx-redirect casperjs  mongodb elasticsearch5
+LTS_CONTAINERS:= base0x644 nginx0x644 php-fpm0x644
+CLEAN_CONTAINERS := $(CORE_CONTAINERS) $(CHILD_CONTAINERS) $(LTS_CONTAINERS)
 
-.PHONY: build push pull showinfo test $(CORE_CONTAINERS) $(CHILD_CONTAINERS) clean
+.PHONY: build push pull showinfo test $(CORE_CONTAINERS) $(CHILD_CONTAINERS) $(LTS_CONTAINERS) clean
 
 tagrepo = no
 ifneq ($(stage),)
@@ -34,8 +35,8 @@ oldRegistryUrl = registry.service.dsd.io
 
 buildcore: $(CORE_CONTAINERS)
 buildchild: $(CHILD_CONTAINERS)
-
-build: buildcore buildchild
+buildnewcore: $(LTS_CONTAINERS)
+build: buildcore buildchild buildnewcore
 
 
 $(CORE_CONTAINERS):
@@ -44,8 +45,11 @@ $(CORE_CONTAINERS):
 $(CHILD_CONTAINERS):
 	$(MAKE) -C $@ newtag=$(newtag) registryUrl=$(registryUrl) no-cache=$(no-cache)
 
+$(LTS_CONTAINERS):
+    $(MAKE) -C $@ newtag=$(newtag) registryUrl=$(registryUrl) no-cache=$(no-cache)
+
 push:
-	for i in $(CORE_CONTAINERS) $(CHILD_CONTAINERS); do \
+	for i in $(CORE_CONTAINERS) $(CHILD_CONTAINERS) $(LTS_CONTAINERS); do \
 			[ "$(stagearg)x" = "x" ] && docker push $(registryUrl)/opguk/$$i ; \
 			docker push $(registryUrl)/opguk/$$i:$(newtag) ; \
 	done
@@ -56,13 +60,13 @@ else
 	@echo -e Not tagging repo
 endif
 	#push to old registry
-	for i in $(CORE_CONTAINERS) $(CHILD_CONTAINERS); do \
+	for i in $(CORE_CONTAINERS) $(CHILD_CONTAINERS) $(LTS_CONTAINERS); do \
 			[ "$(stagearg)x" = "x" ] && docker push $(oldRegistryUrl)/opguk/$$i ; \
 			docker push $(oldRegistryUrl)/opguk/$$i:$(newtag) ; \
 	done
 
 pull:
-	for i in $(CORE_CONTAINERS) $(CHILD_CONTAINERS); do \
+	for i in $(CORE_CONTAINERS) $(CHILD_CONTAINERS) $(LTS_CONTAINERS); do \
 			docker pull $(registryUrl)/opguk/$$i ; \
 	done
 
@@ -73,6 +77,7 @@ showinfo:
 	@echo Current Tag: $(currenttag)
 	@echo Core Container List: $(CORE_CONTAINERS)
 	@echo Container List: $(CHILD_CONTAINERS)
+	@echo 16.04 Container List: $(LTS_CONTAINERS)
 	@echo Clean Container List: $(CLEAN_CONTAINERS)
 ifeq ($(tagrepo),yes)
 	@echo Tagging repo: $(tagrepo)
