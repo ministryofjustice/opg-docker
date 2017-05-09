@@ -1,0 +1,80 @@
+{{ if exists "/opg/nginx/server/names" }}
+{{   if exists "/opg/nginx/ssl/force/redirect" }}
+server {
+    listen      80;
+    return      307 https://$host$request_uri;
+    server_name {{ getv "/opg/nginx/server/names" }};
+}
+{{   end }}
+
+server {
+    #Using global cert let's also listen on 443
+    listen     443 ssl;
+    server_name {{ getv "/opg/nginx/server/names" }};
+
+    rewrite_log  on;
+    access_log  /var/log/app/nginx.access.json logstash_json;
+    error_log   /var/log/app/nginx.error.log error;
+
+    {{ if exists "/opg/nginx/clientmaxbodysize" }}
+    client_max_body_size {{ getv "/opg/nginx/clientmaxbodysize" }};
+    {{ end }}
+
+
+# Defaults to /app/public if OPG_NGINX_ROOT isn't set
+{{   if exists "/opg/nginx/root" }}
+    set $root "{{ getv "/opg/nginx/root" }}";
+{{   else }}
+    set $root "/app/public";
+{{   end }}
+
+    root $root;
+
+    location =/meta.json {
+        alias /app/META;
+    }
+
+    # i.e. deny access to .htaccess in case someone will create it
+    location ~ /\. {
+        deny  all;
+    }
+
+    # Add HTTP Strict Transport Security header - required for .service.gov.uk domains
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; ";
+    # serve static files directly
+    location ~* ^.+.(jpg|jpeg|gif|css|png|js|ico|htm|html|xml|txt|woff|eot|ttf)$ {
+        access_log        off;
+        expires           24h;
+
+    }
+# Defaults to index.html if OPG_NGINX_INDEX isn't set
+{{   if exists "/opg/nginx/index" }}
+    set $index "{{ getv "/opg/nginx/index" }}";
+{{   else }}
+    set $index "index.html";
+{{   end }}
+
+    index $index;
+
+#    fastcgi_buffers 256 4k;
+#    fastcgi_buffer_size 4k;
+#    fastcgi_busy_buffers_size 256k;
+#    fastcgi_temp_file_write_size 256k;
+
+    location / {
+        try_files $uri $uri/ /$index$is_args$args;
+    }
+
+    if ($http_x_request_id = '') {
+        set $http_x_request_id $request_id;
+    }
+
+    # add x-request-id to response
+    add_header X-Request-Id $http_x_request_id;
+    proxy_set_header X-Request-Id $http_x_request_id;
+
+    # Optionally include app-specific config files
+    include /etc/nginx/app.conf.d/*.conf;
+
+}
+{{ end }}
