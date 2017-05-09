@@ -1,0 +1,17 @@
+[/var/log/app/php-fpm-master.log]
+format: json
+type: php-fpm
+tags: php-fpm, {{ getv "/opg/service" }}, master {{ if exists "/opg/stackname" }}, {{ getv "/opg/stackname" }} {{ end }}
+delimiter: \n
+
+[/var/log/app/php-fpm-error.log]
+format: json
+type: php-fpm
+tags: php-fpm, {{ getv "/opg/service" }}, error {{ if exists "/opg/stackname" }}, {{ getv "/opg/stackname" }} {{ end }}
+delimiter: \n
+
+[/var/log/app/php-fpm-slow.log]
+format: json
+type: php-fpm
+tags: php-fpm, {{ getv "/opg/service" }}, slow {{ if exists "/opg/stackname" }}, {{ getv "/opg/stackname" }} {{ end }}
+delimiter: \n
