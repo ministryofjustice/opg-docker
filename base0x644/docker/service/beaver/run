@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# when linked to monitoring container
+# or when MONITORING_ENABLED is set
+if $( grep -q "\smonitoring\s" /etc/hosts ) || $( grep -q "\smonitoring$" /etc/hosts ) || [ -n "${MONITORING_ENABLED}" ]
+then
+    # let's call beaver but clean all env variables
+    exec -c /usr/local/bin/beaver -c /etc/beaver.conf -C /etc/beaver.d -t redis
+else
+    echo "No monitoring server connected. Skipping beaver"
+    sv stop beaver
+fi

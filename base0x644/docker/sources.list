@@ -1,0 +1,5 @@
+# based on http://askubuntu.com/questions/37753/how-can-i-get-apt-to-use-a-mirror-close-to-me-or-choose-a-faster-mirror/125252#125252
+deb http://eu-west-1.clouds.archive.ubuntu.com/ubuntu/ xenial main restricted universe multiverse
+deb http://eu-west-1.clouds.archive.ubuntu.com/ubuntu/ xenial-updates main restricted universe multiverse
+deb http://eu-west-1.clouds.archive.ubuntu.com/ubuntu/ xenial-security main restricted universe multiverse
+deb http://eu-west-1.clouds.archive.ubuntu.com/ubuntu/ xenial-proposed main restricted universe multiverse
