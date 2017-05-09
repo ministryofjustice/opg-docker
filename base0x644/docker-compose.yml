@@ -1,0 +1,24 @@
+#a demo docker compose file
+
+base:
+  build: .
+  environment:
+    OPG_BASE_SSL_CERT: |
+      foo
+      bar
+      cert
+    OPG_BASE_SSL_KEY: |
+      foo
+      bar
+      key
+
+
+base2:
+  build: .
+  environment:
+  -  OPG_BASE_SSL_CERT=foo\nbar\ncert
+  -  OPG_BASE_SSL_KEY=foo\nbar\nkey
+
+
+basegen:
+  build: .
