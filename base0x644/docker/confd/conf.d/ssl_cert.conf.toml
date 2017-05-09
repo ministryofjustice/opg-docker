@@ -1,0 +1,6 @@
+[template]
+src = "ssl_cert.conf.tmpl"
+dest = "/etc/ssl/cert.pem"
+keys = [
+    "/opg/base/ssl",
+]
