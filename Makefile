@@ -45,7 +45,7 @@ $(CHILD_CONTAINERS):
 	$(MAKE) -C $@ newtag=$(newtag) registryUrl=$(registryUrl) no-cache=$(no-cache)
 
 $(LTS_CONTAINERS):
-    $(MAKE) -C $@ newtag=$(newtag) registryUrl=$(registryUrl) no-cache=$(no-cache)
+	$(MAKE) -C $@ newtag=$(newtag) registryUrl=$(registryUrl) no-cache=$(no-cache)
 
 push:
 	for i in $(CORE_CONTAINERS) $(CHILD_CONTAINERS) $(LTS_CONTAINERS); do \
