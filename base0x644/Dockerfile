@@ -59,8 +59,6 @@ RUN  chmod a+x /etc/sv/beaver/run && \
      ln -s /etc/sv/beaver /etc/service/ && \
      mkdir -p /etc/beaver.d
 
-ADD  docker/beaver.conf /etc/beaver.conf
-
 # Provide a resolver at localhost for software that can't/won't use /etc/resolv.conf
 ADD  docker/service/dnsmasq /etc/service/dnsmasq
 RUN  chmod a+x /etc/service/dnsmasq/run
@@ -80,6 +78,5 @@ ADD  docker/confd /etc/confd
 RUN mkdir -p /scripts/base
 ADD docker/scripts /scripts/base
 RUN chmod -R a+x /scripts/base
-
 
 ENV OPG_SERVICE base
