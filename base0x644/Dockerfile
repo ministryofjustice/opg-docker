@@ -2,6 +2,8 @@ FROM phusion/baseimage:0.9.21
 
 # Set correct HOME
 ENV HOME /root
+ARG GOSU_VERSION=1.10
+ARG CONFD_VERSION=0.11.0
 
 # For debconf not to complain
 ENV DEBIAN_FRONTEND noninteractive
@@ -9,31 +11,34 @@ ENV DEBIAN_FRONTEND noninteractive
 # Ensure that all packages are latest and use AWS EU mirror
 # Basic packages
 # Log aggregation
-ADD  docker/sources.list /etc/apt/sources.list
+# Set --no-install-recommends as our default
+ADD docker/01norecommend /etc/apt/apt.conf.d/01norecommend
+ADD docker/sources.list /etc/apt/sources.list
+
 RUN gpg --keyserver hkp://ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4
-RUN curl -o /usr/local/bin/gosu -SL "https://github.com/tianon/gosu/releases/download/1.2/gosu-$(dpkg --print-architecture)" \
-  && curl -o /usr/local/bin/gosu.asc -SL "https://github.com/tianon/gosu/releases/download/1.2/gosu-$(dpkg --print-architecture).asc" \
+RUN curl -o /usr/local/bin/gosu -SL "https://github.com/tianon/gosu/releases/download/${GOSU_VERSION}/gosu-$(dpkg --print-architecture)" \
+  && curl -o /usr/local/bin/gosu.asc -SL "https://github.com/tianon/gosu/releases/download//${GOSU_VERSION}/gosu-$(dpkg --print-architecture).asc" \
   && gpg --verify /usr/local/bin/gosu.asc \
   && rm /usr/local/bin/gosu.asc \
   && chmod +x /usr/local/bin/gosu
 
 RUN  rm -f /etc/apt/sources.list.d/* && \
-     apt-get update && \
-     apt-get install -y apt-utils && \
-     apt-get -y upgrade && \
-     apt-get install -y git joe \
-     python python-pip \
+     apt update && \
+     apt install -y apt-utils && \
+     apt -y upgrade && \
+     apt install -y git joe \
+     python python-setuptools \
      wget dnsmasq \
      unzip zip && \
-     apt-get clean && apt-get autoremove && \
+     apt clean && apt autoremove && \
      rm -rf /var/lib/cache/* /var/lib/log/* /tmp/* /var/tmp/*
 
 # Pip installs
 # Install awscli to override the system one which is broken (with python 3.4.3 as of Sept 2015)
-RUN pip install -U pip && pip install awscli Beaver==36.2.0
+RUN easy_install pip && pip install -U pip && pip install awscli Beaver
 
 # ConfD install
-RUN  wget -O /usr/bin/confd https://github.com/kelseyhightower/confd/releases/download/v0.9.0/confd-0.9.0-linux-amd64 && \
+RUN  wget -O /usr/bin/confd https://github.com/kelseyhightower/confd/releases/download/v${CONFD_VERSION}/confd-${CONFD_VERSION}-linux-amd64 && \
      chmod a+x /usr/bin/confd && \
      mkdir -p /etc/confd/conf.d && \
      mkdir -p /etc/confd/templates
