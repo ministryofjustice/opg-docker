@@ -1,5 +1,9 @@
 #!/bin/bash
+
+apt install -y libpcre3-dev zlib1g-dev libssl-dev libossp-uuid-dev uuid build-essential
+
 NGINX_VERSION="1.11.13"
+
 useradd -r nginx
 mkdir -p /var/lib/nginx && chown nginx:nginx /var/lib/nginx
 mkdir -p /var/log/nginx && chown nginx:nginx /var/log/nginx
@@ -26,3 +30,11 @@ cd nginx-${NGINX_VERSION}
   --with-pcre-jit
 make
 make install
+
+rm /tmp/nginx-${NGINX_VERSION}.tar.gz
+rm -rf /tmp/nginx-*
+
+apt remove -y --purge build-essential
+apt clean
+apt autoremove -y
+rm -rf /var/lib/cache/* /var/lib/log/* /tmp/* /var/tmp/*
