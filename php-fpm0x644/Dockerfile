@@ -32,9 +32,6 @@ RUN  pip install schedule statsd requests && \
 ADD  docker/service/php-fpm-stats /etc/sv/php-fpm-stats
 RUN  chmod a+x /etc/sv/php-fpm-stats/run && ln -s /etc/sv/php-fpm-stats /etc/service/
 
-ENV  OPG_PHP_POOL_CHILDREN_MAX 4
-ENV  OPG_PHP_POOL_REQUESTS_MAX 0
-
 ENV  STATSD_HOST monitoring
 ENV  STATSD_PORT 8125
 ENV  STATSD_DELAY 10

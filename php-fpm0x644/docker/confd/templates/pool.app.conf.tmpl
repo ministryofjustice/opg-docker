@@ -14,12 +14,12 @@ daemonize = no
 
 listen = 9000
 listen.allowed_clients = 127.0.0.1
-user = app
-group = app
+user = {{ getv "/opg/php/pool/user", "app" }}
+group = {{ getv "/opg/php/pool/group", "app" }}
 
 pm = static
 
-pm.max_children = {{getv "/opg/php/pool/children/max"}}
+pm.max_children = {{ getv "/opg/php/pool/children/max", "4" }}
 
 pm.start_servers = 2
 
@@ -27,7 +27,7 @@ pm.min_spare_servers = 2
 
 pm.max_spare_servers = 2
 
-pm.max_requests = {{getv "/opg/php/pool/requests/max"}}
+pm.max_requests = {{ getv "/opg/php/pool/requests/max", "0" }}
 
 pm.status_path = /status
 
@@ -35,7 +35,7 @@ ping.path = /ping
 
 ping.response = pong
 
-request_terminate_timeout = 60
+request_terminate_timeout = {{ getv "/opg/php/pool/request/terminate/timeout", "60" }}
 
 request_slowlog_timeout = 0
 
@@ -45,14 +45,14 @@ catch_workers_output = yes
 
 php_admin_value[error_log] = /var/log/app/php-fpm-error.log
 php_admin_flag[log_errors] = on
-php_admin_value[memory_limit] = 256M
+php_admin_value[memory_limit] = {{ getv "/opg/php/pool/memory/limit", "256M" }}
 
 php_value[session.save_handler] = files
 php_value[session.save_path] = /data/session
 
 php_value[session.name] = app-session
 
-php_admin_value[post_max_size] = 64M
-php_admin_value[upload_max_filesize] = 64M
+php_admin_value[post_max_size] = {{ getv "/opg/php/pool/post/max/size" , "64M" }}
+php_admin_value[upload_max_filesize] = {{ getv "/opg/php/pool/upload/max/filesize", "64M" }}
 
-php_value[max_input_vars] = 10000
+php_value[max_input_vars] = {{ getv "/opg/php/pool/max/input/vars", "1000" }}
