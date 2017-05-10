@@ -1,12 +1,7 @@
 FROM registry.service.opg.digital/opguk/base0x644
 
-RUN  apt-get install -y libpcre3-dev zlib1g-dev libssl-dev libossp-uuid-dev uuid && \
-     apt-get clean && apt-get autoremove && \
-     rm -rf /var/lib/cache/* /var/lib/log/* /tmp/* /var/tmp/*
-
 ADD docker/bin/compile_nginx.sh /tmp/compile_nginx.sh
-RUN chmod +x /tmp/compile_nginx.sh
-RUN /tmp/compile_nginx.sh
+RUN sh /tmp/compile_nginx.sh
 
 ADD  docker/nginx /etc/nginx
 ADD  docker/confd /etc/confd
