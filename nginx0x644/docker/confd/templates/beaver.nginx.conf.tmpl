@@ -1,26 +1,26 @@
 [/var/log/app/nginx.access.json]
 format: rawjson
 type: nginx
-tags: nginx, {{ getv "/opg/service" }} {{ if exists "/opg/stackname" }}, {{ getv "/opg/stackname" }} {{ end }}
+tags: nginx, {{ getv "/opg/service", "nginx" }} {{ if exists "/opg/stackname" }}, {{ getv "/opg/stackname" }} {{ end }}
 delimiter: \n
 
 
 [/var/log/app/nginx.error.log]
 format: json
 type: nginx
-tags: nginx, {{ getv "/opg/service" }} {{ if exists "/opg/stackname" }}, {{ getv "/opg/stackname" }} {{ end }}
+tags: nginx, {{ getv "/opg/service", "nginx" }} {{ if exists "/opg/stackname" }}, {{ getv "/opg/stackname" }} {{ end }}
 delimiter: \n
 
 
 [/var/log/nginx/error.log]
 format: json
 type: nginx
-tags: nginx, {{ getv "/opg/service" }} {{ if exists "/opg/stackname" }}, {{ getv "/opg/stackname" }} {{ end }}
+tags: nginx, {{ getv "/opg/service", "nginx" }} {{ if exists "/opg/stackname" }}, {{ getv "/opg/stackname" }} {{ end }}
 delimiter: \n
 
 
 [/var/log/nginx/access.json]
 format: rawjson
 type: nginx
-tags: nginx, {{ getv "/opg/service" }} {{ if exists "/opg/stackname" }}, {{ getv "/opg/stackname" }} {{ end }}
+tags: nginx, {{ getv "/opg/service", "nginx" }} {{ if exists "/opg/stackname" }}, {{ getv "/opg/stackname" }} {{ end }}
 delimiter: \n
