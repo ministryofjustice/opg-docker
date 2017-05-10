@@ -30,7 +30,6 @@ ifneq ($(findstring ERROR, $(newtag)),)
 endif
 
 registryUrl = registry.service.opg.digital
-oldRegistryUrl = registry.service.dsd.io
 
 buildcore: $(CORE_CONTAINERS)
 buildchild: $(CHILD_CONTAINERS)
@@ -55,11 +54,7 @@ ifeq ($(tagrepo),yes)
 else
 	@echo -e Not tagging repo
 endif
-	#push to old registry
-	for i in $(CORE_CONTAINERS) $(CHILD_CONTAINERS); do \
-			[ "$(stagearg)x" = "x" ] && docker push $(oldRegistryUrl)/opguk/$$i ; \
-			docker push $(oldRegistryUrl)/opguk/$$i:$(newtag) ; \
-	done
+
 
 pull:
 	for i in $(CORE_CONTAINERS) $(CHILD_CONTAINERS); do \
@@ -80,9 +75,7 @@ endif
 
 clean:
 	for i in $(CLEAN_CONTAINERS); do \
-		docker rmi $(oldRegistryUrl)/opguk/$$i || true ; \
 		docker rmi $(registryUrl)/opguk/$$i:$(currenttag) || true ; \
-		docker rmi $(oldRegistryUrl)/opguk/$$i:$(currenttag) || true ; \
 		docker rmi $(registryUrl)/opguk/$$i || true ; \
 	done
 
