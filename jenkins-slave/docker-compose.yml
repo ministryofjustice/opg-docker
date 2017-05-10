@@ -1,6 +1,6 @@
 {% for instance in range(5) %}
 jenkins-slave-{{ instance }}:
-  image: registry.service.dsd.io/opguk/jenkins-slave:latest
+  image: registry.service.opg.digital/opguk/jenkins-slave:latest
   env_file: ./jenkins_slave.env
   ports:
     - "22"
