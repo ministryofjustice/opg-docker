@@ -1,4 +1,4 @@
-FROM registry.service.dsd.io/opguk/jre-8
+FROM registry.service.opg.digital/opguk/jre-8
 
 #Install tools
 RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D && \
@@ -72,7 +72,7 @@ RUN mkdir -p /usr/share/jenkins/ref/{users/opgops, .docker} && \
     chmod a+x /etc/my_init.d/* && \
     usermod -p '*' app && \
     ln -s /dev/stdout /var/log/auth.log
-    
+
 COPY docker/etc/confd /etc/confd
 COPY docker/etc/ssh /etc/ssh
 
