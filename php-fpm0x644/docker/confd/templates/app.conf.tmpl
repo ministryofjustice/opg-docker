@@ -13,14 +13,18 @@ server {
 {{   end }}
     #Using global cert let's also listen on 443
     listen     443 ssl;
-    server_name {{ getv "/opg/nginx/server/names" "localhost" }};
+    server_name {{ getv "/opg/nginx/server/names" }};
     rewrite_log  on;
     access_log  /var/log/app/nginx.access.json logstash_json;
     error_log   /var/log/app/nginx.error.log error;
 
 
 # Defaults to /app/public if OPG_NGINX_ROOT isn't set
-    set $root "{{ getv "/opg/nginx/root" "/app/public" }};
+    {{ if exists "" }}
+    set $root "{{ getv "/opg/nginx/root" }}";
+    {{ else }}
+    set $root "/app/public";
+    {{ end }}
 
     root $root;
 
@@ -38,7 +42,11 @@ server {
     # serve static files directly
 
 # Defaults to index.html if OPG_NGINX_INDEX isn't set
-    set $index "{{ getv "/opg/nginx/index" "index.php" }};
+    {{ if exists "" }}
+    set $index "{{ getv "/opg/nginx/index" }}";
+    {{ else }}
+    set $index "index.php";
+    {{ end }}
 
     index $index;
 

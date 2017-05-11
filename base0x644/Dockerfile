@@ -78,3 +78,5 @@ ADD  docker/confd /etc/confd
 RUN mkdir -p /scripts/base
 ADD docker/scripts /scripts/base
 RUN chmod -R a+x /scripts/base
+
+ENV OPG_SERVICE base

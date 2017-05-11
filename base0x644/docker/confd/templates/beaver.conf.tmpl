@@ -7,5 +7,5 @@ queue_timeout: 3600
 [/var/log/ebs-snapshot.log]
 format: json
 type: ebs-snapshot
-tags: ebs-snapshot, {{ getv "/opg/service" "base" }} {{ if exists "/opg/stackname" }}, {{ getv "/opg/stackname" }} {{ end }}
+tags: ebs-snapshot, {{ getv "/opg/service" }} {{ if exists "/opg/stackname" }}, {{ getv "/opg/stackname" }} {{ end }}
 delimiter: \n
