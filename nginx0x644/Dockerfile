@@ -15,3 +15,6 @@ RUN  mkdir -p /app/public /etc/nginx/app.conf.d && \
 
 EXPOSE 80
 EXPOSE 443
+
+ENV OPG_NGINX_SERVER_NAMES localhost
+ENV OPG_SERVICE nginx
