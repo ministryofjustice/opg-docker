@@ -1,4 +1,3 @@
-{{ if exists "/opg/nginx/server/names" }}
 {{   if exists "/opg/nginx/ssl/force/redirect" }}
 server {
     listen      80;
@@ -14,14 +13,14 @@ server {
 {{   end }}
     #Using global cert let's also listen on 443
     listen     443 ssl;
-    server_name {{ getv "/opg/nginx/server/names", "localhost"}};
+    server_name {{ getv "/opg/nginx/server/names" "localhost" }};
     rewrite_log  on;
     access_log  /var/log/app/nginx.access.json logstash_json;
     error_log   /var/log/app/nginx.error.log error;
 
 
 # Defaults to /app/public if OPG_NGINX_ROOT isn't set
-    set $root "{{ getv "/opg/nginx/root", "/app/public" }};
+    set $root "{{ getv "/opg/nginx/root" "/app/public" }};
 
     root $root;
 
@@ -39,7 +38,7 @@ server {
     # serve static files directly
 
 # Defaults to index.html if OPG_NGINX_INDEX isn't set
-    set $index "{{ getv "/opg/nginx/index", "index.php" }};
+    set $index "{{ getv "/opg/nginx/index" "index.php" }};
 
     index $index;
 
@@ -79,4 +78,3 @@ server {
     # Optionally include app-specific config files
     include /etc/nginx/app.conf.d/*.conf;
 }
-{{ end }}
