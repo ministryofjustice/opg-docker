@@ -10,7 +10,7 @@ server {
 server {
     #Using global cert let's also listen on 443
     listen     443 ssl;
-    server_name {{ getv "/opg/nginx/server/names" "localhost" }};
+    server_name {{ getv "/opg/nginx/server/names" }};
 
     rewrite_log  on;
     access_log  /var/log/app/nginx.access.json logstash_json;
@@ -22,8 +22,11 @@ server {
 
 
 # Defaults to /app/public if OPG_NGINX_ROOT isn't set
-    set $root "{{ getv "/opg/nginx/root" "/app/public" }}";
-
+    {{ if exists "" }}
+    set $root "{{ getv "/opg/nginx/root" }}";
+    {{ else }}
+    set $root "/app/public";
+    {{ end }}
     root $root;
 
     location =/meta.json {
@@ -44,14 +47,13 @@ server {
 
     }
 # Defaults to index.html if OPG_NGINX_INDEX isn't set
-    set $index "{{ getv "/opg/nginx/index" "index.html" }};
+    {{ if exists "/opg/nginx/index" }}
+    set $index "{{ getv "/opg/nginx/index" }}";
+    {{ else }}
+    set $index "index.html";
+    {{ end }}
 
     index $index;
-
-#    fastcgi_buffers 256 4k;
-#    fastcgi_buffer_size 4k;
-#    fastcgi_busy_buffers_size 256k;
-#    fastcgi_temp_file_write_size 256k;
 
     location / {
         try_files $uri $uri/ /$index$is_args$args;
