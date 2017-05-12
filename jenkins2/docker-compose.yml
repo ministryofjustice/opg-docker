@@ -1,0 +1,22 @@
+version: '2'
+services:
+
+  router:
+    image: registry.service.opg.digital/opguk/nginx-router
+    links:
+      - jenkins2
+    ports:
+      - 443:443
+    environment:
+      - OPG_NGINX_ROUTER_00_VHOST=localhost
+      - OPG_NGINX_ROUTER_00_TARGET=http://jenkins2:8080
+
+  jenkins2:
+    build: .
+    ports:
+      - "50000:50000"
+      - "8080:8080"
+    volumes:
+      - ./example_home:/srv/jenkins_home
+      # Don't enable this unless you really trust the containers you are running.
+      #- /var/run/docker.sock:/var/run/docker.sock
