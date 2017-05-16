@@ -39,7 +39,7 @@ buildchild: $(CHILD_CONTAINERS)
 buildnewcore: $(LTS_CONTAINERS)
 buildnewchild: $(LTS_CHILD_CONTAINERS)
 build: buildnewcore buildnewchild
-#build: buildcore buildchild buildnewcore
+#build: buildcore buildchild buildnewcore buildnewchild
 
 
 $(CORE_CONTAINERS):
