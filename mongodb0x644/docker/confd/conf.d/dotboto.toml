@@ -1,0 +1,8 @@
+[template]
+src = "dotboto.tmpl"
+dest = "/root/.boto"
+keys = [
+    "/backupninja",
+]
+owner = "root"
+mode = "0600"

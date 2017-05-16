@@ -1,0 +1,6 @@
+[template]
+src = "mongod.conf.tmpl"
+dest = "/etc/mongod.conf"
+keys = [
+    "/mongo",
+]

@@ -1,0 +1,8 @@
+[template]
+src = "80.dup.tmpl"
+dest = "/etc/backup.d/80.dup"
+keys = [
+    "/backupninja",
+]
+owner = "root"
+mode = "0600"

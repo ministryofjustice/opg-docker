@@ -1,0 +1,9 @@
+#!/bin/sh
+
+if [ -z "${BACKUPNINJA_DUPLICITY_ENABLED}" ] || [ "${BACKUPNINJA_DUPLICITY_ENABLED}" != "True" ]; then
+	rm /etc/backup.d/90.dup /usr/local/bin/duplicity_daily_helper /usr/local/etc/duplicity_daily_helper.conf /usr/local/bin/duplicity_hourly_helper /usr/local/etc/duplicity_hourly_helper.conf || true
+fi
+
+if [ -z "${BACKUPNINJA_DUPLICITY_HOURLY_ENABLED}" ] || [ "${BACKUPNINJA_DUPLICITY_HOURLY_ENABLED}" != "True" ]; then
+	rm /etc/backup.d/80.dup /usr/local/bin/duplicity_hourly_helper /usr/local/etc/duplicity_hourly_helper.conf || true
+fi
