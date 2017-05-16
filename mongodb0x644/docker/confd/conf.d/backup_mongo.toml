@@ -1,0 +1,9 @@
+[template]
+src = "backup_mongo.tmpl"
+dest = "/etc/backup.d/30.mongodb"
+keys = [
+    "/backupninja/mongo",
+    "/mongo/admin",
+]
+owner = "root"
+mode = "0600"
