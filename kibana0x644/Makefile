@@ -1,7 +1,7 @@
 .PHONY: build
 
 registryUrl ?= registry.service.opg.digital
-image = opguk/kibana
+image = opguk/kibana0x644
 
 build:
 	docker build $(no-cache) -t "$(registryUrl)/$(image)" .

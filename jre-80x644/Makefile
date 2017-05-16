@@ -1,7 +1,7 @@
 .PHONY: build
 
 registryUrl ?= registry.service.opg.digital
-image = opguk/jre-8
+image = opguk/jre-80x644
 
 build:
 	docker build $(no-cache) -t "$(registryUrl)/$(image)" .
