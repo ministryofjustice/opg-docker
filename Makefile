@@ -35,7 +35,8 @@ registryUrl = registry.service.opg.digital
 buildcore: $(CORE_CONTAINERS)
 buildchild: $(CHILD_CONTAINERS)
 buildnewcore: $(LTS_CONTAINERS)
-build: buildcore buildchild buildnewcore
+build: buildcore buildnewcore
+#build: buildcore buildchild buildnewcore
 
 
 $(CORE_CONTAINERS):
