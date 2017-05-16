@@ -1,6 +1,8 @@
-FROM registry.service.opg.digital/opguk/base
+FROM registry.service.opg.digital/opguk/base0x644
 
 ENV KIBANA_VERSION 5.4.0
+ENV ES_SKIP_SET_KERNEL_PARAMETERS true
+
 # add our user and group first to make sure their IDs get assigned consistently
 RUN groupadd -r kibana && useradd -r -g kibana kibana
 
