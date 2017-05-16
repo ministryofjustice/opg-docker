@@ -1,0 +1,15 @@
+[template]
+src = "kibana.yml.tmpl"
+dest = "/etc/kibana/kibana.yml"
+keys = [
+    "/port",
+    "/host",
+    "/elasticsearch",
+    "/elasticsearch/port/9200/tcp",
+    "/elasticsearch/preserve/host",
+    "/kibana/index",
+    "/default/app/id",
+    "/request/timeout",
+    "/shard/timeout",
+    "/verify/ssl"
+]
