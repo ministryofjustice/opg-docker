@@ -1,0 +1,140 @@
+#!/usr/bin/env python
+
+import os
+import urllib2
+import socket
+import subprocess
+import json
+
+
+class DockerConfiguration:
+    """
+    class that extracts host ip and port bindings for the instance
+    """
+    host_ssh_port = ''
+    host_ip_address = ''
+
+    @staticmethod
+    def jenkins_defined():
+        return os.environ.get('JENKINS_MASTER_URL', None)
+
+    @staticmethod
+    def _get_host_ip():
+        try:
+            request  = urllib2.Request("http://169.254.169.254/latest/meta-data/local-ipv4")
+            response = urllib2.urlopen(request)
+            return response.read()
+        except urllib2.URLError as e:
+            raise e
+
+    @staticmethod
+    def _get_environment_data():
+        result = subprocess.check_output(
+            ['docker', 'inspect', socket.gethostname()],
+            stderr=subprocess.STDOUT
+        )
+        return result
+
+    def _extract_config_to_vars(self, json_string):
+        json_data = json.loads(json_string)[0]
+        host_bindings = json_data['NetworkSettings']['Ports']
+        self.host_ip_address = self._get_host_ip()
+        self.host_ssh_port = host_bindings['22/tcp'][0]['HostPort']
+
+    def __init__(self):
+        self._extract_config_to_vars(self._get_environment_data())
+
+
+class SelfRegistration:
+    """
+    Class that does the jenkins self registration
+    """
+    jenkins_url = ''
+    config_data = None
+
+    def __init__(self, config_instance):
+        self.config_data = config_instance
+        self.generate_registration_url()
+
+    @staticmethod
+    def _generate_slave_name():
+        slave_name = "jenkins_slave_{}".format(socket.gethostname())
+        if os.environ.get('SLAVE_PROJECT_NAME', None) \
+                and os.environ.get('SLAVE_STACK_NAME', None):
+            slave_name = "{}_{}_{}".format(
+                os.environ['SLAVE_PROJECT_NAME'],
+                os.environ['SLAVE_STACK_NAME'],
+                socket.gethostname()
+            )
+
+        return slave_name
+
+    @staticmethod
+    def _generate_slave_labels():
+        slave_labels = os.environ.get('SLAVE_LABELS', '')
+
+        if slave_labels is '':
+            if os.environ.get('SLAVE_PROJECT_NAME', None) \
+                    and os.environ.get('SLAVE_STACK_NAME', None):
+                slave_labels = "{} {} {}_{}".format(
+                    os.environ['SLAVE_PROJECT_NAME'],
+                    os.environ['SLAVE_STACK_NAME'],
+                    os.environ['SLAVE_PROJECT_NAME'],
+                    os.environ['SLAVE_STACK_NAME']
+                )
+        return slave_labels
+
+    @staticmethod
+    def _generate_jenkins_host():
+        host_url = os.environ['JENKINS_MASTER_URL'].rstrip('/')
+
+        if os.environ.get('JENKINS_MASTER_PORT', None):
+            host_url = "{}:{}".format(
+                host_url,
+                os.environ['JENKINS_MASTER_PORT']
+            )
+
+        return host_url
+
+    def generate_registration_url(self):
+        self.jenkins_url = '{}/buildByToken/buildWithParameters' \
+                           '?job={}' \
+                           '&token={}' \
+                           '&REMOTE_HOST={}' \
+                           '&SLAVE_NAME={}' \
+                           '&SLAVE_LABELS={}' \
+                           '&REMOTE_PORT={}' \
+            .format(
+                self._generate_jenkins_host(),
+                os.environ['JENKINS_JOB_NAME'],
+                os.environ['JENKINS_AUTH_TOKEN'],
+                self.config_data.host_ip_address,
+                self._generate_slave_name(),
+                self._generate_slave_labels(),
+                conf.host_ssh_port
+            )
+
+    def register(self):
+        request = urllib2.Request(self.jenkins_url)
+
+        try:
+            response = urllib2.urlopen(request)
+            result = response.read()
+        except urllib2.URLError as e:
+            if hasattr(e, 'reason'):
+                print "We failed to reach the jenkins server."
+                print "Reason: {}".format(e.reason)
+                raise
+            elif hasattr(e, 'code'):
+                print "The server returned a {} response".format(e.code)
+                raise
+        else:
+            print result
+
+# Entry-point
+if DockerConfiguration.jenkins_defined():
+    conf = DockerConfiguration()
+    registration = SelfRegistration(conf)
+    registration.register()
+else:
+    print "Aborting self registration, no Jenkins Master defined"

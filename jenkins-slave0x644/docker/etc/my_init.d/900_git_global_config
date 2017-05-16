@@ -1,0 +1,5 @@
+#!/bin/sh
+
+export `su - app -c /usr/bin/env | grep "^HOME="`
+`git config --global user.name "${JENKINS_GITHUB_USERNAME:-Jenkins Agent}"`
+`git config --global user.email "${JENKINS_GITHUB_EMAIL:-no-reply@jenkins.agent}"`
