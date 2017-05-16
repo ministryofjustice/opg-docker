@@ -1,0 +1,253 @@
+# -*- mode: sh; sh-basic-offset: 3; indent-tabs-mode: nil; -*-
+# vim: set filetype=sh sw=3 sts=3 expandtab autoindent:
+#
+# PostgreSQL handler script for backupninja
+#
+
+getconf backupdir /var/backups/postgres
+getconf databases all
+getconf compress yes
+getconf vsname
+# format maps to pg_dump --format= option, old/default was plain
+getconf format plain
+getconf user
+getconf password
+getconf host
+getconf port 5432
+
+if [ -n "${host}" ]; then
+  dump_hostname=$host
+  export PGHOST=$host
+  export PGPORT=$port
+else
+  dump_hostname=`hostname`
+fi
+
+if [ -n "${user}" ]; then
+  export PGUSER=$user
+  if [ -n "${password}" ]; then
+    export PGPASSFILE=$(mktemp --suffix='.backupninja-pgsql')
+    echo "*:*:*:${user}:${password}" > $PGPASSFILE
+  fi
+fi
+
+
+# Decide if the handler should operate on a vserver or on the host.
+# In the former case, check that $vsname exists and is running.
+usevserver=no
+vroot=''
+if [ $vservers_are_available = yes ]; then
+   if [ -n "$vsname" ]; then
+      # does it exist ?
+      if ! vservers_exist "$vsname" ; then
+         fatal "The vserver given in vsname ($vsname) does not exist."
+      fi
+      # is it running ?
+      vservers_running $vsname || fatal "The vserver $vsname is not running."
+      # everything ok
+      info "Using vserver '$vsname'."
+      usevserver=yes
+      vroot="$VROOTDIR/$vsname"
+   else
+      info "No vserver name specified, actions will be performed on the host."
+   fi
+fi
+
+# Make sure that the system to backup has the needed executables
+if [ $usevserver = yes ]; then
+   debug "Examining vserver '$vsname'."
+   if [ "$databases" == "all" ] && [ "$format" = "plain" ]; then
+      [ -x "$vroot`$VSERVER $vsname exec which $PGSQLDUMPALL`" ] || \
+         fatal "Can't find $PGSQLDUMPALL in vserver $vsname."
+   elif [ "$format" != "plain" ]; then
+      [ -x "$vroot`$VSERVER $vsname exec which $PGSQLDUMPALL`" ] || \
+         fatal "Can't find $PGSQLDUMPALL in vserver $vsname."
+      [ -x "$vroot`$VSERVER $vsname exec which $PGSQLDUMP`" ] || \
+         fatal "Can't find $PGSQLDUMP in vserver $vsname."
+      [ -x "$vroot`$VSERVER $vsname exec which $PSQL`" ] || \
+         fatal "Can't find $PSQL in vserver $vsname."
+   else
+      [ -x "$vroot`$VSERVER $vsname exec which $PGSQLDUMP`" ] || \
+         fatal "Can't find $PGSQLDUMP in vserver $vsname."
+   fi
+else
+   if [ "$databases" == "all" ] && [ "$format" = "plain" ]; then
+      [ -x "`which $PGSQLDUMPALL`" ] || \
+         fatal "Can't find $PGSQLDUMPALL."
+   elif [ "$format" != "plain" ]; then
+      [ -x "`which $PGSQLDUMPALL`" ] || \
+         fatal "Can't find $PGSQLDUMPALL."
+      [ -x "`which $PGSQLDUMP`" ] || \
+         fatal "Can't find $PGSQLDUMP."
+      [ -x "`which $PSQL`" ] || \
+         fatal "Can't find $PSQL."
+   else
+      [ -x "`which $PGSQLDUMP`" ] || \
+         fatal "Can't find $PGSQLDUMP."
+   fi
+fi
+
+# create backup dir, the vroot variable will be empty if no vsname was specified
+# and will proceed to operate on the host
+[ -d $vroot$backupdir ] || (debug "mkdir -p $vroot$backupdir"; mkdir -p $vroot$backupdir)
+[ -d $vroot$backupdir ] || fatal "Backup directory '$vroot$backupdir' does not exist, and could not be created."
+
+# give backup dir the good uid and permissions
+# (in respect to the vserver, if $usevserver = yes)
+if [ $usevserver = yes ]; then
+   pguid=`$VSERVER $vsname exec getent passwd $PGSQLUSER | /usr/bin/awk -F: '{print $3}'`
+else
+   pguid=`getent passwd $PGSQLUSER | /usr/bin/awk -F: '{print $3}'`
+fi
+[ -n "$pguid" ] || \
+   fatal "No user called $PGSQLUSER`[ $usevserver = no ] || echo \" on vserver $vsname\"`."
+debug "chown $pguid $vroot$backupdir"
+chown $pguid $vroot$backupdir
+debug "chmod 700 $vroot$backupdir"
+chmod 700 $vroot$backupdir
+
+
+# If we are using the custom (best) or tar pg_dump format, and
+# dumping "all" databases, we will substitute "all" for a list
+# of all non-template databases to avoid the use of pg_dumpall.
+dumpglobals="no"
+if [ "$databases" = "all" ] && [ "$format" != "plain" ]; then
+   cmdprefix=""
+   if [ "$usevserver" = "yes" ]; then
+      	cmdprefix="$VSERVER $vsname exec "
+   fi
+   if [ -n "${PGHOST}" ]; then
+     execstr="psql -w -At -c \"SELECT datname FROM pg_database WHERE NOT datistemplate\" postgres"
+   elif [ -z "${user}" ]; then
+     execstr="${cmdprefix} su - $PGSQLUSER -c 'psql -AtU $PGSQLUSER -c \"SELECT datname FROM pg_database WHERE NOT datistemplate\"'"
+   else
+     execstr="${cmdprefix} su - $PGSQLUSER -c 'psql -AtU $user -c \"SELECT datname FROM pg_database WHERE NOT datistemplate\"'"
+   fi
+   debug $execstr
+   dblist=""
+   for db in $(eval $execstr 2>&1); do
+      dblist="$dblist $db"
+   done
+   if [ "$dblist" != "" ]; then
+      databases="$dblist"
+   fi
+   # Dump globals (pg_dumpall -g) for roles and tablespaces
+   dumpglobals="yes"
+fi
+
+
+# if $databases = all, use pg_dumpall
+if [ "$databases" == "all" ]; then
+   if [ $usevserver = yes ]; then
+      if [ "$compress" == "yes" ]; then
+         execstr="$VSERVER $vsname exec su - $PGSQLUSER -s /bin/bash -c \"set -o pipefail ; $PGSQLDUMPALL -w | $GZIP $GZIP_OPTS > '$backupdir/${vsname}.sql.gz'\""
+      else
+         execstr="$VSERVER $vsname exec su - $PGSQLUSER -c \"$PGSQLDUMPALL -w > '$backupdir/${vsname}.sql'\""
+      fi
+   else
+      if [ "$compress" == "yes" ]; then
+         if [ -n "${PGHOST}" ]; then
+           execstr="set -o pipefail ; $PGSQLDUMPALL -w | $GZIP $GZIP_OPTS > '$backupdir/${dump_hostname}-all.sql.gz'"
+         else
+           execstr="su - $PGSQLUSER -s /bin/bash -c \"set -o pipefail ; $PGSQLDUMPALL -w | $GZIP $GZIP_OPTS > '$backupdir/${dump_hostname}-all.sql.gz'\""
+         fi
+      else
+         if [ -n "${PGHOST}" ]; then
+           execstr="$PGSQLDUMPALL -w > '$backupdir/${dump_hostname}-all.sql'"
+         else
+           execstr="su - $PGSQLUSER -c \"$PGSQLDUMPALL -w > '$backupdir/${dump_hostname}-all.sql'\""
+         fi
+      fi
+   fi
+   debug "$execstr"
+   if [ ! $test ]; then
+      output=`eval $execstr 2>&1`
+      code=$?
+      if [ "$code" == "0" ]; then
+         debug $output
+         info "Successfully finished dump of pgsql cluster"
+      else
+         warning $output
+         warning "Failed to dump pgsql cluster"
+      fi
+   fi
+
+# else use pg_dump on each specified database
+else
+   # If we're not doing plain format, database=all may now be database=list
+   # so we track the database=all selection in dumpglobals which tells us
+   # to also dump the roles and tablespaces via pg_dumpall -g
+   if [ "$dumpglobals" = "yes" ]; then
+      globalscmd=""
+      if [ "$compress" == "yes" ]; then
+         globalscmd="set -o pipefail ; $PGSQLDUMPALL -w -g | $GZIP $GZIP_OPTS > '$backupdir/globals.sql.gz'"
+      else
+         globalscmd="$PGSQLDUMPALL -w -g > '$backupdir/globals.sql'"
+      fi
+      if [ -n "${PGHOST}" ]; then
+         execstr=$globalscmd
+      elif [ $usevserver = yes ]; then
+         execstr="$VSERVER $vsname exec su - $PGSQLUSER -s /bin/bash -c \"$globalscmd\""
+      else
+         execstr="su - $PGSQLUSER -s /bin/bash -c \"$globalscmd\""
+      fi
+      debug "$execstr"
+      if [ ! $test ]; then
+         output=`eval $execstr 2>&1`
+         code=$?
+         if [ "$code" == "0" ]; then
+            debug $output
+            info "Successfully finished pgsql globals (roles and tablespaces) dump"
+         else
+            warning $output
+            warning "Failed to dump pgsql globals (roles and tablespaces)"
+         fi
+      fi
+   fi
+   for db in $databases; do
+      dumpext="sql"
+      if [ "$format" != "plain" ]; then
+         dumpext="pg_dump"
+      fi
+      # To better support the backupninja global GZIP and rsync-friendly GZIP_OPTS
+      # the custom archive format is told to disable compression. The plain format
+      # is uncompressed by default and the tar format doesn't support pg_dump compression.
+      disablecustomcompress=""
+      if [ "$format" = "custom" ]; then
+         disablecustomcompress="--compress=0"
+      fi
+      dumpcmd=""
+      globalscmd=""
+      if [ "$compress" == "yes" ]; then
+         dumpcmd="set -o pipefail ; $PGSQLDUMP -w --format=$format ${disablecustomcompress} $db | $GZIP $GZIP_OPTS > '$backupdir/${db}.${dumpext}.gz'"
+      else
+         dumpcmd="$PGSQLDUMP -w --format=$format ${disablecustomcompress} $db > '$backupdir/${db}.${dumpext}'"
+      fi
+      if [ -n "${PGHOST}" ]; then
+         execstr=$dumpcmd
+      elif [ $usevserver = yes ]; then
+         execstr="$VSERVER $vsname exec su - $PGSQLUSER -s /bin/bash -c \"$dumpcmd\""
+      else
+         execstr="su - $PGSQLUSER -s /bin/bash -c \"$dumpcmd\""
+      fi
+      debug "$execstr"
+      if [ ! $test ]; then
+         output=`eval $execstr 2>&1`
+         code=$?
+         if [ "$code" == "0" ]; then
+            debug $output
+            info "Successfully finished dump of pgsql database ${db}"
+         else
+            warning $output
+            warning "Failed to dump pgsql database ${db}"
+         fi
+      fi
+   done
+fi
+
+if [ -n "${PGPASSFILE}" ]; then
+  rm -f $PGPASSFILE
+fi
+
+return 0
+

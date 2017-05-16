@@ -1,0 +1,15 @@
+packages = yes
+partitions = yes
+dosfdisk = yes
+hardware = yes
+luksheaders = no
+lvm = yes
+
+packagesfile = {{ getv "/backupninja/basedir" }}/sys/dpkg-selections.txt
+selectionsfile = {{ getv "/backupninja/basedir" }}/sys/debconfsel.txt
+partitionsfile = {{ getv "/backupninja/basedir" }}/sys/partitions.__star__.txt
+hardwarefile = {{ getv "/backupninja/basedir" }}/sys/hardware.txt
+
+# If vservers = yes in /etc/backupninja.conf then the following variables can
+# be used:
+# vsnames = all | <vserver1> <vserver2> ... (default = all)

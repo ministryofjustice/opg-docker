@@ -1,0 +1,9 @@
+[template]
+src = "duplicity_hourly_helper.conf.tmpl"
+dest = "/usr/local/etc/duplicity_hourly_helper.conf"
+keys = [
+    "/backupninja",
+]
+owner = "root"
+group = "adm"
+mode = "0440"

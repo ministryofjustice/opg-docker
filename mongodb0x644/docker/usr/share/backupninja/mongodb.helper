@@ -1,0 +1,87 @@
+# -*- mode: sh; sh-basic-offset: 3; indent-tabs-mode: nil; -*-
+# vim: set filetype=sh sw=3 sts=3 expandtab autoindent:
+
+HELPERS="$HELPERS mongodb:mongodb_database_backup"
+
+do_mongodb_vserver() {
+   choose_one_vserver "$mongodb_title"
+   [ $? = 0 ] || return 1
+   vsname="vsname = $REPLY"
+}
+
+mongodb_wizard() {
+
+   # Global variables
+   mongodb_title="MongoDB action wizard"
+
+   # backup the host system or a Vserver?
+   choose_host_or_one_vserver "$mongodb_title"
+   [ $? = 0 ] || return 1
+   if [ $host_or_vservers == vservers ]
+   then
+      do_mongodb_vserver
+      [ $? = 0 ] || return 1
+   fi
+
+   inputBox "$mongodb_title" "What is the path to \"mongodump\" utility?" "/usr/bin/mongodump"
+   [ $? = 1 ] && return;
+   result="$REPLY"
+   mongodump="mongodump = $result"
+
+   mongouser="# mongouser = <username>"
+   mongopass="# mongopass = <password>"
+   inputBox "$mongodb_title" "Mongo DB User" 
+   [ $? = 1 ] && return;
+   result="$REPLY"
+   if [ $REPLY ]
+   then
+      mongouser="mongouser = $result"
+      inputBox "$mongodb_title" "Mongo DB Password"
+      [ $? = 1 ] && return;
+      result="$REPLY"
+      mongopass="mongopass = $result"
+   fi
+
+   backupdir_default="/var/backups/mongodb"
+   mongodb="# mongodb = <db to backup>"
+   mongocollection="# mongocollection = <collection to backup>"
+   inputBox "$mongodb_title" "Mongo DB to backup, leave empty for all dbs."
+   [ $? = 1 ] && return;
+   result="$REPLY"
+   if [ $REPLY ]
+   then
+     mongodb="mongodb = $result"
+     backupdir_default="${backupdir_default}_${result}"
+     inputBox "$mongodb_title" "Mongo collection to backup, leave empty for all collections."
+       [ $? = 1 ] && return;
+       result="$REPLY"
+       if [ $REPLY ]
+       then
+         mongocollection="mongocollection = $result"
+         backupdir_default="${backupdir_default}_${result}"
+       fi
+   fi
+
+   inputBox "$mongodb_title" "Directory where backups should be stored?`echo \"\n(Relative to the vserver's root if run in a vserver)\"`" $backupdir_default
+   [ $? = 1 ] && return;
+   result="$REPLY"
+   backupdir="backupdir = $result"
+   inputBox "$mongodb_title" "MongoDB host" "localhost"
+   [ $? = 1 ] && return;
+   result="$REPLY"
+   dbhost="hostdb = $result"
+   get_next_filename $configdirectory/31-db.mongodb
+   cat > $next_filename <<EOF
+# when = everyday at 5:15
+$mongodump
+$mongouser
+$mongopass
+$mongodb
+$mongocollection
+$backupdir
+$dbhost
+$vsname
+EOF
+   chmod 600 $next_filename
+}
+

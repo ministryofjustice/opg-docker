@@ -1,0 +1,5 @@
+export PASSPHRASE={{ getv "/backupninja/duplicity/password" }}
+export AWS_ACCESS_KEY_ID={{ getv "/backupninja/duplicity/aws/key" }}
+export AWS_SECRET_ACCESS_KEY={{ getv "/backupninja/duplicity/aws/secret" }}
+export DUPLICITY_EXTRA_OPTS="--s3-use-new-style"
+export DUPLICITY_BACKEND_URL="{{ getv "/backupninja/duplicity/desturl" }}"
