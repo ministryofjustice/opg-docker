@@ -1,0 +1,32 @@
+{{if exists "/elasticsearch/network/bind/host" }}network.bind_host: {{ getv "/elasticsearch/network/bind/host" }}{{end}}
+{{if exists "/elasticsearch/network/publish/host" }}network.publish_host: {{ getv "/elasticsearch/network/publish/host" }}{{end}}
+{{if exists "/elasticsearch/path/data" }}path.data: {{ getv "/elasticsearch/path/data" }}{{end}}
+{{if exists "/elasticsearch/path/repo" }}path.repo: {{ getv "/elasticsearch/path/repo" }}{{end}}
+
+{{if ls "/elasticsearch/cluster/nodes"}}
+discovery.zen.ping.unicast.hosts: {{range getvs "/elasticsearch/cluster/nodes/*"}}
+- {{.}} {{end}}
+{{end}}
+
+{{if exists "/elasticsearch/discovery/zen/minimum/master/nodes" }}discovery.zen.minimum_master_nodes: {{ getv "/elasticsearch/discovery/zen/minimum/master/nodes" }}{{end}}
+
+{{if exists "/elasticsearch/cluster/name" }}cluster.name: {{ getv "/elasticsearch/cluster/name" }}{{end}}
+
+{{if exists "/elasticsearch/node/name" }}node.name: {{ getv "/elasticsearch/node/name" }}{{end}}
+{{if exists "/elasticsearch/node/type" }}
+{{$nodetype := getv "/elasticsearch/node/type"}}
+{{if eq $nodetype "coord" }}
+node.master: false
+node.data: false
+node.ingest: false
+{{  end}}
+{{  if eq $nodetype "ingest" }}
+node.master: false
+node.data: false
+{{  end}}
+{{ end }}
+{{if exists "/elasticsearch/indices/fielddata/cache/size" }}indices.fielddata.cache.size: {{ getv "/elasticsearch/indices/fielddata/cache/size" }}{{end}}
+
+{{if exists "/elasticsearch/gateway/expected/nodes" }}gateway.expected_nodes: {{ getv "/elasticsearch/gateway/expected/nodes" }}{{end}}
+{{if exists "/elasticsearch/gateway/recover/after/time" }}gateway.recover_after_time: {{ getv "/elasticsearch/gateway/recover/after/time" }}{{end}}
+{{if exists "/elasticsearch/gateway/recover/after/nodes" }}gateway.recover_after_nodes: {{ getv "/elasticsearch/gateway/recover/after/nodes" }}{{end}}
