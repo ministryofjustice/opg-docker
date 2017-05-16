@@ -2,7 +2,7 @@
 
 # data on volume
 elasticsearch:
-  image: registry.service.opg.digital/opguk/elasticsearch5
+  image: registry.service.opg.digital/opguk/elasticsearch50x644
   log_driver: syslog
   mem_limit: 5000000000
   ports:
@@ -20,10 +20,10 @@ elasticsearch:
     - elasticsearchshareddata
 
 elasticsearchshareddata:
-  image: registry.service.opg.digital/opguk/elasticsearch-shared-data
+  image: registry.service.opg.digital/opguk/elasticsearch-shared-data0x644
 
 elasticsearchingest:
-  image: registry.service.opg.digital/opguk/elasticsearch5
+  image: registry.service.opg.digital/opguk/elasticsearch50x644
   log_driver: syslog
   mem_limit: 5000000000
   links:
