@@ -1,7 +1,0 @@
-[template]
-src = "beaver.nginx.conf.tmpl"
-dest = "/etc/beaver.d/nginx.conf"
-keys = [
-    "/opg/service",
-    "/opg/stackname",
-]
