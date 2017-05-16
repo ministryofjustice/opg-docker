@@ -16,8 +16,8 @@ ENV ELASTICSEARCH_PATH_REPO /usr/share/elasticsearch/repo
 
 RUN echo "deb $ELASTICSEARCH_REPO_BASE stable main" > /etc/apt/sources.list.d/elasticsearch.list
 
-RUN apt-get update \
-  && apt-get install elasticsearch=${ELASTICSEARCH_VERSION} \
+RUN  apt update \
+  && apt install -y elasticsearch=${ELASTICSEARCH_VERSION} \
   && pip install elasticsearch-curator \
   && rm -rf /var/lib/apt/lists/*
 
