@@ -1,0 +1,9 @@
+server.port: {{ getv "/port" }}
+server.host: "{{ getv "/host" }}"
+elasticsearch.url: 'http://{{ getv "/elasticsearch" }}:{{ getv "/elasticsearch/port/9200/tcp" }}'
+elasticsearch.preserveHost: {{ getv "/elasticsearch/preserve/host" }}
+elasticsearch.requestTimeout: {{ getv "/request/timeout" }}
+elasticsearch.shardTimeout: {{ getv "/shard/timeout" }} 
+elasticsearch.ssl.verify: {{ getv "/verify/ssl" }}
+kibana.index: "{{ getv "/kibana/index" }}"
+kibana.defaultAppId: "{{ getv "/default/app/id" }}"

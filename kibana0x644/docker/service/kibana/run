@@ -1,0 +1,2 @@
+#!/bin/bash
+exec gosu kibana /usr/share/kibana/bin/kibana
