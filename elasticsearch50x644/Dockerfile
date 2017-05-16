@@ -8,6 +8,8 @@ RUN wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add 
 # Define software versions
 ENV ELASTICSEARCH_REPO_BASE https://artifacts.elastic.co/packages/5.x/apt
 ENV ELASTICSEARCH_VERSION 5.4.0
+# ES 16.04 issue
+ENV ES_SKIP_SET_KERNEL_PARAMETERS true
 
 # Define this confd variable here so we can use it early
 ENV ELASTICSEARCH_PATH_REPO /usr/share/elasticsearch/repo
