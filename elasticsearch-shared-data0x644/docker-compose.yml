@@ -2,7 +2,7 @@ elasticsearchshareddata:
   build: .
 
 kibana:
-  image: registry.service.opg.digital/opguk/kibana:latest
+  image: registry.service.opg.digital/opguk/kibana0x644:latest
   environment:
     ELASTICSEARCH: elasticsearch
     ELASTICSEARCH_PORT_9200_TCP: 9200
@@ -12,7 +12,7 @@ kibana:
     - elasticsearch
 
 elasticsearch:
-  image: registry.service.opg.digital/opguk/elasticsearch5:latest
+  image: registry.service.opg.digital/opguk/elasticsearch50x644:latest
   ports:
     - 9200:9200
     - 9300:9300
