@@ -1,7 +1,7 @@
 .PHONY: build
 
 registryUrl ?= registry.service.opg.digital
-image = opguk/elasticsearch-shared-data
+image = opguk/elasticsearch-shared-data0x644
 
 build:
 	docker build $(no-cache) -t "$(registryUrl)/$(image)" .
