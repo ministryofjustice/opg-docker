@@ -3,7 +3,7 @@ FROM registry.service.opg.digital/opguk/jre-80x644
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN groupadd -g 3999 elasticsearch && useradd -m -u 3999 -g 3999 elasticsearch
 
-RUN wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+RUN wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
 
 # Define software versions
 ENV ELASTICSEARCH_REPO_BASE https://artifacts.elastic.co/packages/5.x/apt
