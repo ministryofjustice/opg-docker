@@ -6,7 +6,7 @@ RUN groupadd -r kibana && useradd -r -g kibana kibana
 
 RUN apt-get update && apt-get install -y ca-certificates curl --no-install-recommends && rm -rf /var/lib/apt/lists/*
 
-RUN wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+RUN wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
 
 # Define software versions
 ENV ELASTICSEARCH_REPO_BASE https://artifacts.elastic.co/packages/5.x/apt
