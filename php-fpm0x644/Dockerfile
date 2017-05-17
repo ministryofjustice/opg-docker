@@ -1,6 +1,6 @@
 FROM registry.service.opg.digital/opguk/nginx0x644
 
-ARG PHP_PACKAGES="php-fpm php-cli php-imagick php-mongodb mongodb-clients php-curl php7.0-xml postgresql-client php-pgsql php-mcrypt"
+ARG PHP_PACKAGES="php-fpm php-cli php-imagick php-mongodb mongodb-clients php-curl php7.0-xml postgresql-client php-pgsql php-mcrypt php-memcached php-redis php-pear php-mbstring"
 
 RUN apt install -y $PHP_PACKAGES && \
     apt clean && apt -y autoremove && \
