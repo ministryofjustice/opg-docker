@@ -8,9 +8,6 @@ server {
 
 
 server {
-{{   if not (exists "/opg/nginx/ssl/force/redirect") }}
-    listen     80;
-{{   end }}
     #Using global cert let's also listen on 443
     listen     443 ssl;
     server_name {{ getv "/opg/nginx/server/names" }};
