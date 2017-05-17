@@ -12,9 +12,6 @@ server {
 {{ range lsdir "/opg/nginx/router" }}
 {{ with $vhost_id := . }}
 server {
-{{ if not (exists "/opg/nginx/ssl/force/redirect") }}
-    listen     80;
-{{ end }}
     listen     443 ssl;
     server_name {{ getv (printf "/opg/nginx/router/%s/vhost" $vhost_id) }};
 
