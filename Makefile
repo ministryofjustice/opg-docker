@@ -38,7 +38,7 @@ buildcore: $(CORE_CONTAINERS)
 buildchild: $(CHILD_CONTAINERS)
 buildnewcore: $(LTS_CONTAINERS)
 buildnewchild: $(LTS_CHILD_CONTAINERS)
-build: buildnewcore buildnewchild
+build: buildnewcore #buildnewchild
 #build: buildcore buildchild buildnewcore buildnewchild
 
 
