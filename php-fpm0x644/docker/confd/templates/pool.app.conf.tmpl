@@ -14,8 +14,8 @@ daemonize = no
 
 listen = 9000
 listen.allowed_clients = 127.0.0.1
-user = {{ getv "/opg/php/pool/user" "app" }}
-group = {{ getv "/opg/php/pool/group" "app" }}
+user = {{ getv "/opg/php/pool/user" }}
+group = {{ getv "/opg/php/pool/group" }}
 
 pm = static
 
