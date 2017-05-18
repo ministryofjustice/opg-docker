@@ -22,15 +22,14 @@ RUN curl -o /usr/local/bin/gosu -SL "https://github.com/tianon/gosu/releases/dow
   && rm /usr/local/bin/gosu.asc \
   && chmod +x /usr/local/bin/gosu
 
+ARG APT_PACKAGES="dos2unix joe python-setuptools wget dnsmasq unzip zip"
+
 RUN  rm -f /etc/apt/sources.list.d/* && \
      apt update && \
      apt install -y apt-utils && \
      apt -y upgrade && \
-     apt install -y git joe \
-     python python-setuptools \
-     wget dnsmasq \
-     unzip zip && \
-     apt clean && apt autoremove && \
+     apt install -y ${APT_PACKAGES} && \
+     apt-get clean && apt-get autoremove && \
      rm -rf /var/lib/cache/* /var/lib/log/* /tmp/* /var/tmp/*
 
 # Pip installs
