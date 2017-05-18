@@ -3,7 +3,7 @@ FROM registry.service.opg.digital/opguk/nginx
 ARG PHP_PACKAGES="php5-fpm php5-cli php5-xdebug php5-xhprof php5-imagick php5-mongo mongodb-clients php5-curl php5-xsl postgresql-client php5-pgsql php5-mcrypt php5-intl mcrypt"
 
 RUN  apt-get update && \
-     apt-get install -y --no-install-recommends $PHP_PACKAGES && \
+     apt-get install -y $PHP_PACKAGES && \
      apt-get autoremove && \
      rm -rf /var/lib/cache/* /var/lib/log/* /tmp/* /var/tmp/*
 
