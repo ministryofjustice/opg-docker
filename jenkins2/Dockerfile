@@ -106,14 +106,74 @@ COPY install-plugins.sh /usr/local/bin/install-plugins.sh
 
 ### END ###
 
-# Required minimum plugins
+# Required minimum plugins. Ecexute the following code in jenkins script console for the list.
+#  Jenkins.instance.pluginManager.plugins.sort { it.getDisplayName() }.each{
+#    plugin -> println ("${plugin.getShortName()}:${plugin.getVersion()} \\") }
+#
 RUN /usr/local/bin/install-plugins.sh \
+  ace-editor:1.1 \
   ansicolor:0.5.0 \
+  authentication-tokens:1.3 \
+  bouncycastle-api:2.16.1 \
+  branch-api:2.0.9 \
+  cloudbees-folder:6.0.4 \
+  config-file-provider:2.16.0 \
+  credentials-binding:1.11 \
+  credentials:2.1.13 \
+  display-url-api:2.0 \
+  docker-commons:1.6 \
+  docker-workflow:1.11 \
+  durable-task:1.13 \
+  envinject:2.1 \
+  git-client:2.4.6 \
+  git-server:1.7 \
+  git:3.3.0 \
+  github-api:1.85 \
+  github-branch-source:2.0.5 \
   github-oauth:0.27 \
+  github:1.27.0 \
+  groovy:2.0 \
+  handlebars:1.1.1 \
+  icon-shim:2.0.3 \
   job-dsl:1.63 \
+  jquery-detached:1.2.1 \
+  junit:1.20 \
+  mailer:1.20 \
+  matrix-auth:1.6 \
+  matrix-project:1.11 \
+  momentjs:1.1.1 \
+  pipeline-build-step:2.5 \
+  pipeline-graph-analysis:1.3 \
+  pipeline-input-step:2.7 \
+  pipeline-milestone-step:1.3.1 \
+  pipeline-model-api:1.1.4 \
+  pipeline-model-declarative-agent:1.1.1 \
+  pipeline-model-definition:1.1.4 \
+  pipeline-model-extensions:1.1.4 \
+  pipeline-multibranch-defaults:1.1 \
+  pipeline-rest-api:2.8 \
+  pipeline-stage-step:2.2 \
+  pipeline-stage-tags-metadata:1.1.4 \
+  pipeline-stage-view:2.8 \
+  plain-credentials:1.4 \
   role-strategy:2.4.0 \
+  scm-api:2.1.1 \
+  script-security:1.27 \
+  ssh-credentials:1.13 \
   ssh-slaves:1.17 \
-  groovy:2.0
+  structs:1.7 \
+  token-macro:2.1 \
+  workflow-aggregator:2.5 \
+  workflow-api:2.16 \
+  workflow-basic-steps:2.5 \
+  workflow-cps-global-lib:2.8 \
+  workflow-cps:2.33 \
+  workflow-durable-task-step:2.11 \
+  workflow-job:2.11 \
+  workflow-multibranch:2.13 \
+  workflow-scm-step:2.4 \
+  workflow-step-api:2.10 \
+  workflow-support:2.14
 
 # Default java options for running jenkins
 ENV JAVA_OPTS -Djava.awt.headless=true -Djenkins.install.runSetupWizard=false -Dorg.apache.commons.jelly.tags.fmt.timeZone=Europe/London -Duser.timezone=Europe/London -Duser.country=GB
