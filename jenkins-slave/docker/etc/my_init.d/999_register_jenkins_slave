@@ -103,7 +103,7 @@ class SelfRegistration:
 
     def generate_registration_url(self):
         self.jenkins_url = '{}/job/{}/buildWithParameters' \
-                           '&token={}' \
+                           '?token={}' \
                            '&REMOTE_HOST={}' \
                            '&SLAVE_NAME={}' \
                            '&SLAVE_LABELS={}' \
