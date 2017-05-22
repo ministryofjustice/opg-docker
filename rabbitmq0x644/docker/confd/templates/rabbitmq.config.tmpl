@@ -1,0 +1,19 @@
+[
+ {rabbit,
+  [
+   {loopback_users, []},
+   {{ if exists "/rabbitmq/ssl" }}
+   {ssl_listeners, [{{ getv "/rabbitmq/ssl/listeners" }}]},
+   {ssl_options, [{certfile,"{{ getv "/rabbitmq/ssl/certfile" }}"},
+                  {keyfile,"{{ getv "/rabbitmq/ssl/keyfile" }}"},
+                  {verify,{{ getv "/rabbitmq/ssl/verify" }}},
+                  {fail_if_no_peer_cert,{{ getv "/rabbitmq/ssl/nopeer" }}}]},
+   {{ end }}
+   {tcp_listeners, [{{ getv "/rabbitmq/tcp/listeners" }}]},
+   {default_vhost,       <<"{{ getv "/rabbitmq/default/vhost" }}">>},
+   {default_user,        <<"{{ getv "/rabbitmq/default/user" }}">>},
+   {default_pass,        <<"{{ getv "/rabbitmq/default/pass" }}">>},
+   {default_permissions, [<<".*">>, <<".*">>, <<".*">>]},
+   {default_user_tags, [administrator]}
+  ]}
+].
