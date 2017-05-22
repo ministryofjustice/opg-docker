@@ -122,7 +122,6 @@ class SelfRegistration:
         request = urllib2.Request(self.jenkins_url)
         print "Trying to connect to {}".format(
             self.jenkins_url.replace(os.environ['JENKINS_AUTH_TOKEN'], '[REDACTED]'))
-
         try:
             response = urllib2.urlopen(request)
             result = response.read()
