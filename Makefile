@@ -1,7 +1,7 @@
 CORE_CONTAINERS := base nginx php-fpm jre-8 backupninja
 CHILD_CONTAINERS := phpunit rabbitmq wordpress elasticsearch elasticsearch-shared-data jenkins-slave jenkins2 kibana nginx-router wkhtmlpdf nginx-redirect casperjs mongodb elasticsearch5
 LTS_CONTAINERS:= base0x644 nginx0x644 php-fpm0x644 jre-80x644
-LTS_CHILD_CONTAINERS:= elasticsearch50x644 elasticsearch-shared-data0x644 kibana0x644 jenkins-slave0x644 mongodb0x644
+LTS_CHILD_CONTAINERS:= elasticsearch50x644 elasticsearch-shared-data0x644 kibana0x644 jenkins-slave0x644 jenkins20x644 rabbitmq0x644 wkhtmlpdf0x644 mongodb0x644
 
 CLEAN_CONTAINERS := $(CORE_CONTAINERS) $(CHILD_CONTAINERS) $(LTS_CONTAINERS) $(LTS_CHILD_CONTAINERS)
 
@@ -38,8 +38,8 @@ buildcore: $(CORE_CONTAINERS)
 buildchild: $(CHILD_CONTAINERS)
 buildnewcore: $(LTS_CONTAINERS)
 buildnewchild: $(LTS_CHILD_CONTAINERS)
-build: buildnewcore #buildnewchild
-#build: buildcore buildchild buildnewcore buildnewchild
+#build: buildnewcore #buildnewchild
+build: buildcore buildchild buildnewcore buildnewchild
 
 
 $(CORE_CONTAINERS):
