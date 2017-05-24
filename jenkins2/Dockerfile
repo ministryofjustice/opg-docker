@@ -110,7 +110,10 @@ COPY install-plugins.sh /usr/local/bin/install-plugins.sh
 RUN /usr/local/bin/install-plugins.sh \
   ansicolor:0.5.0 \
   github-oauth:0.27 \
-  job-dsl:1.62
+  job-dsl:1.63 \
+  role-strategy:2.4.0 \
+  ssh-slaves:1.17 \
+  groovy:2.0
 
 # Default java options for running jenkins
 ENV JAVA_OPTS -Djava.awt.headless=true -Djenkins.install.runSetupWizard=false -Dorg.apache.commons.jelly.tags.fmt.timeZone=Europe/London -Duser.timezone=Europe/London -Duser.country=GB
