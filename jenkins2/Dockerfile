@@ -109,6 +109,8 @@ COPY install-plugins.sh /usr/local/bin/install-plugins.sh
 # Required minimum plugins
 RUN /usr/local/bin/install-plugins.sh \
   ansicolor:0.5.0 \
+  workflow-multibranch:2.14 \
+  workflow-aggregator:2.5 \
   github-oauth:0.27 \
   job-dsl:1.63 \
   role-strategy:2.4.0 \
