@@ -1,5 +1,6 @@
 FROM registry.service.opg.digital/opguk/jre-8
 
+ARG ES_VERSION=5.3
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN groupadd -g 3999 elasticsearch && useradd -m -u 3999 -g 3999 elasticsearch
 
@@ -14,7 +15,7 @@ ENV ELASTICSEARCH_PATH_REPO /usr/share/elasticsearch/repo
 RUN echo "deb $ELASTICSEARCH_REPO_BASE stable main" > /etc/apt/sources.list.d/elasticsearch.list
 
 RUN apt-get update \
-  && apt-get install elasticsearch \
+  && apt-get install elasticsearch=${ES_VERSION} \
   && pip install elasticsearch-curator \
   && rm -rf /var/lib/apt/lists/*
 

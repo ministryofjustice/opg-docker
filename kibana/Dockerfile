@@ -1,5 +1,5 @@
 FROM registry.service.opg.digital/opguk/base
-
+ARG ES_VERSION=5.3
 # add our user and group first to make sure their IDs get assigned consistently
 RUN groupadd -r kibana && useradd -r -g kibana kibana
 
@@ -12,7 +12,7 @@ ENV ELASTICSEARCH_REPO_BASE https://artifacts.elastic.co/packages/5.x/apt
 RUN echo "deb $ELASTICSEARCH_REPO_BASE stable main" > /etc/apt/sources.list.d/elasticsearch.list
 
 RUN apt-get update \
-  && apt-get install kibana \
+  && apt-get install kibana=${ES_VERSION} \
   && rm -rf /var/lib/apt/lists/*
 
 ENV PORT 5601
