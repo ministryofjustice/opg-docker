@@ -1,0 +1,1 @@
+https://github.com/ministryofjustice/opg-jenkins-confluence-publisher-plugin/raw/master/target/confluence-publisher.hpi

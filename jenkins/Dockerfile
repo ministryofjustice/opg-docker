@@ -104,4 +104,7 @@ USER ${user}
 # This is where your customised plugins go
 RUN /usr/local/bin/plugins.sh $JENKINS_REF/plugins.txt
 
+# Install the forked plugins listed in forked-plugins.txt file
+RUN wget -i $JENKINS_REF/forked-plugins.txt -P /usr/share/jenkins/ref/plugins
+
 USER root
