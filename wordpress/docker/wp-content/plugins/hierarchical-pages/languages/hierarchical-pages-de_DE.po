@@ -1,0 +1,120 @@
+# Copyright (C) 2013 
+# This file is distributed under the same license as the  package.
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/hierarchical-pages\n"
+"POT-Creation-Date: 2013-12-09 12:14:05+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2013-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: hierpage.php:70
+msgid "Hierarchical Page Directory Widget"
+msgstr ""
+
+#: hierpage.php:72
+msgid "Hierarchical Pages"
+msgstr "Hierarchical Seiten"
+
+#: hierpage.php:310
+msgid "Hierarchical Category Widget"
+msgstr ""
+
+#: hierpage.php:312
+msgid "Hierarchical Categories"
+msgstr ""
+
+# known_params for Hierarchial Pages
+msgid "Show siblings to the current page?"
+msgstr ""
+
+msgid "Always show top-level pages?"
+msgstr "Immer Seiten von obersten Ebene zeigen?"
+
+msgid "Show the static home page?"
+msgstr ""
+
+msgid "(always shown if it has child pages)"
+msgstr ""
+
+msgid "Root page ID:"
+msgstr ""
+
+msgid "Exclude pages:"
+msgstr "Seiten zum ausschließen:"
+
+msgid "List of page IDs to exclude"
+msgstr "Geben Sie hier die page-IDs"
+
+msgid "Sort field:"
+msgstr ""
+
+msgid "Comma-separated list: <em>post_title, menu_order, post_date, post_modified, ID, post_author, post_name</em>"
+msgstr ""
+
+msgid "Sort direction:"
+msgstr ""
+
+msgid "(default: ASC)"
+msgstr ""
+
+msgid "Meta Key:"
+msgstr ""
+
+msgid "Meta-key Value:"
+msgstr ""
+
+msgid "for selecting pages by custom fields"
+msgstr ""
+
+msgid "Authors:"
+msgstr "Autoren"
+
+msgid "Post status:"
+msgstr ""
+
+msgid "(default: publish)"
+msgstr ""
+
+msgid "Post type:"
+msgstr ""
+
+msgid "(default: page)"
+msgstr ""
+
+# known_params for Hierarchical Categories
+
+
+msgid "Title:"
+msgstr ""
+
+msgid "Show siblings to the current category?"
+msgstr ""
+
+msgid "Include:"
+msgstr ""
+
+msgid "Comma-delimited list of category IDs, or blank for all"
+msgstr ""
+
+msgid "Exclude:"
+msgstr ""
+
+msgid "Enter one of: <em>name, count, term_group, slug</em> or a custom value. Default: name"
+msgstr ""
+
+msgid "Only display Categories below this ID"
+msgstr ""
+
+msgid "Hide empty categories?" 
+msgstr ""
+
+msgid "Show count of category entries?" 
+msgstr ""
+
+msgid "Custom taxonomy:"
+msgstr ""
