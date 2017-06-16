@@ -10,14 +10,23 @@ USER app
 
 # Install wordpress
 RUN cd /tmp && \
-    wget https://en-gb.wordpress.org/latest-en_GB.tar.gz && \
+    wget --no-verbose https://en-gb.wordpress.org/latest-en_GB.tar.gz && \
     tar -xf latest-en_GB.tar.gz && \
+    rm -rf wordpress/wp-content/themes/* && \
     mv wordpress/* /data/. && \
     rm -rf wordpress latest-en_GB.tar.gz
 
-# Install wordpress plugins
+# Install lastest versions of required plugins
 RUN cd /tmp && \
-    git clone git@github.com:ministryofjustice/opg-core-help-guidance-template.git
+    wget --no-verbose https://downloads.wordpress.org/plugin/yet-another-related-posts-plugin.4.4.zip && \
+    wget --no-verbose https://downloads.wordpress.org/plugin/wordpress-popular-posts.3.3.4.zip && \
+    wget --no-verbose https://downloads.wordpress.org/plugin/updraftplus.1.13.4.zip && \
+    unzip -ofq \*.zip && \
+    rm *.zip && \
+    find . -maxdepth 1 -type d -not -path "." -exec mv '{}' /data/wp-content/plugins \;
+
+# Install "custom" wordpress plugins and our theme
+COPY docker/wp-content /data/wp-content
 
 # Install our custom theme
 # Add wordpress configuration templates
