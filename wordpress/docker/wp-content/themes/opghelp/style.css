@@ -1,0 +1,776 @@
+/*
+Theme Name: OPG Help Preview
+Description: Theme to preview help content for OPG Core - Requires twentyfourteen to be installed
+Template: twentyfourteen
+*/
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 300;
+    src: local('Open Sans Light'), local('OpenSans-Light'), url(fonts/OpenSans-Light.woff) format('woff');
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Open Sans'), local('OpenSans'), url(fonts/OpenSans.woff) format('woff');
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 600;
+    src: local('Open Sans Semibold'), local('OpenSans-Semibold'), url(fonts/OpenSans-Semibold.woff) format('woff');
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 700;
+    src: local('Open Sans Bold'), local('OpenSans-Bold'), url(fonts/OpenSans-Bold.woff) format('woff');
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 800;
+    src: local('Open Sans Extrabold'), local('OpenSans-Extrabold'), url(fonts/OpenSans-Extrabold.woff) format('woff');
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: 300;
+    src: local('Open Sans Light Italic'), local('OpenSansLight-Italic'), url(fonts/OpenSansLight-Italic.woff) format('woff');
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: 400;
+    src: local('Open Sans Italic'), local('OpenSans-Italic'), url(fonts/OpenSans-Italic.woff) format('woff');
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: 600;
+    src: local('Open Sans Semibold Italic'), local('OpenSans-SemiboldItalic'), url(fonts/OpenSans-SemiboldItalic.woff) format('woff');
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: 700;
+    src: local('Open Sans Bold Italic'), local('OpenSans-BoldItalic'), url(fonts/OpenSans-BoldItalic.woff) format('woff');
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: 800;
+    src: local('Open Sans Extrabold Italic'), local('OpenSans-ExtraboldItalic'), url(fonts/OpenSans-ExtraboldItalic.woff) format('woff');
+}
+
+@font-face {
+    font-family: 'opg-icons';
+    src: url('fonts/opg-icons.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+html {
+    background: linear-gradient(to bottom, #f7f7f7 1px, #acacac 34px, #fff 35px) no-repeat;
+    height: 100%;
+}
+
+body {
+    color: #231f20;
+    font-family: 'Open Sans', sans-serif;
+    margin: 0;
+    min-height: 100%;
+    counter-reset: mostViewed;
+}
+
+body.logged-in-user {
+    background: url(bg.png) no-repeat fixed top left;
+    float: left;
+    width: 100%;
+}
+
+#secondary,
+.site-header,
+.site-footer,
+.comments-area,
+.post-navigation {
+    display: none;
+}
+
+#primary {
+    background: #fff;
+    -webkit-box-shadow: 0px 4px 10px 0px rgba(50, 50, 50, 0.75);
+    -moz-box-shadow: 0px 4px 10px 0px rgba(50, 50, 50, 0.75);
+    box-shadow: 0px 4px 10px 0px rgba(50, 50, 50, 0.75);
+    padding: 10px 20px;
+    margin: 60px 0;
+}
+
+.logged-in-user #primary {
+    float: right;
+    width: 70%;
+}
+
+.help-header {
+    background: linear-gradient(to bottom, #4370A8 0%, #00326E 100%);
+    color: #fff;
+    font-size: 20px;
+    font-weight: 400;
+    margin: 0 -10px 10px 0px;
+    padding: 4px 10px;
+}
+.logged-in-user .help-header {
+    width: 70%;
+    float: right;
+    padding-right: 40px;
+}
+
+body.home .help-header {
+    padding-left: 10px;
+    margin-top: 0;
+}
+
+body.home .help-header a {
+    border-left: none;
+    padding-left: 0;
+}
+
+body .help-header {
+    padding-left: 1.7em;
+    margin-top: -1.8em;
+}
+
+body .help-header a {
+    border-left: 1px solid #21456D;
+    padding-left: 10px;
+}
+
+body.home #navBack {
+    display: none;
+}
+
+body #navBack {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+    border: none;
+    border-right: 1px solid #94AECC;
+    color: #fff;
+    cursor: pointer;
+    margin: 0;
+    padding: .95em 0.75em;
+    vertical-align: middle;
+    font-size: 11px; /* IE consistent sizing fix */
+}
+
+/*
+ Typography and defaults
+*/
+h1 {
+    color: #4e4e4e;
+    font-size: 2em;
+    font-weight: 600;
+    margin: 0 0 10px 0;
+    min-height: 1.5em;
+}
+
+h2 {
+    color: #00316d;
+    font-size: 1.05em;
+    font-weight: 600;
+    margin-top: 1.25em;
+}
+
+/*
+ Fixing a problem with anchored links bumping the top of the window: https://css-tricks.com/hash-tag-links-padding/
+*/
+
+h2:before {
+  display: block;
+  content: " ";
+  margin-top: -100px;
+  height: 100px;
+  visibility: hidden;
+}
+
+h3,
+.widget_yarpp_widget h1 {
+    font-size: .9375em;
+    font-weight: 600;
+    color: #00316D;
+}
+
+h3:before {
+  display: block;
+  content: " ";
+  margin-top: -100px;
+  height: 100px;
+  visibility: hidden;
+}
+
+h4 {
+    color: #00316d;
+    font-size: 0.875em;
+    font-weight: 600;
+}
+
+p, li {
+    font-size: .875em;
+    line-height: 1.5em;
+    margin: 0 0 .5em 0;
+}
+
+li li {
+    font-size: 1em;
+}
+
+a {
+    text-decoration: none;
+    color: #00316D;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+img {
+    border: 0;
+    display: block;
+    height: auto;
+    max-width: 100%;
+    margin: 12px auto 24px;
+    text-align: center;
+
+}
+
+#search-container {
+    background: none repeat scroll 0 0 #d9e2ed;
+    clear: both;
+    display: block;
+    overflow: auto;
+    margin-top: -10px;
+    padding: 10px 30px 10px 10px;
+}
+
+.logged-in-user #search-container {
+    width: 70%;
+    float: right;
+}
+
+.help-header-href {
+    color: #FFF;
+    text-decoration: none;
+}
+
+#searchform div {
+    font-size: 0.75em;
+    float: left;
+    margin: 0 15px 0 0;
+    width: 45%;
+    background: none repeat scroll 0 0 #F1F1F1;
+    border: 1px solid #4370a8;
+    border-radius: 5px;
+    padding: 2px 0;
+    right: 10px;
+    z-index: 80;
+}
+
+.search-input {
+    border: 0 none;
+    width: 92%;
+    padding: 0;
+    background: #F1F1F1;
+}
+
+.search-submit {
+    background: none;
+    border: 0 none;
+    cursor: pointer;
+    color: #6f777b;
+    text-align: center;
+    width: 6%;
+    padding: 0;
+}
+
+.opg-icon {
+    font-family: "opg-icons";
+    font-feature-settings: "liga" 1;
+    -webkit-font-feature-settings: "liga";
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+}
+
+div#help-header-container {
+    position: fixed;
+    width: 100%;
+    top: 0;
+}
+
+.logged-in-user div#help-header-container {
+    top: auto;
+}
+
+.site-content {
+    margin-top: 1.6em;
+    overflow: auto;
+}
+
+.search-results .site-content {
+    overflow: inherit;
+}
+
+/* Breadcrumb */
+.entry-meta {
+    font-size: 0.6875em; /* 11px */
+}
+
+.entry-meta a {
+    color: #000;
+    text-decoration: underline;
+    display: inline-block;
+    padding: 0.25em 0.5em;
+}
+
+.entry-meta a:first-child {
+    padding-left: 0;
+}
+
+.entry-meta a:hover {
+    text-decoration: none;
+}
+
+/*
+ Layout
+*/
+#content .page .entry-header,
+#content .page .entry-content,
+.paging-navigation,
+.search-results .page {
+    width: 66%;
+    float: left;
+}
+
+.search-results #content .page .entry-header {
+    width: 100%;
+}
+
+.paging-navigation {
+    clear: both;
+}
+
+/*
+ Header
+*/
+.entry-header h1 {
+    margin: 0;
+}
+
+/*
+ Intro
+ */
+.entry-content p:first-child {
+    font-size: 1em;
+    margin-top: 0.25em;
+}
+
+/*
+ Sidebar
+*/
+.side-bar {
+    margin-left: 68%;
+}
+
+.side-bar aside {
+    padding: 10px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.side-bar h3 {
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+#content-sidebar aside {
+    margin-bottom: 10px;
+}
+
+/*
+ Sub page navigation
+*/
+.widget_hier_page {
+    background: #D9E2ED;
+}
+
+.widget_hier_page .widget-title {
+    top: -3999px;
+    left: -3999px;
+    position: absolute;
+}
+
+.widget_hier_page ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.widget_hier_page ul ul {
+    padding: 0;
+}
+
+.widget_hier_page ul a {
+    padding-left: 10px;
+}
+
+.widget_hier_page ul ul a {
+    padding-left: 30px;
+    font-size: 1em;
+}
+
+.widget_hier_page ul ul ul a {
+    padding-left: 50px;
+    font-size: 1em;
+}
+
+.widget_hier_page ul ul ul ul a {
+    padding-left: 70px;
+}
+
+.widget_hier_page ul .current_page_item a {
+    padding-left: 20px;
+}
+
+.widget_hier_page ul ul .current_page_item a {
+    padding-left: 40px;
+    font-size: 1em;
+}
+
+.widget_hier_page ul ul ul .current_page_item  a {
+    padding-left: 60px;
+    font-size: 1em;
+}
+
+.widget_hier_page ul ul ul ul .current_page_item  a {
+    padding-left: 80px;
+}
+
+.widget_hier_page > ul > li > a {
+    font-weight: bold;
+}
+
+.widget_hier_page li {
+    list-style: none;
+}
+
+.widget_hier_page a {
+    color: #000;
+    text-decoration: none;
+    display: block;
+    padding: 2px 0;
+}
+
+.current_page_item > a {
+    margin-left: -10px;
+    margin-right: -10px;
+    color: #fff;
+
+    /* Blue gradient */
+    background: rgba(65,111,166,1);
+    background: -moz-linear-gradient(left, rgba(65,111,166,1) 0%, rgba(0,50,110,1) 100%);
+    background: -webkit-gradient(left top, right top, color-stop(0%, rgba(65,111,166,1)), color-stop(100%, rgba(0,50,110,1)));
+    background: -webkit-linear-gradient(left, rgba(65,111,166,1) 0%, rgba(0,50,110,1) 100%);
+    background: -o-linear-gradient(left, rgba(65,111,166,1) 0%, rgba(0,50,110,1) 100%);
+    background: -ms-linear-gradient(left, rgba(65,111,166,1) 0%, rgba(0,50,110,1) 100%);
+    background: linear-gradient(to right, rgba(65,111,166,1) 0%, rgba(0,50,110,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#416fa6', endColorstr='#00326e', GradientType=1 );
+}
+
+/*
+ Related page side bar
+*/
+.widget_yarpp_widget {
+    padding: 10px;
+}
+
+.widget_yarpp_widget p {
+    margin: 0;
+}
+
+.yarpp-related-widget ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.yarpp-related-widget ol li {
+    margin: .5em 0;
+}
+
+/*
+ In page sub navigation
+*/
+.child-pages {
+    background: none;
+}
+
+.child-pages section {
+    float: left;
+    width: 47%;
+    margin-right: 5%;
+}
+
+.child-pages section:nth-child(even) {
+    margin-right: 0;
+}
+
+.child-pages section .excerpt {
+    height: 5em;
+    margin-top: 0;
+}
+
+.child-pages p,
+.child-pages h2 {
+    margin: 0;
+    padding: 10px;
+}
+
+.child-pages p {
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: -10px;
+}
+
+/*
+ Most viewed
+*/
+.wpp-list {
+    list-style: none;
+    padding: 0;
+    margin: .5em 0;
+}
+
+.wpp-list li {
+    margin: .5em 0;
+    clear: none !important;
+}
+
+.wpp-views {
+    display: none;
+}
+
+/*
+ Request a change
+*/
+.request-change {
+    border: 2px solid #00316D;
+    margin-bottom: 1em;
+    margin-top: 1em;
+}
+
+.request-change .opg-icon {
+    float: left;
+    font-size: 3em;
+    margin-left: -1.2em;
+}
+
+.request-change h3,
+.request-change h2 {
+    min-height: 3em;
+    line-height: 3em;
+    padding-left: 4em;
+}
+
+.request-change h3 {
+    font-size: .75em;
+}
+
+.search-results .page-header h1 {
+    font-size: 1em;
+}
+
+.search-results .page-header h1 strong {
+    color: #00326E;
+    font-weight: 600;
+}
+
+.search-results .entry-meta,
+.search-results .menu {
+    display: none;
+}
+
+.search-results .entry-summary {
+    display: block;
+    float: none;
+    clear: both;
+}
+
+.search-results .page {
+    padding: 10px;
+    margin-left: -10px;
+}
+
+.search-results .page:nth-child(odd) {
+    background: #EFF7FF;
+    float: left;
+}
+
+.search-results .page h1 {
+    font-size: 1em;
+}
+
+.search-results .page p {
+    margin: 0;
+    padding-top: .25em;
+}
+
+/*
+ Homepage footer
+*/
+.homepage-footer {
+    background: #D7E4ED;
+    margin-left: -20px;
+    margin-right: -20px;
+    padding: 20px;
+    overflow: auto;
+}
+
+.homepage-footer h2 {
+    margin-top: 0;
+    color: #4E4E4E;
+    font-weight: 400;
+}
+
+.homepage-footer .most-popular {
+    width: 30%;
+    float: left;
+}
+
+.homepage-footer .OPG_Recently_Updated_Pages {
+    float: left;
+    margin-left: 3%;
+    width: 33%;
+}
+
+.homepage-footer .most-popular ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    padding-left: 2.5em;
+}
+
+.homepage-footer .most-popular li {
+    list-style: none;
+    margin-top: .75em;
+}
+
+.homepage-footer .most-popular li:before {
+    border: 2px solid #00316d;
+    border-radius: 3em;
+    color: #00316d;
+    content: counter(mostViewed, decimal);
+    counter-increment: mostViewed;
+    display: inline-block;
+    font-size: 1.4em;
+    height: 1.1em;
+    line-height: 1.1em;
+    margin-left: -1.75em;
+    text-align: center;
+    width: 1.3em;
+}
+
+.homepage-footer .most-popular li a {
+    font-size: 1em;
+    line-height: 1.75em;
+    display: block;
+    padding-top: 0.1em;
+}
+
+.homepage-footer .OPG_Recently_Updated_Pages > ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.homepage-footer .OPG_Recently_Updated_Pages > ul > li {
+    margin-right: 5%;
+    float: left;
+    margin-bottom: 1em;
+    min-height: 6em;
+}
+
+.homepage-footer .OPG_Recently_Updated_Pages > ul > li:nth-child(odd) {
+    clear: left;
+}
+
+.homepage-footer .OPG_Recently_Updated_Pages > ul > li p {
+    font-size: 1em;
+    margin: .25em 0;
+    list-style: none;
+    line-height: 1.5em;
+}
+
+.homepage-footer .OPG_Recently_Updated_Pages > ul > h3 {
+    font-size: 1.33em;
+    margin: 0;
+}
+
+.primary-nav {
+    float: right;
+    width: 33%;
+}
+
+.primary-nav ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.primary-nav li > ul {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 4.5s;
+    padding-left: 1em;
+}
+
+.primary-nav li:hover > ul {
+    max-height: 1000px;
+}
+
+/*
+ Helper classes
+*/
+.accessible-text {
+    position: absolute;
+    top: -3990px;
+    left: -3999px;
+}
+
+/*
+ Responsive increases in font-size
+*/
+@media screen and (max-width : 1289px) {
+    body {
+        font-size: 1em;
+    }
+}
+
+@media screen and (min-width : 1290px)
+and (max-width :1380px) {
+    body {
+        font-size: 1.125em;
+    }
+}
+
+@media screen and (min-width : 1381px) {
+    body {
+        font-size: 1.25em;
+    }
+}
