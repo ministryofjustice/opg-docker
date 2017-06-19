@@ -21,7 +21,7 @@ RUN cd /tmp && \
     wget --no-verbose https://downloads.wordpress.org/plugin/yet-another-related-posts-plugin.4.4.zip && \
     wget --no-verbose https://downloads.wordpress.org/plugin/wordpress-popular-posts.3.3.4.zip && \
     wget --no-verbose https://downloads.wordpress.org/plugin/updraftplus.1.13.4.zip && \
-    unzip -ofq \*.zip && \
+    unzip -q \*.zip && \
     rm *.zip && \
     find . -maxdepth 1 -type d -not -path "." -exec mv '{}' /data/wp-content/plugins \;
 
