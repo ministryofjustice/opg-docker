@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+   db:
+     image: mysql:5.7
+     volumes:
+       - /home/bminnie/wp-data/:/var/lib/mysql
+     restart: always
+     env_file:
+        - ./wordpress.env
+
+   wordpress:
+     depends_on:
+       - db
+     build: .
+     ports:
+       - "443:443"
+       - "80:80"
+     restart: always
+     volumes:
+      - /home/bminnie/Sources/OPG/core/help-and-guidance-content/uploads:/data/wp-content/uploads
+     env_file:
+       - ./wordpress.env
+volumes:
+    db_data:
