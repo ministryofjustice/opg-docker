@@ -13,14 +13,21 @@ RUN cd /tmp && \
     wget --no-verbose https://en-gb.wordpress.org/latest-en_GB.tar.gz && \
     tar -xf latest-en_GB.tar.gz && \
     rm -rf wordpress/wp-content/themes/* && \
+    rm -rf wordpress/wp-content/plugins/hello.php wordpress/wp-content/plugins/akismet && \
     mv wordpress/* /data/. && \
     rm -rf wordpress latest-en_GB.tar.gz
 
 # Install lastest versions of required plugins
+ENV WP_PLUGIN_DL="https://downloads.wordpress.org/plugin"
 RUN cd /tmp && \
-    wget --no-verbose https://downloads.wordpress.org/plugin/yet-another-related-posts-plugin.4.4.zip && \
-    wget --no-verbose https://downloads.wordpress.org/plugin/wordpress-popular-posts.3.3.4.zip && \
-    wget --no-verbose https://downloads.wordpress.org/plugin/updraftplus.1.13.4.zip && \
+    wget --no-verbose ${WP_PLUGIN_DL}/yet-another-related-posts-plugin.4.4.zip && \
+    wget --no-verbose ${WP_PLUGIN_DL}/wordpress-popular-posts.3.3.4.zip && \
+    wget --no-verbose ${WP_PLUGIN_DL}/updraftplus.1.13.4.zip && \
+    wget --no-verbose ${WP_PLUGIN_DL}/cms-tree-page-view.1.3.4.zip && \
+    wget --no-verbose ${WP_PLUGIN_DL}/google-analytics-dashboard-for-wp.5.0.1.zip && \
+    wget --no-verbose ${WP_PLUGIN_DL}/google-sitemap-generator.4.0.8.zip && \
+    wget --no-verbose ${WP_PLUGIN_DL}/tablepress.1.8.zip && \
+    wget --no-verbose ${WP_PLUGIN_DL}/user-role-editor.4.35.zip && \
     unzip -q \*.zip && \
     rm *.zip && \
     find . -maxdepth 1 -type d -not -path "." -exec mv '{}' /data/wp-content/plugins \;
