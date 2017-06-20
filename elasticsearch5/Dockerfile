@@ -1,6 +1,6 @@
 FROM registry.service.opg.digital/opguk/base
 
-ARG ES_VERSION=5.3
+ARG ES_VERSION=5.3.3
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN groupadd -g 3999 elasticsearch && useradd -m -u 3999 -g 3999 elasticsearch
 
