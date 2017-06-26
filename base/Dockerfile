@@ -30,7 +30,7 @@ RUN  rm -f /etc/apt/sources.list.d/* && \
 RUN pip install -U pip && pip install awscli Beaver==36.2.0
 
 # ConfD install
-RUN  wget -O /usr/bin/confd https://github.com/kelseyhightower/confd/releases/download/v0.9.0/confd-0.9.0-linux-amd64 && \
+RUN  wget -O /usr/bin/confd https://github.com/kelseyhightower/confd/releases/download/v0.11.0/confd-0.11.0-linux-amd64 && \
      chmod a+x /usr/bin/confd && \
      mkdir -p /etc/confd/conf.d && \
      mkdir -p /etc/confd/templates
