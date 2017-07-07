@@ -20,7 +20,6 @@ RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
       libffi-dev \
       libgmp3-dev \
       libssl-dev \
-      libssl-dev \
       libx11-6 \
       libxml2-dev \
       libxslt1-dev \
