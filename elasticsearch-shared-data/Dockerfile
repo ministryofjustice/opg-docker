@@ -2,7 +2,7 @@ FROM registry.service.opg.digital/opguk/base
 
 RUN mkdir -p /tmp/elasticsearchshareddata/beats
 
-ENV BEATS_DASHBOARD_VERSION=5.3
+ENV BEATS_DASHBOARD_VERSION=5.3.0
 
 RUN cd /tmp && \
    wget https://artifacts.elastic.co/downloads/beats/beats-dashboards/beats-dashboards-${BEATS_DASHBOARD_VERSION}.zip && \
@@ -19,5 +19,3 @@ VOLUME /tmp/elasticsearchshareddata
 
 USER root
 ENV  HOME /root
-
-

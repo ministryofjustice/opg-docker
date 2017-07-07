@@ -1,5 +1,5 @@
 FROM registry.service.opg.digital/opguk/base
-ARG ES_VERSION=5.3
+ARG ES_VERSION=5.3.0
 # add our user and group first to make sure their IDs get assigned consistently
 RUN groupadd -r kibana && useradd -r -g kibana kibana
 
