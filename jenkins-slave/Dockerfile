@@ -1,70 +1,53 @@
 FROM registry.service.opg.digital/opguk/jre-8
 
 #Install tools
-RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D && \
-    echo 'deb https://apt.dockerproject.org/repo ubuntu-trusty main' > /etc/apt/sources.list.d/docker.list && \
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - && \
+    add-apt-repository \
+      "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+      $(lsb_release -cs) \
+      stable" && \
     apt-get update && \
-    apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
-    apparmor \
-    docker-engine=1.9.1-0~trusty \
-    libcurl4-gnutls-dev \
-    libexpat1-dev \
-    gettext \
-    libssl-dev \
-    python2.7-dev \
-    python3-dev \
-    python-dev \
-    libxslt1-dev \
-    libxml2-dev \
-    zip \
-    ttf-dejavu \
-    fontconfig \
-    libyaml-dev \
-    libgmp3-dev \
-    libffi-dev \
-    libssl-dev && \
-    apt-get clean && \
-    apt-get autoremove && \
-    rm -rf /tmp/* /var/tmp/* && rm -rf /var/lib/apt/lists/*
+      apparmor \
+      apt-transport-https \
+      ca-certificates \
+      curl \
+      docker-ce \
+      fontconfig \
+      gettext \
+      libcurl4-gnutls-dev \
+      libexpat1-dev \
+      libffi-dev \
+      libgmp3-dev \
+      libssl-dev \
+      libx11-6 \
+      libxml2-dev \
+      libxslt1-dev \
+      libyaml-dev \
+      python-dev \
+      python2.7-dev \
+      python3-dev \
+      software-properties-common \
+      ttf-dejavu \
+      zip && \
+    apt-get clean && rm -rf /tmp/* /var/tmp/* && rm -rf /var/lib/apt/lists/* && \
+    pip install -U pip && \
+    pip install \
+      docker-compose virtualenv git+https://github.com/ministryofjustice/semvertag.git
 
-# Install pip requirements
-RUN pip install meta-compose git+https://github.com/ministryofjustice/semvertag.git virtualenv
-
-# Download and install docker-machine and docker compose
-RUN curl -L https://github.com/docker/machine/releases/download/v0.8.1/docker-machine-x86_64 >/usr/local/bin/docker-machine && \
-    chmod +x /usr/local/bin/docker-machine
-
-#Download and install terraform
-RUN cd /tmp && \
-    wget https://releases.hashicorp.com/terraform/0.7.4/terraform_0.7.4_linux_amd64.zip && \
-    unzip terraform*.zip && \
-    mv terraform /usr/bin/terraform && \
-    rm -rf /tmp/terraform*
-
-#ARG user=app
-#ARG group=app
-#ARG uid=1000
-#ARG gid=1000
-
-#Fix docker GID to sync with underlying ECS so that the user can access the docker socket
-RUN groupmod -g 497 docker && adduser app docker
+# Copy jenkins
+COPY docker/etc/my_init.d /etc/my_init.d
+COPY docker/etc/confd /etc/confd
+COPY docker/etc/ssh /etc/ssh
 
 ENV JENKINS_HOME /srv/jenkins
+EXPOSE 22
 
-# Jenkins is run with user `app`, uid = 1000
-# If you bind mount a volume from the host or a data container,
-# ensure you use the same uid
+# Configure app user
 RUN usermod -d "$JENKINS_HOME" -m -s /bin/bash app
+RUN adduser app docker
 
-ADD  docker/etc/my_init.d /etc/my_init.d
-
-# `/usr/share/jenkins/ref/` contains all reference configuration we want
-# to set on a fresh new installation. Use it to bundle additional plugins
-# or config file with your custom jenkins Docker image.
-
-RUN mkdir -p /usr/share/jenkins/ref/{users/opgops, .docker} && \
-    mkdir -p /srv/jenkins/builds && \
+RUN mkdir -p /srv/jenkins/builds && \
     mkdir -p /srv/jenkins/.ssh && \
     chown app /srv/jenkins/.ssh && \
     chown app /srv/jenkins/builds && \
@@ -72,8 +55,3 @@ RUN mkdir -p /usr/share/jenkins/ref/{users/opgops, .docker} && \
     chmod a+x /etc/my_init.d/* && \
     usermod -p '*' app && \
     ln -s /dev/stdout /var/log/auth.log
-
-COPY docker/etc/confd /etc/confd
-COPY docker/etc/ssh /etc/ssh
-
-EXPOSE 22
