@@ -112,11 +112,14 @@ COPY install-plugins.sh /usr/local/bin/install-plugins.sh
 RUN /usr/local/bin/install-plugins.sh \
   ace-editor:1.1 \
   ansicolor:0.5.0 \
+  ant:1.5 \
+  antisamy-markup-formatter:1.5 \
   authentication-tokens:1.3 \
   bouncycastle-api:2.16.1 \
   branch-api:2.0.9 \
   cloudbees-folder:6.0.4 \
   config-file-provider:2.16.0 \
+  confluence-publisher:1.8 \
   credentials-binding:1.11 \
   credentials:2.1.13 \
   display-url-api:2.0 \
@@ -124,6 +127,7 @@ RUN /usr/local/bin/install-plugins.sh \
   docker-workflow:1.11 \
   durable-task:1.13 \
   envinject:2.1 \
+  external-monitor-job:1.7 \
   git-client:2.4.6 \
   git-server:1.7 \
   git:3.3.0 \
@@ -134,13 +138,16 @@ RUN /usr/local/bin/install-plugins.sh \
   groovy:2.0 \
   handlebars:1.1.1 \
   icon-shim:2.0.3 \
+  javadoc:1.4 \
   job-dsl:1.63 \
   jquery-detached:1.2.1 \
   junit:1.20 \
+  ldap:1.16 \
   mailer:1.20 \
   matrix-auth:1.6 \
   matrix-project:1.11 \
   momentjs:1.1.1 \
+  pam-auth:1.3 \
   pipeline-build-step:2.5 \
   pipeline-graph-analysis:1.3 \
   pipeline-input-step:2.7 \
@@ -162,6 +169,7 @@ RUN /usr/local/bin/install-plugins.sh \
   ssh-slaves:1.17 \
   structs:1.7 \
   token-macro:2.1 \
+  windows-slaves:1.3.1 \
   workflow-aggregator:2.5 \
   workflow-api:2.16 \
   workflow-basic-steps:2.5 \
