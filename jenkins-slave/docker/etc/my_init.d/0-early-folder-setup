@@ -1,0 +1,7 @@
+#!/bin/sh
+
+mkdir -p /srv/jenkins/builds
+mkdir -p /srv/jenkins/.ssh
+chown app /srv/jenkins/.ssh
+chown app /srv/jenkins/builds
+chmod 0700 /srv/jenkins/.ssh
