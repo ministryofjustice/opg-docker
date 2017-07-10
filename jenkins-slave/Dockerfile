@@ -47,11 +47,6 @@ EXPOSE 22
 RUN usermod -d "$JENKINS_HOME" -m -s /bin/bash app
 RUN adduser app docker
 
-RUN mkdir -p /srv/jenkins/builds && \
-    mkdir -p /srv/jenkins/.ssh && \
-    chown app /srv/jenkins/.ssh && \
-    chown app /srv/jenkins/builds && \
-    chmod 0700 /srv/jenkins/.ssh && \
-    chmod a+x /etc/my_init.d/* && \
+RUN chmod a+x /etc/my_init.d/* && \
     usermod -p '*' app && \
     ln -s /dev/stdout /var/log/auth.log
