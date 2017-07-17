@@ -1,4 +1,4 @@
-FROM registry.service.opg.digital/opguk/base
+FROM registry.service.opg.digital/opguk/jre-8
 
 ARG ES_VERSION=5.3.0
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
