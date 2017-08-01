@@ -1,0 +1,28 @@
+{{$prune := (getenv "ELASTICSEARCH_PRUNE_INDICES") "no"}}
+{{ printf "%s" $prune }}
+{{if ne $prune "no"}}
+{{ range lsdir "/elasticsearch/prune/index" }}
+{{ with $num := . }}
+actions:
+  {{printf "%s" $num}}:
+    action: delete_indices
+    description: >-
+      Delete indices older than a variable retention period
+      Ignore the error if the filter does not result in an
+      actionable list of indices (ignore_empty_list) and exit cleanly.
+    options:
+      ignore_empty_list: True
+      disable_action: True
+    filters:
+    - filtertype: pattern
+      kind: prefix
+      value: {{ getv (printf "/elasticsearch/prune/index/%s/name" $num)}}
+    - filtertype: age
+      source: name
+      direction: older
+      timestring: '%Y.%m.%d'
+      unit: weeks
+      unit_count: {{(getv "/elasticsearch/indices/persist/weeks") "26"}}
+{{end}}
+{{end}}
+{{end}}

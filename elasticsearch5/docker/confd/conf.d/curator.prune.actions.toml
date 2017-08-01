@@ -1,0 +1,6 @@
+[template]
+src = "curator.prune.actions.tmpl"
+dest = "/usr/share/elasticsearch/config/curator_prune_actions.yml"
+keys = [
+    "/elasticsearch",
+]
