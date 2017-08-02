@@ -18,9 +18,9 @@ services:
        - "80:80"
      restart: always
      volumes:
-      - ~/Sources/OPG/core/help-and-guidance-content/uploads:/data/wp-content/uploads
-      - ~/Sources/OPG/core/help-and-guidance-content/themes:/data/wp-content/themes
-      - ~/Sources/OPG/core/help-and-guidance-content/plugins:/data/wp-content/plugins
+      - ../../help-and-guidance-content/uploads:/data/wp-content/uploads
+      - ../../help-and-guidance-content/themes:/data/wp-content/themes
+      - ../../help-and-guidance-content/plugins:/data/wp-content/plugins
      env_file:
        - ./wordpress.env
 volumes:
