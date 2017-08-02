@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+   db:
+     image: mysql:5.7
+     volumes:
+       - ../../wp-data/:/var/lib/mysql
+     restart: always
+     env_file:
+        - ./wordpress.env
+
+   wordpress:
+     depends_on:
+       - db
+     build: .
+     ports:
+       - "443:443"
+       - "80:80"
+     restart: always
+     volumes:
+      - ../../help-and-guidance-content/uploads:/data/wp-content/uploads
+      - ../../help-and-guidance-content/themes:/data/wp-content/themes
+      - ../../help-and-guidance-content/plugins:/data/wp-content/plugins
+     env_file:
+       - ./wordpress.env
+volumes:
+    db_data:
