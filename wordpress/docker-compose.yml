@@ -4,7 +4,7 @@ services:
    db:
      image: mysql:5.7
      volumes:
-       - ~/wp-data/:/var/lib/mysql
+       - ../../wp-data/:/var/lib/mysql
      restart: always
      env_file:
         - ./wordpress.env
