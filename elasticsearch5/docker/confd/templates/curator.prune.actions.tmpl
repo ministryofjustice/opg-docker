@@ -1,9 +1,6 @@
 {{$prune := (getenv "ELASTICSEARCH_PRUNE_INDICES") "no"}}
-{{ printf "%s" $prune }}
 {{if ne $prune "no"}}
-{{ range lsdir "/elasticsearch/prune/index" }}
-{{ with $num := . }}
-actions:
+actions:{{ range lsdir "/elasticsearch/prune/index" }}{{ with $num := . }}
   {{printf "%s" $num}}:
     action: delete_indices
     description: >-
@@ -12,7 +9,7 @@ actions:
       actionable list of indices (ignore_empty_list) and exit cleanly.
     options:
       ignore_empty_list: True
-      disable_action: True
+      disable_action: False
     filters:
     - filtertype: pattern
       kind: prefix
@@ -20,9 +17,7 @@ actions:
     - filtertype: age
       source: name
       direction: older
-      timestring: '%Y.%m.%d'
+      timestring: '%Y%m%d'
       unit: weeks
       unit_count: {{(getv "/elasticsearch/indices/persist/weeks") "26"}}
-{{end}}
-{{end}}
-{{end}}
+{{end}}{{end}}{{end}}

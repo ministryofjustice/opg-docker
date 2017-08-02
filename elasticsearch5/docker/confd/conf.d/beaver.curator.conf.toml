@@ -1,0 +1,7 @@
+[template]
+src = "beaver.curator.conf.tmpl"
+dest = "/etc/beaver.d/curator.conf"
+keys = [
+    "/opg/service",
+    "/opg/stackname",
+]

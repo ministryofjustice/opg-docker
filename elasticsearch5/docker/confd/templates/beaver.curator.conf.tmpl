@@ -1,0 +1,4 @@
+[/var/log/app/curator.log]
+type: application
+tags: curator, {{ getv "/opg/service" }} {{ if exists "/opg/stackname" }}, {{ getv "/opg/stackname" }} {{ end }}
+delimiter: \n
