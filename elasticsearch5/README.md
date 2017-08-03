@@ -150,17 +150,21 @@ ELASTICSEARCH_CLUSTER_NODES_THREE=elasticsearch-03
 
 ### Curator
 
-```
-elasticcurator:
-  image: registry.service.opg.digital/opguk/elasticsearch:latest
-  external_links:
-    - opgcoredocker_elasticsearch_1:elasticsearch
-```
+Curator is implemented using confd templates and environment variables to define indexes that should be pruned and the number of weeks defined by any data retention policies for the indexes.
 
-Assuming a running elasticsearch container has been started as above, to run curator against it:
+environment variables as follows define the affected indices
+```bash
+ELASTICSEARCH_PRUNE_INDICES='yes'  # default 'no'
+ELASTICSEARCH_PRUNE_INDEX_0_NAME="metricbeat-" # no default
+ELASTICSEARCH_PRUNE_INDEX_1_NAME="filebeat-" # no default
+ELASTICSEARCH_PRUNE_INDEX_2_NAME="logstash-" # no default
+ELASTICSEARCH_INDICES_PERSIST_WEEKS=2 # default 26
+``` 
+there may be one or more `ELASTICSEARCH_PRUNE_INDEX_` variables set, and each one will have a `delete_index` action defined in the curator configuration
 
-```
- # docker-compose -f <docker-compose-file> run elasticcurator curator --host elasticsearch.......
+To run the curator job manually or with cron use the command
+```bash
+docker exec <container_name_or_id_for_elasticsearch> curator --config /usr/share/elasticsearch/config/curator.yml  /usr/share/elasticsearch/config/curator_prune_actions.yml
 ```
 
 ### Snapshots

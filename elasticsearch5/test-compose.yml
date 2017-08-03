@@ -1,0 +1,51 @@
+#version: '2'
+
+# data on volume
+elasticsearch:
+  image: registry.service.opg.digital/opguk/elasticsearch5:123
+  ports:
+    - 9200:9200
+    - 9300:9300
+  env_file: ./env
+
+#  environment:
+#    SHARED_DATA_BASE: '/tmp'
+#    SHARED_DATA_PATHS: "['/elasticsearchshareddata/beats']"
+#    DASHBOARD_SLEEP_TIMEOUT: 90
+#  volumes:
+#    - data:/usr/share/elasticsearch/data
+#    - /tmp/elasticsearchshareddata
+#  volumes_from:
+#    - elasticsearchshareddata
+#
+#elasticsearchshareddata:
+#  image: registry.service.opg.digital/opguk/elasticsearch-shared-data
+
+#elasticsearchingest:
+#  image: registry.service.opg.digital/opguk/elasticsearch5
+#  log_driver: syslog
+#  mem_limit: 5000000000
+#  links:
+#    - elasticsearch
+#  ports:
+#    - 9201:9200
+#  env_file: ./ingestenv
+#  environment:
+#    ELASTICSEARCH_NODE_TYPE: 'ingest'
+
+
+#elasticsearchcoord:
+#  image: registry.service.opg.digital/opguk/elasticsearch5
+#  log_driver: syslog
+#  mem_limit: 5000000000
+#  ports:
+#    - 9200:9200
+#  env_file: ./coordenv
+#  environment:
+#       ELASTICSEARCH_NODE_TYPE: 'coord'
+
+#elasticcurator:
+#  image: registry.service.opg.digital/opguk/elasticsearch5:{{es_version}}
+#  external_links:
+#    - monitoringserver_elasticsearch_1:elasticsearch
+#  env_file: ./elasticsearch.env

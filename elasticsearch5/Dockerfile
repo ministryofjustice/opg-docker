@@ -1,4 +1,4 @@
-FROM registry.service.opg.digital/opguk/base
+FROM registry.service.opg.digital/opguk/jre-8
 
 ARG ES_VERSION=5.3.3
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
@@ -45,8 +45,8 @@ ENV ELASTICSEARCH_GATEWAY_RECOVER_AFTER_TIME 5m
 ENV ELASTICSEARCH_GATEWAY_RECOVER_AFTER_NODES 1
 ENV ELASTICSEARCH_CLOUD_AWS_REGION eu-west-1
 ENV ELASTICSEARCH_CLOUD_AWS_S3_PROTOCOL https
-ENV ELASTICSEARCH_CLOUD_AWS_ACCESSKEY=
-ENV ELASTICSEARCH_CLOUD_AWS_SECRETKEY=
+ENV ELASTICSEARCH_CLOUD_AWS_ACCESSKEY ""
+ENV ELASTICSEARCH_CLOUD_AWS_SECRETKEY ""
 ENV ELASTICSEARCH_SNAPSHOTS_REPOSITORY_TYPE s3
 ENV ELASTICSEARCH_SNAPSHOTS_REPOSITORY_NAME snapshot_repo
 ENV ELASTICSEARCH_SNAPSHOTS_REPOSITORY_S3_BUCKET snapshots
@@ -64,18 +64,18 @@ RUN chgrp elasticsearch $ELASTICSEARCH_PATH_REPO
 ADD docker/confd /etc/confd
 ADD docker/opt /opt
 ADD docker/service/elasticsearch /etc/sv/elasticsearch
-RUN mkdir -p /scripts/elasticsearch $HOME/config/scripts $HOME/logs
+RUN mkdir -p /scripts/elasticsearch $HOME/config/scripts $HOME/logs /var/log/app
 ADD docker/scripts /scripts/elasticsearch
 ADD docker/my_init.d /etc/my_init.d
 
-RUN chmod a+x /etc/my_init.d/*
-RUN chmod -R a+x /etc/sv/elasticsearch/run
-RUN chmod -R a+x /scripts/elasticsearch
-RUN chmod -R a+x /opt
-
-RUN  ln -s /etc/sv/elasticsearch /etc/service/
-
+RUN chmod a+x /etc/my_init.d/* && \
+    chmod -R a+x /etc/sv/elasticsearch/run && \
+    chmod -R a+x /scripts/elasticsearch && \
+    chmod -R a+x /opt && \
+    ln -s /etc/sv/elasticsearch /etc/service/ && \
 # forward request and error logs to docker log collector
-RUN ln -sf /dev/stdout /var/log/elastic-scripts.log
+    ln -sf /dev/stdout /var/log/elastic-scripts.log && \
+    chown app:app /var/log/app
 
 ENV OPG_SERVICE elasticsearch
+ENV ELASTICSEARCH_INDICES_PERSIST_WEEKS 26

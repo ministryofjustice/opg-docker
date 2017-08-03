@@ -1,0 +1,6 @@
+[template]
+src = "curator.config.tmpl"
+dest = "/usr/share/elasticsearch/config/curator.yml"
+keys = [
+    "/elasticsearch",
+]
