@@ -1,5 +1,5 @@
 CORE_CONTAINERS := base nginx nginx2 php-fpm php-fpm2 jre-8 backupninja
-CHILD_CONTAINERS := phpunit golang rabbitmq wordpress elasticsearch elasticsearch-shared-data jenkins-slave jenkins2 kibana nginx-router wkhtmlpdf nginx-redirect casperjs  mongodb elasticsearch5
+CHILD_CONTAINERS := phpunit golang rabbitmq wordpress elasticsearch elasticsearch-shared-data jenkins-slave jenkins2 kibana nginx-router wkhtmlpdf nginx-redirect casperjs mongodb elasticsearch5 phpcs
 CLEAN_CONTAINERS := $(CORE_CONTAINERS) $(CHILD_CONTAINERS)
 
 .PHONY: build push pull showinfo test $(CORE_CONTAINERS) $(CHILD_CONTAINERS) clean
