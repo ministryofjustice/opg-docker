@@ -4,7 +4,7 @@ actions:{{ range lsdir "/elasticsearch/prune/index" }}{{ with $num := . }}
   {{printf "%s" $num}}:
     action: delete_indices
     description: >-
-      Delete indices older than a variable retention period
+      Delete indices older than retention period
       Ignore the error if the filter does not result in an
       actionable list of indices (ignore_empty_list) and exit cleanly.
     options:
@@ -17,7 +17,7 @@ actions:{{ range lsdir "/elasticsearch/prune/index" }}{{ with $num := . }}
     - filtertype: age
       source: name
       direction: older
-      timestring: '%Y%m%d'
+      timestring: '%Y.%m.%d'
       unit: weeks
       unit_count: {{(getv "/elasticsearch/indices/persist/weeks") "26"}}
 {{end}}{{end}}{{end}}
