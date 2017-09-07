@@ -4,7 +4,7 @@ registryUrl ?= registry.service.opg.digital
 image = opguk/nginx2
 
 build:
-	docker build -t "$(registryUrl)/$(image)" .
+	docker build --pull -t "$(registryUrl)/$(image)" .
 	docker tag  "$(registryUrl)/$(image)" "$(registryUrl)/$(image):$(newtag)"
 
 push:
