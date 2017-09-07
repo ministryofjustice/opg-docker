@@ -27,6 +27,7 @@ RUN rm -rf /app/* && \
     ln -s /data /app/public
 
 ADD  docker/my_init.d /etc/my_init.d
+ADD  docker/nginx/uploadsize.conf /etc/nginx/conf.d/uploadsize.conf
 RUN  chmod a+x /etc/my_init.d/*
 
 ENV OPG_SERVICE wordpress
