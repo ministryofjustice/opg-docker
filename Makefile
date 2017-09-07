@@ -46,6 +46,7 @@ $(CHILD_CONTAINERS):
 push:
 	for i in $(CORE_CONTAINERS) $(CHILD_CONTAINERS); do \
 			[ "$(stagearg)x" = "x" ] && docker push $(registryUrl)/opguk/$$i ; \
+			[ "$(stagearg)x" = "x" ] && docker push $(registryUrl)/opguk/$$i:latest ; \
 			docker push $(registryUrl)/opguk/$$i:$(newtag) ; \
 	done
 ifeq ($(tagrepo),yes)
