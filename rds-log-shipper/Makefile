@@ -1,7 +1,7 @@
 .PHONY: build
 
 registryUrl ?= registry.service.opg.digital
-image = opguk/rds-logs-shipper
+image = opguk/rds-log-shipper
 
 build:
 	docker build --pull $(no-cache) -t "$(registryUrl)/$(image)" .
