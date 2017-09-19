@@ -1,0 +1,8 @@
+#!/bin/sh
+
+ps auxw | grep rdstail | grep -v grep > /dev/null
+
+if [ $? -eq 0 ]
+then
+    service rdstail start > /dev/null
+fi

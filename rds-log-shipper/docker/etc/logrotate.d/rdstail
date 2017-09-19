@@ -1,0 +1,13 @@
+/var/log/rdstail/*
+{
+        rotate 1
+        daily
+        missingok
+        notifempty
+        delaycompress
+        compress
+        postrotate
+                sv reload rdstail > /dev/null
+                sv reload beaver > /dev/null
+        endscript
+}
