@@ -1,0 +1,9 @@
+#!/bin/bash
+
+mkdir -p /var/log/rdstail
+
+chown -R app /var/log/rdstail
+
+exec /sbin/setuser app /usr/bin/rdstail \
+    -i $OPG_RDSTAIL_INSTANCE watch \
+    >> /var/log/rdstail/$OPG_RDSTAIL_INSTANCE.log
