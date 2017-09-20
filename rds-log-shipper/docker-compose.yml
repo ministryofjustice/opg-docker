@@ -1,0 +1,10 @@
+#a demo docker compose file
+
+rdslog:
+  build: .
+  environment:
+  - OPG_RDSTAIL_INSTANCE=opgcoreapi-feature
+  - AWS_REGION=eu-west-1
+  - MONITORING_ENABLED=yes
+
+
