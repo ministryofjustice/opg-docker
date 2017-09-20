@@ -24,6 +24,7 @@ RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
       libxml2-dev \
       libxslt1-dev \
       libyaml-dev \
+      openssl \
       python-dev \
       python2.7-dev \
       python3-dev \
@@ -31,6 +32,18 @@ RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
       ttf-dejavu \
       zip && \
     apt-get clean && rm -rf /tmp/* /var/tmp/* && rm -rf /var/lib/apt/lists/* && \
+    cd /tmp && \
+        wget -q https://www.python.org/ftp/python/2.7.14/Python-2.7.14.tgz && \
+        tar xzf Python-2.7.14.tgz && \
+        cd Python-2.7.14 && \
+        ./configure --prefix=/opt/python2.7 && make && make install && \
+        cd .. && rm -rf /tmp/Python-2.7.14* && \
+    cd /tmp && \
+        wget -q https://www.python.org/ftp/python/3.6.2/Python-3.6.2.tgz && \
+        tar xzf Python-3.6.2.tgz && \
+        cd Python-3.6.2 && \
+        ./configure --prefix=/opt/python3.6 && make && make install && \
+        cd .. && rm -rf /tmp/Python-3.6.2* && \
     pip install -U pip && \
     pip install \
       docker-compose virtualenv git+https://github.com/ministryofjustice/semvertag.git

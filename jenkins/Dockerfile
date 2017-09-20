@@ -23,7 +23,24 @@ RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 581
     libgmp3-dev \
     libffi-dev \
     libssl-dev && \
+    openssl && \
     apt-get clean && rm -rf /tmp/* /var/tmp/* && rm -rf /var/lib/apt/lists/*
+
+# install latest python2.7
+RUN cd /tmp && \
+        wget -q https://www.python.org/ftp/python/2.7.14/Python-2.7.14.tgz && \
+        tar xzf Python-2.7.14.tgz && \
+        cd Python-2.7.14 && \
+        ./configure --prefix=/opt/python2.7 && make && make install && \
+        cd .. && rm -rf /tmp/Python-2.7.14*
+
+# install latest python3.6
+RUN cd /tmp && \
+        wget -q https://www.python.org/ftp/python/3.6.2/Python-3.6.2.tgz && \
+        tar xzf Python-3.6.2.tgz && \
+        cd Python-3.6.2 && \
+        ./configure --prefix=/opt/python3.6 && make && make install && \
+        cd .. && rm -rf /tmp/Python-3.6.2*
 
 #Upgrade the verison of pip and install pip requirements
 RUN pip install -U pip && \
