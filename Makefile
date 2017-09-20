@@ -32,6 +32,10 @@ endif
 registryUrl = registry.service.opg.digital
 
 
+buildcore: $(CORE_CONTAINERS)
+buildchild: $(CHILD_CONTAINERS)
+
+
 build: 
 	python build.py $(CORE_CONTAINERS)
 	python build.py $(CHILD_CONTAINERS)
@@ -80,4 +84,4 @@ clean:
 		docker rmi $(registryUrl)/opguk/$$i || true ; \
 	done
 
-all: showinfo build push clean
+all: showinfo build buildcore buildchild push clean
