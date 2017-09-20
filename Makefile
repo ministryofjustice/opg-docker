@@ -32,14 +32,19 @@ endif
 registryUrl = registry.service.opg.digital
 
 
+
 buildcore: $(CORE_CONTAINERS)
 buildchild: $(CHILD_CONTAINERS)
 
 
-build: 
+paralell_build: 
 	python build.py $(CORE_CONTAINERS)
 	python build.py $(CHILD_CONTAINERS)
 
+
+make_build: buildcore buildchild
+
+build: paralell_build make_build
 
 $(CORE_CONTAINERS):
 	$(MAKE) -C $@ newtag=$(newtag) registryUrl=$(registryUrl) no-cache=$(no-cache)
