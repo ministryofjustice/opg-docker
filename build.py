@@ -8,11 +8,7 @@ from functools import partial
 import subprocess
 
 def docker_build(docker_img, _):
-    cmd = ['docker',
-           'build',
-           '-t',
-           docker_img,
-           '.']
+    cmd = ['make']
 
     start = datetime.now()
     pipes = subprocess.Popen(cmd,
@@ -90,7 +86,8 @@ def measure_overall_sucess(results):
 batch = sys.argv[1:]
 print "starting build.py with params: %s" % batch
 
-results = build_batch_of_docker_images(batch, len(batch))
+# build a maximum of 8 containers in parallel
+results = build_batch_of_docker_images(batch, 8)
 if measure_overall_sucess(results) != 0:
     sys.exit(1)
 
