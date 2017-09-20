@@ -31,10 +31,10 @@ endif
 
 registryUrl = registry.service.opg.digital
 
-buildcore: $(CORE_CONTAINERS)
-buildchild: $(CHILD_CONTAINERS)
 
-build: buildcore buildchild
+build: 
+	python build.py $(CORE_CONTAINERS)
+	python build.py $(CHILD_CONTAINERS)
 
 
 $(CORE_CONTAINERS):
