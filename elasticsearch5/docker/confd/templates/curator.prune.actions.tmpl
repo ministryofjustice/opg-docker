@@ -17,7 +17,7 @@ actions:{{ range lsdir "/elasticsearch/prune/index" }}{{ with $num := . }}
     - filtertype: age
       source: name
       direction: older
-      timestring: '%Y.%m.%d'
+      timestring: "%Y.%m.%d"
       unit: weeks
       unit_count: {{(getv "/elasticsearch/indices/persist/weeks") "26"}}
 {{end}}{{end}}{{end}}
