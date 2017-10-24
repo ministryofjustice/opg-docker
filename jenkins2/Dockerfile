@@ -105,7 +105,7 @@ COPY install-plugins.sh /usr/local/bin/install-plugins.sh
 
 ### END ###
 
-# Required minimum plugins. Ecexute the following code in jenkins script console for the list.
+# Required minimum plugins. Execute the following code in jenkins script console for the list.
 #  Jenkins.instance.pluginManager.plugins.sort { it.getDisplayName() }.each{
 #    plugin -> println ("${plugin.getShortName()}:${plugin.getVersion()} \\") }
 #
@@ -115,79 +115,82 @@ analysis-core:1.92 \
 ansicolor:0.5.2 \
 ant:1.7 \
 antisamy-markup-formatter:1.5 \
+apache-httpcomponents-client-4-api:4.5.3-2.0 \
 authentication-tokens:1.3 \
 bouncycastle-api:2.16.2 \
-branch-api:2.0.11 \
+branch-api:2.0.14 \
 checkstyle:3.49 \
-cloudbees-folder:6.1.2 \
+cloudbees-folder:6.2.1 \
 clover:4.8.0 \
-config-file-provider:2.16.3 \
-confluence-publisher:1.8 \
+config-file-provider:2.16.4 \
+confluence-publisher:2.0 \
 credentials-binding:1.13 \
 credentials:2.1.16 \
-display-url-api:2.0 \
-docker-commons:1.8 \
+display-url-api:2.1.0 \
+docker-commons:1.9 \
 docker-workflow:1.13 \
-durable-task:1.14 \
-envinject-api:1.2 \
-envinject:2.1.3 \
+durable-task:1.15 \
+envinject-api:1.4 \
+envinject:2.1.5 \
 external-monitor-job:1.7 \
 git-client:2.5.0 \
 git-server:1.7 \
-git:3.5.1 \
-github-api:1.86 \
-github-branch-source:2.2.3 \
+git:3.6.2 \
+github-api:1.89 \
+github-branch-source:2.2.4 \
 github-oauth:0.27 \
-github:1.28.0 \
+github:1.28.1 \
 groovy:2.0 \
 handlebars:1.1.1 \
 icon-shim:2.0.3 \
-jackson2-api:2.7.3 \
+jackson2-api:2.8.7.0 \
 javadoc:1.4 \
-job-dsl:1.65 \
+job-dsl:1.66 \
 jquery-detached:1.2.1 \
+jsch:0.1.54.1 \
 junit:1.21 \
 ldap:1.17 \
 mailer:1.20 \
-matrix-auth:1.7 \
-matrix-project:1.11 \
-maven-plugin:2.17 \
+matrix-auth:2.1 \
+matrix-project:1.12 \
+maven-plugin:3.0 \
 momentjs:1.1.1 \
 pam-auth:1.3 \
 pipeline-build-step:2.5.1 \
 pipeline-graph-analysis:1.5 \
 pipeline-input-step:2.8 \
 pipeline-milestone-step:1.3.1 \
-pipeline-model-api:1.1.9 \
+pipeline-model-api:1.2.2 \
 pipeline-model-declarative-agent:1.1.1 \
-pipeline-model-definition:1.1.9 \
-pipeline-model-extensions:1.1.9 \
+pipeline-model-definition:1.2.2 \
+pipeline-model-extensions:1.2.2 \
 pipeline-multibranch-defaults:1.1 \
 pipeline-rest-api:2.9 \
 pipeline-stage-step:2.2 \
-pipeline-stage-tags-metadata:1.1.9 \
+pipeline-stage-tags-metadata:1.2.2 \
 pipeline-stage-view:2.9 \
 plain-credentials:1.4 \
-role-strategy:2.6.0 \
-scm-api:2.2.2 \
+purge-build-queue-plugin:1.0 \
+role-strategy:2.6.1 \
+scm-api:2.2.3 \
 script-security:1.34 \
 slave-setup:1.10 \
 ssh-credentials:1.13 \
-ssh-slaves:1.21 \
+ssh-slaves:1.22 \
 structs:1.10 \
 token-macro:2.3 \
 windows-slaves:1.3.1 \
 workflow-aggregator:2.5 \
-workflow-api:2.20 \
+workflow-api:2.23 \
 workflow-basic-steps:2.6 \
 workflow-cps-global-lib:2.9 \
-workflow-cps:2.40 \
-workflow-durable-task-step:2.15 \
+workflow-cps:2.41 \
+workflow-durable-task-step:2.17 \
 workflow-job:2.12.2 \
 workflow-multibranch:2.16 \
 workflow-scm-step:2.6 \
-workflow-step-api:2.12 \
-workflow-support:2.14
+workflow-step-api:2.13 \
+workflow-support:2.16
 
 
 # Default java options for running jenkins
