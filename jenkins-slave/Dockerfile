@@ -40,11 +40,13 @@ COPY docker/etc/my_init.d /etc/my_init.d
 COPY docker/etc/confd /etc/confd
 COPY docker/etc/ssh /etc/ssh
 
-ENV JENKINS_HOME /srv/jenkins
+ENV JENKINS_HOME /nfsdata/jenkins-slave
 EXPOSE 22
 
 # Configure app user
-RUN usermod -d "$JENKINS_HOME" -m -s /bin/bash app
+RUN mkdir /nfsdata && \
+    usermod -d "$JENKINS_HOME" -m -s /bin/bash app
+
 RUN adduser app docker
 
 RUN chmod a+x /etc/my_init.d/* && \
