@@ -15,7 +15,6 @@ RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
       docker-ce \
       fontconfig \
       gettext \
-      libcurl4-gnutls-dev \
       libexpat1-dev \
       libffi-dev \
       libgmp3-dev \
@@ -203,7 +202,7 @@ workflow-job:2.17 \
 workflow-multibranch:2.17 \
 workflow-scm-step:2.6 \
 workflow-step-api:2.14 \
-workflow-support:2.17 \
+workflow-support:2.17
 
 
 # Default java options for running jenkins
