@@ -1,4 +1,4 @@
-FROM registry.service.opg.digital/opguk/base
+FROM registry.service.opg.digital/opguk/base:0.1.367
 
 ENV JAVA_MAJOR_VERSION=8
 ENV JAVA_UPDATE_VERSION=131
