@@ -106,9 +106,7 @@ COPY install-plugins.sh /usr/local/bin/install-plugins.sh
 
 # Required minimum plugins. Execute the following code in jenkins script console for the list.
 # Jenkins.instance.pluginManager.plugins.each{
-#   plugin ->
-#     println ("${plugin.getShortName()}:${plugin.getVersion()} \\")
-# }
+#   plugin -> println ("${plugin.getShortName()}:${plugin.getVersion()} \\") }
 RUN /usr/local/bin/install-plugins.sh \
 ace-editor:1.1 \
 analysis-core:1.94 \
@@ -124,16 +122,17 @@ branch-api:2.0.18 \
 checkstyle:3.50 \
 cloudbees-folder:6.3 \
 clover:4.8.0 \
+command-launcher:1.0 \
 config-file-provider:2.17 \
 confluence-publisher:2.0.1 \
 copyartifact:1.39 \
-credentials-binding:1.14 \
+credentials-binding:1.15 \
 credentials:2.1.16 \
 custom-tools-plugin:0.5 \
 display-url-api:2.2.0 \
 docker-build-step:2.0 \
 docker-commons:1.11 \
-docker-workflow:1.14 \
+docker-workflow:1.15 \
 durable-task:1.17 \
 ec2:1.38 \
 envinject-api:1.5 \
@@ -154,12 +153,12 @@ htmlpublisher:1.14 \
 icon-shim:2.0.3 \
 jackson2-api:2.8.10.1 \
 javadoc:1.4 \
-job-dsl:1.66 \
+job-dsl:1.67 \
 jquery-detached:1.2.1 \
 jquery:1.12.4-0 \
 jsch:0.1.54.1 \
-junit:1.23 \
-ldap:1.18 \
+junit:1.24 \
+ldap:1.19 \
 lockable-resources:2.1 \
 mailer:1.20 \
 matrix-auth:2.2 \
@@ -172,14 +171,14 @@ pipeline-build-step:2.7 \
 pipeline-graph-analysis:1.6 \
 pipeline-input-step:2.8 \
 pipeline-milestone-step:1.3.1 \
-pipeline-model-api:1.2.6 \
+pipeline-model-api:1.2.7 \
 pipeline-model-declarative-agent:1.1.1 \
-pipeline-model-definition:1.2.6 \
-pipeline-model-extensions:1.2.6 \
+pipeline-model-definition:1.2.7 \
+pipeline-model-extensions:1.2.7 \
 pipeline-multibranch-defaults:1.1 \
 pipeline-rest-api:2.9 \
 pipeline-stage-step:2.3 \
-pipeline-stage-tags-metadata:1.2.6 \
+pipeline-stage-tags-metadata:1.2.7 \
 pipeline-stage-view:2.9 \
 plain-credentials:1.4 \
 purge-build-queue-plugin:1.0 \
@@ -189,22 +188,21 @@ script-security:1.40 \
 slack:2.3 \
 slave-setup:1.10 \
 ssh-credentials:1.13 \
-ssh-slaves:1.25 \
-structs:1.10 \
+ssh-slaves:1.25.1 \
+structs:1.13 \
 token-macro:2.3 \
 windows-slaves:1.3.1 \
 workflow-aggregator:2.5 \
 workflow-api:2.25 \
 workflow-basic-steps:2.6 \
 workflow-cps-global-lib:2.9 \
-workflow-cps:2.43 \
+workflow-cps:2.44 \
 workflow-durable-task-step:2.18 \
 workflow-job:2.17 \
 workflow-multibranch:2.17 \
 workflow-scm-step:2.6 \
 workflow-step-api:2.14 \
-workflow-support:2.17
-
+workflow-support:2.18
 
 # Default java options for running jenkins
 ENV JAVA_OPTS -Djava.awt.headless=true -Djenkins.install.runSetupWizard=false -Dorg.apache.commons.jelly.tags.fmt.timeZone=Europe/London -Duser.timezone=Europe/London -Duser.country=GB
