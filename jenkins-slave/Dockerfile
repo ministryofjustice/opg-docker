@@ -15,7 +15,6 @@ RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
       docker-ce \
       fontconfig \
       gettext \
-      libcurl4-gnutls-dev \
       libexpat1-dev \
       libffi-dev \
       libgmp3-dev \
