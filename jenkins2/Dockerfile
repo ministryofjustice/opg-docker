@@ -105,9 +105,10 @@ COPY install-plugins.sh /usr/local/bin/install-plugins.sh
 ### END ###
 
 # Required minimum plugins. Execute the following code in jenkins script console for the list.
-#  Jenkins.instance.pluginManager.plugins.sort { it.getDisplayName() }.each{
-#    plugin -> println ("${plugin.getShortName()}:${plugin.getVersion()} \\") }
-#
+# Jenkins.instance.pluginManager.plugins.each{
+#   plugin ->
+#     println ("${plugin.getShortName()}:${plugin.getVersion()} \\")
+# }
 RUN /usr/local/bin/install-plugins.sh \
 ace-editor:1.1 \
 analysis-core:1.94 \
