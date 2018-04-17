@@ -109,7 +109,7 @@ COPY install-plugins.sh /usr/local/bin/install-plugins.sh
 #   plugin -> println ("${plugin.getShortName()}:${plugin.getVersion()} \\") }
 RUN /usr/local/bin/install-plugins.sh \
 ace-editor:1.1 \
-analysis-core:1.94 \
+analysis-core:1.95 \
 ansicolor:0.5.2 \
 ant:1.8 \
 antisamy-markup-formatter:1.5 \
@@ -117,7 +117,7 @@ apache-httpcomponents-client-4-api:4.5.3-2.1 \
 authentication-tokens:1.3 \
 aws-credentials:1.23 \
 aws-java-sdk:1.11.264 \
-blueocean-autofavorite:1.2.1 \
+blueocean-autofavorite:1.2.2 \
 blueocean-bitbucket-pipeline:1.4.2 \
 blueocean-commons:1.4.2 \
 blueocean-config:1.4.2 \
@@ -142,21 +142,21 @@ bouncycastle-api:2.16.2 \
 branch-api:2.0.18 \
 checkstyle:3.50 \
 cloudbees-bitbucket-branch-source:2.2.10 \
-cloudbees-folder:6.3 \
-clover:4.8.0 \
+cloudbees-folder:6.4 \
+clover:4.9.0 \
 command-launcher:1.2 \
-config-file-provider:2.17 \
+config-file-provider:2.18 \
 confluence-publisher:2.0.1 \
 copyartifact:1.39 \
-credentials-binding:1.15 \
+credentials-binding:1.16 \
 credentials:2.1.16 \
 custom-tools-plugin:0.5 \
 display-url-api:2.2.0 \
 docker-build-step:2.0 \
 docker-commons:1.11 \
 docker-workflow:1.15.1 \
-durable-task:1.18 \
-ec2:1.38 \
+durable-task:1.22 \
+ec2:1.39 \
 envinject-api:1.5 \
 envinject:2.1.5 \
 extended-choice-parameter:0.76 \
@@ -167,7 +167,7 @@ git-client:2.7.1 \
 git-server:1.7 \
 git:3.8.0 \
 github-api:1.90 \
-github-branch-source:2.3.2 \
+github-branch-source:2.3.3 \
 github-oauth:0.29 \
 github:1.29.0 \
 groovy:2.0 \
@@ -185,7 +185,7 @@ jquery:1.12.4-0 \
 jsch:0.1.54.2 \
 junit:1.24 \
 ldap:1.20 \
-lockable-resources:2.1 \
+lockable-resources:2.2 \
 mailer:1.20 \
 matrix-auth:2.2 \
 matrix-project:1.12 \
@@ -213,7 +213,7 @@ purge-build-queue-plugin:1.0 \
 resource-disposer:0.8 \
 role-strategy:2.7.0 \
 scm-api:2.2.6 \
-script-security:1.41 \
+script-security:1.42 \
 slack:2.3 \
 slave-setup:1.10 \
 sse-gateway:1.15 \
@@ -234,7 +234,8 @@ workflow-multibranch:2.17 \
 workflow-scm-step:2.6 \
 workflow-step-api:2.14 \
 workflow-support:2.18 \
-ws-cleanup:0.34 
+ws-cleanup:0.34
+
 
 # Default java options for running jenkins
 ENV JAVA_OPTS -Djava.awt.headless=true -Djenkins.install.runSetupWizard=false -Dorg.apache.commons.jelly.tags.fmt.timeZone=Europe/London -Duser.timezone=Europe/London -Duser.country=GB
