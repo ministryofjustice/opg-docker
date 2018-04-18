@@ -31,8 +31,8 @@ RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
       zip && \
     apt-get clean && rm -rf /tmp/* /var/tmp/* && rm -rf /var/lib/apt/lists/* && \
     pip install -U pip && \
-    pip install \
-      docker-compose virtualenv git+https://github.com/ministryofjustice/semvertag.git
+    pip install docker-compose --ignore-installed && \
+    pip install virtualenv git+https://github.com/ministryofjustice/semvertag.git
 
 
 ### This section is from https://github.com/jenkinsci/docker/blob/master/Dockerfile with changes ###
