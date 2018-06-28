@@ -108,11 +108,16 @@ COPY install-plugins.sh /usr/local/bin/install-plugins.sh
 ### END ###
 
 # Required minimum plugins. Execute the following code in jenkins script console for the list.
-# Remove the trailing backslash after the last plugin output
-# def plugins = Jenkins.instance.pluginManager.plugins;
-# plugins = plugins.sort(false)
+# def plugins = Jenkins.instance.pluginManager.plugins.sort(false)
 # plugins.each{
-#    plugin -> println ("${plugin.getShortName()}:${plugin.getVersion()} \\") }
+#   plugin ->
+#   if (plugins.last() == plugin) {
+#     delimiter = ""
+#   } else {
+#     delimiter = "\\"
+#   }
+#   println ("${plugin.getShortName()}:${plugin.getVersion()} ${delimiter}")
+# }
 
 RUN /usr/local/bin/install-plugins.sh \
 ace-editor:1.1 \
