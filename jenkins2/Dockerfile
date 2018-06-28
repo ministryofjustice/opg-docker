@@ -75,10 +75,10 @@ RUN ln -s /etc/sv/jenkins /etc/service
 
 # jenkins version being bundled in this docker image
 ARG JENKINS_VERSION
-ENV JENKINS_VERSION ${JENKINS_VERSION:-2.89.3}
+ENV JENKINS_VERSION ${JENKINS_VERSION:-2.121.1}
 
 # jenkins.war sha256sum checksum, download will be validated using it
-ARG JENKINS_SHA=79f176e9388cdeb0deb0e6af49ff9d1ff4b7a3c47102af11e3e9461bf268983a
+ARG JENKINS_SHA=5bb075b81a3929ceada4e960049e37df5f15a1e3cfc9dc24d749858e70b48919
 
 # Can be used to customize where jenkins.war get downloaded from
 ARG JENKINS_URL=https://repo.jenkins-ci.org/public/org/jenkins-ci/main/jenkins-war/${JENKINS_VERSION}/jenkins-war-${JENKINS_VERSION}.war
@@ -108,8 +108,12 @@ COPY install-plugins.sh /usr/local/bin/install-plugins.sh
 ### END ###
 
 # Required minimum plugins. Execute the following code in jenkins script console for the list.
-# Jenkins.instance.pluginManager.plugins.each{
-#   plugin -> println ("${plugin.getShortName()}:${plugin.getVersion()} \\") }
+# Remove the trailing backslash after the last plugin output
+# def plugins = Jenkins.instance.pluginManager.plugins;
+# plugins = plugins.sort(false)
+# plugins.each{
+#    plugin -> println ("${plugin.getShortName()}:${plugin.getVersion()} \\") }
+
 RUN /usr/local/bin/install-plugins.sh \
 ace-editor:1.1 \
 analysis-core:1.95 \
@@ -120,27 +124,27 @@ apache-httpcomponents-client-4-api:4.5.5-3.0 \
 authentication-tokens:1.3 \
 aws-credentials:1.23 \
 aws-java-sdk:1.11.341 \
+blueocean:1.6.1 \
 blueocean-autofavorite:1.2.2 \
-blueocean-bitbucket-pipeline:1.5.1 \
-blueocean-commons:1.5.1 \
-blueocean-config:1.5.1 \
-blueocean-core-js:1.5.1 \
-blueocean-dashboard:1.5.1 \
+blueocean-bitbucket-pipeline:1.6.1 \
+blueocean-commons:1.6.1 \
+blueocean-config:1.6.1 \
+blueocean-core-js:1.6.1 \
+blueocean-dashboard:1.6.1 \
 blueocean-display-url:2.2.0 \
-blueocean-events:1.5.1 \
-blueocean-git-pipeline:1.5.1 \
-blueocean-github-pipeline:1.5.1 \
-blueocean-i18n:1.5.1 \
-blueocean-jira:1.5.1 \
-blueocean-jwt:1.5.1 \
-blueocean-personalization:1.5.1 \
-blueocean-pipeline-api-impl:1.5.1 \
-blueocean-pipeline-editor:1.5.1 \
-blueocean-pipeline-scm-api:1.5.1 \
-blueocean-rest-impl:1.5.1 \
-blueocean-rest:1.5.1 \
-blueocean-web:1.5.1 \
-blueocean:1.5.1 \
+blueocean-events:1.6.1 \
+blueocean-git-pipeline:1.6.1 \
+blueocean-github-pipeline:1.6.1 \
+blueocean-i18n:1.6.1 \
+blueocean-jira:1.6.1 \
+blueocean-jwt:1.6.1 \
+blueocean-personalization:1.6.1 \
+blueocean-pipeline-api-impl:1.6.1 \
+blueocean-pipeline-editor:1.6.1 \
+blueocean-pipeline-scm-api:1.6.1 \
+blueocean-rest:1.6.1 \
+blueocean-rest-impl:1.6.1 \
+blueocean-web:1.6.1 \
 bouncycastle-api:2.16.3 \
 branch-api:2.0.20 \
 checkstyle:3.50 \
@@ -151,8 +155,8 @@ command-launcher:1.2 \
 config-file-provider:2.18 \
 confluence-publisher:2.0.1 \
 copyartifact:1.39.1 \
-credentials-binding:1.16 \
 credentials:2.1.17 \
+credentials-binding:1.16 \
 custom-tools-plugin:0.5 \
 display-url-api:2.2.0 \
 docker-build-step:2.0 \
@@ -160,19 +164,19 @@ docker-commons:1.13 \
 docker-workflow:1.17 \
 durable-task:1.22 \
 ec2:1.39 \
-envinject-api:1.5 \
 envinject:2.1.5 \
+envinject-api:1.5 \
 extended-choice-parameter:0.76 \
 external-monitor-job:1.7 \
 favorite:2.3.2 \
 file-operations:1.7 \
+git:3.9.1 \
 git-client:2.7.2 \
 git-server:1.7 \
-git:3.9.1 \
+github:1.29.2 \
 github-api:1.92 \
 github-branch-source:2.3.6 \
 github-oauth:0.29 \
-github:1.29.2 \
 groovy:2.0 \
 handlebars:1.1.1 \
 handy-uri-templates-2-api:2.1.6-1.0 \
@@ -180,11 +184,12 @@ htmlpublisher:1.16 \
 icon-shim:2.0.3 \
 jackson2-api:2.8.11.3 \
 javadoc:1.4 \
-jenkins-design-language:1.5.1 \
+jdk-tool:1.1 \
+jenkins-design-language:1.6.1 \
 jira:3.0.0 \
 job-dsl:1.69 \
-jquery-detached:1.2.1 \
 jquery:1.12.4-0 \
+jquery-detached:1.2.1 \
 jsch:0.1.54.2 \
 junit:1.24 \
 ldap:1.20 \
@@ -230,8 +235,8 @@ windows-slaves:1.3.1 \
 workflow-aggregator:2.5 \
 workflow-api:2.27 \
 workflow-basic-steps:2.8 \
-workflow-cps-global-lib:2.9 \
 workflow-cps:2.54 \
+workflow-cps-global-lib:2.9 \
 workflow-durable-task-step:2.19 \
 workflow-job:2.21 \
 workflow-multibranch:2.19 \
